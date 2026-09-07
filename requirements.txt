@@ -1,0 +1,8 @@
+# Runtime dependencies for the Cobri FastAPI backend.
+# The backend/pyproject.toml and backend/uv.lock remain the authoritative
+# project manifest and reproducible lockfile.
+fastapi>=0.115,<1
+pydantic>=2.10,<3
+pydantic-settings>=2.6,<3
+uvicorn[standard]>=0.32,<1
+PyJWT[crypto]>=2.10,<3
