@@ -1,0 +1,70 @@
+# Python dependencies and generated files
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.Python
+
+# Frontend dependencies and generated files
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+*.tsbuildinfo
+
+# Local runtimes, tool caches, builds, and coverage
+.local/
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.tox/
+.nox/
+build/
+dist/
+htmlcov/
+coverage/
+.coverage
+.coverage.*
+coverage.xml
+junit.xml
+
+# Local databases and logs (not migrations or reviewed content)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.log
+logs/
+.data/
+
+# Local secrets; examples are intentionally trackable
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
