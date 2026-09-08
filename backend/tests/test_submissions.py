@@ -2,10 +2,10 @@
 
 import pytest
 
-from cobri.assessments.contracts import EvaluationView, JobView
+from Cobri.backend.src.cobri.assessments.contracts import EvaluationView, JobView
 from cobri.dependencies import get_content_catalog, get_session_store, get_submission_service
 from cobri.errors import DependencyUnavailable, IdempotencyConflict, ResourceNotFound
-from cobri.identity.auth import Principal, get_current_principal
+from Cobri.backend.src.cobri.identity.auth import Principal, get_current_principal
 
 from .conftest import ApiHarness
 from .doubles import (

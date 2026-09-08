@@ -6,8 +6,8 @@ from uuid import UUID
 
 from pydantic import AwareDatetime, field_validator
 
-from cobri.content.ports import PackageReference
-from cobri.identity.auth import Principal
+from Cobri.backend.app.content.ports import PackageReference
+from Cobri.backend.app.identity.auth import Principal
 
 
 class SessionCreate(PackageReference):

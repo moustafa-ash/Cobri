@@ -10,7 +10,7 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from cobri.config import Settings
+from Cobri.backend.src.cobri.core.config import Settings
 
 bearer = HTTPBearer(auto_error=False)
 

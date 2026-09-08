@@ -4,7 +4,7 @@ import pytest
 
 from cobri.dependencies import get_content_catalog, get_session_store
 from cobri.errors import DependencyUnavailable, ResourceNotFound
-from cobri.identity.auth import Principal, get_current_principal
+from Cobri.backend.src.cobri.identity.auth import Principal, get_current_principal
 
 from .conftest import ApiHarness
 from .doubles import OWNER, SESSION_BODY, SESSION_ID, UNKNOWN_ID, canned_session

@@ -12,8 +12,8 @@ from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from cobri.config import Settings
-from cobri.identity.auth import TokenVerifier
-from cobri.main import create_app
+from Cobri.backend.src.cobri.identity.auth import TokenVerifier
+from Cobri.backend.src.cobri.main import create_app
 
 ISSUER = "https://identity.example.test"
 AUDIENCE = "cobri-api"

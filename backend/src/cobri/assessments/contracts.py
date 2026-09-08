@@ -13,8 +13,8 @@ from pydantic import (
     model_validator,
 )
 
-from cobri.content.ports import Reference
-from cobri.identity.auth import Principal
+from Cobri.backend.src.cobri.content.ports import Reference
+from Cobri.backend.src.cobri.identity.auth import Principal
 
 Verdict = Literal["correct", "incorrect", "uncertain"]
 

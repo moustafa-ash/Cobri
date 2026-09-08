@@ -6,7 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from cobri.config import Settings
-from cobri.main import create_app
+from Cobri.backend.src.cobri.main import create_app
 
 
 @pytest.mark.live_auth

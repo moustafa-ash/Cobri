@@ -3,15 +3,15 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from cobri.assessments.contracts import SubmissionService
-from cobri.assessments.router import router as submissions_router
-from cobri.config import Settings
-from cobri.content.ports import ContentCatalog
-from cobri.errors import register_error_handlers
-from cobri.identity.auth import TokenVerifier
-from cobri.identity.router import router as identity_router
-from cobri.tutoring.contracts import SessionStore
-from cobri.tutoring.router import router as sessions_router
+from Cobri.backend.src.cobri.assessments.contracts import SubmissionService
+from Cobri.backend.src.cobri.assessments.router import router as submissions_router
+from Cobri.backend.src.cobri.core.config import Settings
+from Cobri.backend.src.cobri.content.ports import ContentCatalog
+from Cobri.backend.src.cobri.core.errors import register_error_handlers
+from Cobri.backend.src.cobri.identity.auth import TokenVerifier
+from Cobri.backend.src.cobri.identity.router import router as identity_router
+from Cobri.backend.src.cobri.tutoring.contracts import SessionStore
+from Cobri.backend.src.cobri.tutoring.router import router as sessions_router
 
 
 def create_app(

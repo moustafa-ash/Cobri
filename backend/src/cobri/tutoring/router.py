@@ -5,11 +5,11 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Response
 
-from cobri.content.ports import ContentCatalog, PackageReference
-from cobri.dependencies import get_content_catalog, get_session_store
-from cobri.errors import IntegrationContractError, validate_result
-from cobri.identity.auth import Principal, get_current_principal
-from cobri.tutoring.contracts import SessionCreate, SessionStore, SessionView
+from Cobri.backend.app.content.ports import ContentCatalog, PackageReference
+from Cobri.backend.app.core.dependencies import get_content_catalog, get_session_store
+from Cobri.backend.app.core.errors import IntegrationContractError, validate_result
+from Cobri.backend.app.identity.auth import Principal, get_current_principal
+from Cobri.backend.app.tutoring.contracts import SessionCreate, SessionStore, SessionView
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 
