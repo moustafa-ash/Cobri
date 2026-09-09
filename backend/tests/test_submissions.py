@@ -2,10 +2,10 @@
 
 import pytest
 
-from Cobri.backend.src.cobri.assessments.contracts import EvaluationView, JobView
+from cobri.assessments.contracts import EvaluationView, JobView
 from cobri.dependencies import get_content_catalog, get_session_store, get_submission_service
 from cobri.errors import DependencyUnavailable, IdempotencyConflict, ResourceNotFound
-from Cobri.backend.src.cobri.identity.auth import Principal, get_current_principal
+from cobri.identity.auth import Principal, get_current_principal
 
 from .conftest import ApiHarness
 from .doubles import (
@@ -65,14 +65,21 @@ def test_separate_verdicts_support_uncertain(api: ApiHarness) -> None:
     api.submissions.result = canned_submission().model_copy(
         update={
             "job": JobView(job_id=JOB_ID, status="succeeded"),
-            "evaluation": EvaluationView(outcome_verdict="correct", reasoning_verdict="uncertain"),
+            "evaluation": EvaluationView(
+                outcome_verdict="correct",
+                reasoning_verdict="insufficient",
+                diagnostic_status="uncertain",
+            ),
         }
     )
     response = api.client.get(f"/api/v1/submissions/{SUBMISSION_ID}")
     assert response.status_code == 200
     assert response.json()["evaluation"] == {
         "outcome_verdict": "correct",
-        "reasoning_verdict": "uncertain",
+        "reasoning_verdict": "insufficient",
+        "diagnostic_status": "uncertain",
+        "evidence_references": [],
+        "misconception_id": None,
     }
 
 

@@ -1,1 +1,1 @@
-"""Content lookup boundary. Asser supplies the reviewed package implementation."""
+"""Versioned reviewed content lookup and catalog contracts."""

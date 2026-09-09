@@ -1,9 +1,7 @@
-# Versioned learning content
+# Reviewed content packages
 
-This directory reserves a trackable location for Asser's content packages. No content package or reviewed topic is included in Moustafa's Day 1 implementation.
+Packages are immutable, versioned JSON documents. The catalog exposes only packages whose `review_status` is `reviewed`; drafts are validated but unavailable to learners.
 
-The first prototype will use one reviewed programming topic. A session pins a `content_package_id` and `content_version`; submissions reference an `item_id` within that version. Asser owns the initial package and the content catalog adapter that validates these references. Ahmed owns labeled evaluation fixtures under `backend/tests/fixtures/evaluations/`.
+The Day 1 package is `python-functions` version `1.0.0`. It covers Python parameters, return values, and the print-versus-return misconception in Arabic and English. Each item carries package-owned tests, evidence references, misconception metadata, and transfer metadata.
 
-When content is added, retain each referenced version and record the topic, instructional language, review status, and item identifiers. A draft must not be exposed as selectable reviewed content. Coordinate the package format with Ahmed and Mohamed before integration.
-
-UI locale and instructional language are separate session preferences. Content/evaluation design must preserve separate outcome and reasoning verdicts and explicit `uncertain` results when evidence is insufficient. A wrong answer alone must not label a misconception.
+When adding a package, preserve old versions, use stable item IDs, include both language variants, and update the evaluation fixtures before changing the API contract.

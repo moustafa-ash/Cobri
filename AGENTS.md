@@ -12,7 +12,7 @@ Run from the repository root in PowerShell:
 $env:UV_CACHE_DIR = Join-Path $PWD ".cache/uv"
 $env:UV_PYTHON_INSTALL_DIR = Join-Path $PWD ".local/python"
 uv sync --project backend --locked
-uv run --project backend --locked uvicorn app.main:app --reload
+uv run --project backend --locked uvicorn cobri.main:app --reload
 uv run --project backend --locked pytest backend/tests
 uv run --project backend --locked ruff check backend
 uv run --project backend --locked ruff format --check backend

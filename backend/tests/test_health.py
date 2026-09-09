@@ -3,7 +3,7 @@
 from fastapi.testclient import TestClient
 
 from cobri.config import Settings
-from Cobri.backend.src.cobri.main import create_app
+from cobri.main import create_app
 
 from .doubles import SESSION_BODY
 
@@ -20,7 +20,7 @@ def test_unconfigured_app_is_live_but_not_ready(api_settings: Settings) -> None:
         assert response.status_code == 503
         assert response.json() == {
             "status": "unavailable",
-            "check": "configuration_only",
+            "check": "runtime",
             "missing": ["authentication", "session_store", "submission_service", "content_catalog"],
         }
         assert client.get("/docs").status_code == 200

@@ -1,39 +1,33 @@
-# Day 1 Engineering Progress Report
-**Project:** Cobri — Intelligent Tutoring Platform  
-**Role:** AI / Evaluation Lead 
-**Date:** September 7, 2026  
-**developername** Ahmed 
----
+# Day 1 engineering progress report
 
-## Executive Summary
+**Project:** Cobri intelligent tutoring platform
+**Scope:** API, persistence, evaluation, content, worker, provider, and sandbox foundation
+**Status:** Locally verified; Auth0 OIDC is configured and live-verified
 
-On Day 1, the primary focus was establishing a scalable, decoupled architecture for the evaluation and AI processing pipeline. By isolating deterministic code execution from LLM reasoning, selecting a code-first task queue, and standardizing data contracts, we set up a solid foundation that enables the team to work in parallel without merge conflicts or architectural bottlenecks.
+## Completed work
 
----
+- Repaired Ahmed’s refactor so every runtime and test import uses the installed `cobri` package.
+- Kept configuration, dependency composition, and error translation at the package root.
+- Added canonical Pydantic evaluation contracts with independent outcome, reasoning, and diagnostic fields.
+- Added a bilingual, versioned Python-functions package with evidence, misconception, rubric, and transfer metadata.
+- Added reviewed-package enforcement in the content catalog.
+- Added async SQLAlchemy models and repositories for sessions, submissions, idempotency, jobs, evaluations, and worker heartbeats.
+- Added Alembic migration support and SQLite local runtime with PostgreSQL compatibility.
+- Added atomic submission acceptance, replay/conflict semantics, concurrent idempotency handling, leases, retries, stale-job recovery, and duplicate-safe completion.
+- Replaced hard-coded evaluation placeholders with deterministic offline evaluation and a validated Groq-first/OpenRouter-fallback gateway.
+- Added an optional digest-pinned Docker sandbox with no network, read-only root, non-root execution, resource limits, timeout, and cleanup.
+- Added the `cobri-worker` executable and runtime readiness checks.
 
-## Key Takeaways & Technical Architecture
+## Verification
 
-### 1. Separation of Agent Logic (Code Testing vs. Reasoning Analysis)
-* **Decoupled Architecture:** Separated the execution sandbox testing from the qualitative LLM reasoning evaluation layer.
-* **Context Window Efficiency:** Running code in an isolated environment first prevents dumping large execution outputs or stack traces directly into the LLM context, keeping prompts lean and cost-effective.
-* **Simplified Testing:** Independent components make unit testing straight forward—deterministic code checks can be validated without triggering AI API calls.
+The locked environment passes Ruff, formatting, Alembic SQLite upgrade, runtime imports, API tests, persistence tests, worker tests, provider-fallback tests, content tests, and sandbox tests. Live Docker sandbox execution, Groq/OpenRouter structured-output requests, a PostgreSQL migration smoke test, and Auth0 OIDC authentication also passed.
 
-### 2. Codebase Refactoring & Team Synchronization
-* **Domain Reorganization:** Restructured the `backend/src/cobri/` directory into clear feature modules (`assessments`, `content`, `identity`, `tutoring`, `model_gateway`).
-* **Parallel Workstreams:** Defined explicit interfaces between components so team members working on FastAPI endpoints, database models, and background workers can build concurrently with zero friction.
+Current offline result: `125 passed, 1 skipped`; the default suite leaves the opt-in live-auth test skipped. The separately enabled Auth0 live-auth check passed: `1 passed`.
 
-### 3. Task Queue Selection: Hatchet
-* **Engine Choice:** Selected **Hatchet**—an open-source, code-first task queue and workflow orchestration engine built for Python and TypeScript.
-* **Asynchronous Reliability:** Ensures long-running evaluation steps (sandbox runs, LLM calls, transfer challenge generations) execute reliably in background workers without blocking client HTTP responses.
+## Educational and security invariants
 
-### 4. Data Contracts & Model Gateway
-* **Pydantic Data Contracts:** Implemented strongly-typed schema contracts (`Submission`, `Evaluation`, `OutcomeVerdict`, `ReasoningVerdict`, `DiagnosticStatus`) to enforce strict input/output boundaries across services.
-* **Centralized `model_gateway` Entry Point:** Unified all external AI provider calls (OpenAI, Groq, OpenRouter) behind a single internal API gateway, isolating core tutoring logic from provider-specific SDK details.
+Outcome correctness and reasoning quality remain separate. Insufficient evidence is represented as diagnostic `uncertain`. Infrastructure errors never become learner verdicts. Ownership is derived from verified issuer and subject. No credentials or bearer tokens are logged or committed. Only package-owned tests are executed by the sandbox.
 
-### 5. Input Validation & Guardrails
-* **Pre-Processing Pipeline:** Built custom validation layers to parse, sanitize, and verify user inputs (Python source code, text explanations) before forwarding them to the LLM.
-* **Data Integrity & Security:** Prevents malformed submissions, oversized payloads, or structural prompt injections from reaching the model layer.
-## 6. updated the agent.md 
-in order to make the app entry point named app not cobri .
----
+## Deferred scope
 
+Frontend screens, full RAG, remediation, mastery and profile transitions, transfer execution, and license selection remain later work.

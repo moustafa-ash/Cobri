@@ -4,11 +4,11 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
-from Cobri.backend.src.cobri.assessments.contracts import JobView, SubmissionCreate, SubmissionView
-from Cobri.backend.src.cobri.content.ports import ItemReference, PackageReference
+from cobri.assessments.contracts import JobView, SubmissionCreate, SubmissionView
+from cobri.content.ports import ItemReference, PackageReference
 from cobri.errors import ResourceNotFound
-from Cobri.backend.src.cobri.identity.auth import Principal
-from Cobri.backend.src.cobri.tutoring.contracts import SessionCreate, SessionView
+from cobri.identity.auth import Principal
+from cobri.tutoring.contracts import SessionCreate, SessionView
 
 OWNER = Principal(issuer="https://issuer.example", subject="learner-1")
 SESSION_ID = UUID("00000000-0000-0000-0000-000000000001")

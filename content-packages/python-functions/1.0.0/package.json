@@ -1,0 +1,35 @@
+{
+  "content_package_id": "python-functions",
+  "content_version": "1.0.0",
+  "topic": "Python functions: parameters and return values",
+  "review_status": "reviewed",
+  "reviewed_by": "Moustafa",
+  "items": [
+    {
+      "item_id": "python-function-return-1",
+      "title": {
+        "en": "Return a calculated value",
+        "ar": "إرجاع قيمة محسوبة"
+      },
+      "prompt": {
+        "en": "Write a function double(n) that returns twice n. Do not print the result.",
+        "ar": "اكتب دالة double(n) تعيد ضعف n. لا تطبع النتيجة."
+      },
+      "expected_code": "def double(n):\n    return n * 2",
+      "tests": [
+        "assert double(0) == 0",
+        "assert double(4) == 8",
+        "assert double(-3) == -6"
+      ],
+      "evidence_references": [
+        "python-functions:1.0.0:return-values",
+        "python-functions:1.0.0:print-vs-return"
+      ],
+      "misconception_ids": ["print-instead-of-return"],
+      "transfer_prompt": {
+        "en": "Write triple(n) that returns three times n.",
+        "ar": "اكتب triple(n) التي تعيد ثلاثة أضعاف n."
+      }
+    }
+  ]
+}

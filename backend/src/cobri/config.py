@@ -28,6 +28,25 @@ class Settings(BaseSettings):
     auth_jwks_timeout_seconds: float = Field(default=5, gt=0, le=30)
     auth_jwks_cache_seconds: int = Field(default=300, ge=1, le=3600)
     auth_clock_skew_seconds: int = Field(default=0, ge=0, le=120)
+    database_url: str = "sqlite+aiosqlite:///./.data/cobri.db"
+    auto_create_schema: bool = True
+    worker_poll_seconds: float = Field(default=1.0, gt=0, le=60)
+    worker_lease_seconds: int = Field(default=60, ge=5, le=3600)
+    worker_max_attempts: int = Field(default=3, ge=1, le=20)
+    content_root: Path = Path(__file__).resolve().parents[3] / "content-packages"
+    sandbox_enabled: bool = False
+    sandbox_image: str = (
+        "python:3.12-slim-bookworm@sha256:"
+        "782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254"
+    )
+    sandbox_timeout_seconds: float = Field(default=3, gt=0, le=30)
+    groq_api_key: str | None = None
+    groq_base_url: str = "https://api.groq.com/openai/v1"
+    groq_model: str = "openai/gpt-oss-20b"
+    openrouter_api_key: str | None = None
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    openrouter_model: str = "openrouter/free"
+    model_timeout_seconds: float = Field(default=30, gt=0, le=120)
 
     @field_validator("auth_issuer", "auth_audience", "auth_jwks_url", mode="before")
     @classmethod
@@ -58,8 +77,14 @@ class Settings(BaseSettings):
             raise ValueError("Configure auth_issuer, auth_audience, and auth_jwks_url together")
         if len(set(self.auth_algorithms)) != len(self.auth_algorithms):
             raise ValueError("auth_algorithms must not contain duplicates")
+        if self.sandbox_enabled and "@sha256:" not in self.sandbox_image:
+            raise ValueError("sandbox_image must be pinned by digest when sandboxing is enabled")
         return self
 
     @property
     def auth_configured(self) -> bool:
         return bool(self.auth_issuer and self.auth_audience and self.auth_jwks_url)
+
+    @property
+    def model_configured(self) -> bool:
+        return bool(self.groq_api_key or self.openrouter_api_key)

@@ -9,8 +9,8 @@ from fastapi.testclient import TestClient
 
 from cobri.config import Settings
 from cobri.dependencies import get_content_catalog, get_session_store, get_submission_service
-from Cobri.backend.src.cobri.identity.auth import get_current_principal
-from Cobri.backend.src.cobri.main import create_app
+from cobri.identity.auth import get_current_principal
+from cobri.main import create_app
 
 from .doubles import OWNER, CannedContentCatalog, CannedSessionStore, CannedSubmissionService
 

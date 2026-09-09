@@ -1,68 +1,49 @@
 # Day 1 handoff
 
-This handoff covers shared repository preparation and Moustafa's personal implementation scope. Team ownership applies to Day 1 only; backend and AI/evaluation responsibilities swap on Day 2. Preserve these boundaries when changing owners.
+Day 1 is implemented locally across the API, persistence, evaluation, content, worker, provider, sandbox, and OIDC boundaries. Groq, OpenRouter, Docker, PostgreSQL, and Auth0 have been smoke-tested locally.
 
-## What this change supplies
+## Delivered
 
-| Area | Supplied behavior | Limits |
-| --- | --- | --- |
-| Repository | Python 3.12/uv project, lockfile, environment example, ignore rules, development instructions | License deferred; no remote, push, or commit requested |
-| API | FastAPI configuration, OpenAPI, liveness/readiness, auth/session/submission routes | Default learning adapters remain unavailable |
-| Authentication | JWT verification with trusted issuer/audience/JWKS/algorithm configuration | Local signing-key tests are not a live-provider verification |
-| Learning HTTP boundary | Input/output validation, ownership-aware adapter calls, status and error mapping | Persistence, queue, and worker not implemented |
-| Evaluation boundary | Separate outcome/reasoning verdict views with explicit `uncertain` | No fake evaluator, canonical shared schemas, or model gateway |
-| Test doubles | Automated-test-only session/content/submission responses | No in-memory server, login bypass, real content, or durable processing |
-
-See [contracts](day1-contracts.md) for exact API views, asynchronous adapter methods, retry semantics, and ownership rules. See [architecture](architecture.md) for all feature boundaries and educational invariants.
-
-## Verification record
-
-Verification ran locally on 2026-09-07 from the repository root. These checks cover Moustafa's API boundary and test doubles only; they do not establish B/C/D's integrations.
-
-| Check | Result |
+| Area | Current state |
 | --- | --- |
-| Workspace-local Python 3.12 install and locked `uv sync` | Passed with CPython 3.12.14 and 34 installed packages |
-| `ruff check backend` | Passed |
-| `ruff format --check backend` | Passed; 25 files formatted |
-| Automated tests | 117 passed, 1 skipped; live auth skipped by design; 2 upstream TestClient deprecation warnings |
-| Actual Uvicorn startup, OpenAPI, liveness, expected unready status | Passed; `/docs` and `/openapi.json` returned `200`, liveness `200`, unconfigured readiness `503`, unauthenticated `/auth/me` `401` |
-| Ignore rules keep secrets/generated outputs out and source/lockfiles/content trackable | Passed for representative paths, including `.env`, local runtimes, caches, lockfile, migrations, and reviewed content |
-| Live identity-provider authentication | Pending provider configuration and test access token |
-| PostgreSQL persistence, durable enqueueing, restart/concurrency behavior | Pending Mohamed's implementation |
-| Worker startup | Pending Mohamed's entry point; no runnable worker command yet |
-| Canonical evaluation schemas and fake evaluator | Pending Ahmed's implementation |
-| Reviewed topic/package, model gateway, real provider smoke test | Pending Asser's implementation and credentials |
+| Repository and tooling | Python 3.12, uv lockfile, Alembic, Ruff, tests, environment template |
+| API | FastAPI health, auth, session, submission, and polling routes |
+| Identity | JWT signature, issuer, audience, JWKS, expiry, algorithm, and ownership checks |
+| Persistence | Async SQLAlchemy repositories compatible with SQLite and PostgreSQL |
+| Acceptance | Atomic submission, idempotency record, and evaluation job transaction |
+| Worker | Database polling, leases, retry limits, stale-job recovery, heartbeat, duplicate-safe completion |
+| Evaluation | Canonical outcome/reasoning/diagnostic schema and deterministic offline evaluator |
+| Content | Versioned bilingual Python-functions package with reviewed-package enforcement |
+| Providers | Groq-first/OpenRouter-fallback structured gateway, validated before persistence |
+| Sandbox | Optional Docker runner with bounded, network-isolated execution |
 
-The readiness response is a configuration/wiring check; it does not contact JWKS, database, queue, or worker services. The executable local verification commands are in the root README. The live-auth check is opt-in through `COBRI_RUN_LIVE_AUTH=1`; supply the test access token securely through `COBRI_LIVE_ACCESS_TOKEN`. The default test suite explicitly skips that check when it is not enabled/configured.
+## Runtime boundaries
 
-## Ordered ownership and integration
+The default API process uses `cobri.main:app`. It installs the local SQLite repositories and reviewed content catalog. The separate worker is started with `cobri-worker`. Test doubles remain under `backend/tests/` and are never imported by normal runtime composition.
 
-| Order | Owner | Work / dependency |
-| --- | --- | --- |
-| 1 | Moustafa (A) | Shared repository, Python/dependencies, environment setup, documentation |
-| 2 | Moustafa; review by B/C/D | Provisional HTTP contracts and asynchronous integration interfaces |
-| 3 | Moustafa | Configuration, health, JWT verifier, auth principal endpoint |
-| 4 | Moustafa | Session endpoints against session/content interfaces; isolated tests |
-| 5 | Moustafa | Submission acceptance/polling against durable-service contract; isolated tests |
-| 6 | Moustafa | Run documented commands, record results, clarify limitations for handoff |
-| Parallel dependency | Mohamed (B) | SQLAlchemy/Alembic migrations, persistence, queue selection, atomic acceptance, separate worker entry point |
-| Parallel dependency | Ahmed (C) | Canonical schema review, labeled fixtures, reproducible fake evaluator |
-| Parallel dependency | Asser (D) | One reviewed programming topic/package, content adapter, model gateway, provider smoke test |
+`202` is returned only after the database transaction stores the submission, idempotency key, and evaluation job. A worker later changes the job to `succeeded` with an evaluation or to `failed` without a learner verdict.
 
-No external team messages have been sent by this implementation. This document coordinates interfaces for the engineers to review.
+## Verification status
 
-## Pending decisions and evidence
+- Locked dependency synchronization: passed.
+- API and integration suite: passed, `125 passed, 1 skipped`; the skipped test is live OIDC.
+- SQLite acceptance, replay, conflict, concurrent duplicate requests, worker evaluation, and restart-compatible schema: passed.
+- Provider fallback and structured response validation: passed with mocked providers; live Groq and OpenRouter structured-output requests passed.
+- Reviewed-content rejection: passed.
+- Docker sandbox live execution: passed with the digest-pinned Python image for both passing and failing learner tests.
+- Live OIDC: passed with the Auth0 EU tenant and RS256 custom API configuration.
+- Real PostgreSQL smoke test: passed against a disposable PostgreSQL 16 container; SQLite remains the default local database.
 
-- **License:** select the license and exact copyright holder after checking hackathon requirements. Do not create `LICENSE` or package-license metadata until chosen.
-- **Authentication:** agree on a live OIDC provider, issuer, audience, trusted JWKS URL, algorithm, and safe test access token. Registration/token issuance are outside this API scope.
-- **Mohamed:** choose queue technology and demonstrate atomic submission plus durable work acceptance, owned reads, idempotency under concurrent retries, restart recovery, and honest adapter readiness. Provide the worker startup command with the actual entry point.
-- **Ahmed:** review the provisional models and provide canonical evaluation types, evidence-supported labels, and an explicit `uncertain` path. No API verdict should be generated from infrastructure errors.
-- **Asser:** deliver the reviewed package/version/item mapping, content-catalog implementation, gateway interface, and real provider smoke result. Without credentials, mark the real provider check pending.
+## Contracts and invariants
 
-When real adapters arrive, connect them at the dependency boundary and rerun the isolated tests plus true persistence/queue/authentication integration checks. Replace test-only evidence with actual integration evidence only after those checks run successfully.
+- Ownership is derived from verified `(issuer, subject)`, never request data.
+- Outcome correctness and reasoning quality remain independent.
+- `DiagnosticStatus.UNCERTAIN` means evidence is insufficient; provider or infrastructure failure is not a learner result.
+- Evidence references are retained with evaluations.
+- Draft content is never selectable.
+- Only package-owned tests are sent to the sandbox.
+- No bearer tokens or provider credentials are logged or committed.
 
-## Day 2 carryover
+## Deferred work
 
-Unfinished B/C/D items remain their Day 1 work; record unresolved integration checks for the incoming owners after the responsibility swap. Carry forward the contracts, test commands, actual verification results, and this implementation's limitations.
-
-Remediation, transfer challenges, sandbox execution, full RAG, profile recommendations, and frontend screens remain outside this change. Transfer is a future requirement for mastery; Day 1 makes no mastery claims.
+Frontend screens, full RAG, remediation, mastery and profile transitions, transfer execution, and license selection remain outside this Day 1 implementation. The proposed follow-up is tracked in [Day 2 plan](day2-plan.md).

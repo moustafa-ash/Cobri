@@ -13,10 +13,14 @@ from pydantic import (
     model_validator,
 )
 
-from Cobri.backend.src.cobri.content.ports import Reference
-from Cobri.backend.src.cobri.identity.auth import Principal
-
-Verdict = Literal["correct", "incorrect", "uncertain"]
+from cobri.content.ports import Reference
+from cobri.evaluations.contracts import (
+    DiagnosticStatus,
+    Evaluation,
+    OutcomeVerdict,
+    ReasoningVerdict,
+)
+from cobri.identity.auth import Principal
 
 
 class SubmissionCreate(BaseModel):
@@ -30,8 +34,15 @@ class SubmissionCreate(BaseModel):
 class EvaluationView(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, revalidate_instances="always")
 
-    outcome_verdict: Verdict
-    reasoning_verdict: Verdict
+    outcome_verdict: OutcomeVerdict
+    reasoning_verdict: ReasoningVerdict
+    diagnostic_status: DiagnosticStatus = DiagnosticStatus.SUPPORTED
+    evidence_references: list[str] = Field(default_factory=list)
+    misconception_id: str | None = None
+
+    @classmethod
+    def from_evaluation(cls, evaluation: Evaluation) -> "EvaluationView":
+        return cls(**evaluation.model_dump())
 
 
 class JobView(BaseModel):
