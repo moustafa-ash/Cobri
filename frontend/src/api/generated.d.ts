@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/content/topics/discover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Discover Topic */
+        post: operations["discover_topic_api_v1_content_topics_discover_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/content/packages/{content_package_id}/{content_version}/lessons/{item_id}": {
         parameters: {
             query?: never;
@@ -412,6 +429,25 @@ export interface components {
             job: components["schemas"]["JobView"];
             evaluation?: components["schemas"]["EvaluationView"] | null;
         };
+        /** TopicDiscoveryRequest */
+        TopicDiscoveryRequest: {
+            /** Query */
+            query: string;
+        };
+        /** TopicDiscoveryResponse */
+        TopicDiscoveryResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "supported" | "unsupported";
+            /** Options */
+            options: components["schemas"]["LessonSummary"][];
+            /** Content Package Id */
+            content_package_id?: string | null;
+            /** Content Version */
+            content_version?: string | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -470,6 +506,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PackageSummary"][];
+                };
+            };
+        };
+    };
+    discover_topic_api_v1_content_topics_discover_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TopicDiscoveryRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TopicDiscoveryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

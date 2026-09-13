@@ -4,7 +4,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from cobri.content.contracts import LessonDetail, PackageSummary
+from cobri.content.contracts import (
+    LessonDetail,
+    LessonSummary,
+    PackageSummary,
+    TopicDiscoveryRequest,
+    TopicDiscoveryResponse,
+)
 from cobri.content.ports import ContentCatalog
 from cobri.dependencies import get_content_catalog
 from cobri.identity.auth import Principal, get_current_principal
@@ -18,6 +24,26 @@ async def list_packages(
     catalog: Annotated[ContentCatalog, Depends(get_content_catalog)],
 ) -> list[PackageSummary]:
     return [PackageSummary.from_package(package) for package in catalog.list_reviewed()]
+
+
+@router.post("/topics/discover", response_model=TopicDiscoveryResponse)
+async def discover_topic(
+    body: TopicDiscoveryRequest,
+    _: Annotated[Principal, Depends(get_current_principal)],
+    catalog: Annotated[ContentCatalog, Depends(get_content_catalog)],
+) -> TopicDiscoveryResponse:
+    package, items = catalog.match_topic(body.query)
+    if package is None:
+        return TopicDiscoveryResponse(status="unsupported", options=[])
+    return TopicDiscoveryResponse(
+        status="supported",
+        content_package_id=package.content_package_id,
+        content_version=package.content_version,
+        options=[
+            LessonSummary(item_id=item.item_id, title=item.title, prompt=item.prompt)
+            for item in items
+        ],
+    )
 
 
 @router.get(

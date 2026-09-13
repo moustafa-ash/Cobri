@@ -39,6 +39,7 @@ const packages: PackageSummary[] = [{
 let poll = 0;
 const api = {
   packages: async () => packages,
+  discoverTopic: async () => ({ status: "supported", options: packages[0].lessons, content_package_id: "python-functions", content_version: "2.0.0" }),
   lesson: async () => lesson,
   createSession: async () => ({ session_id: "session", content_package_id: "python-functions", content_version: "2.0.0", ui_locale: "en", instructional_language: "en", created_at: new Date().toISOString() }),
   submit: async (_session: string, body: Record<string, unknown>) => ({

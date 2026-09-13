@@ -2,8 +2,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {
   ArrowLeft,
   ArrowRight,
-  BookOpen,
+  ChatCircleDots,
   CheckCircle,
+  PaperPlaneTilt,
   SignOut,
   Sparkle,
   WarningCircle,
@@ -18,7 +19,7 @@ import {
   type LessonDetail,
   type Locale,
   type NextStepView,
-  type PackageSummary,
+  type TopicDiscoveryResponse,
   type SubmissionView,
 } from "./api/client";
 import { copy } from "./i18n";
@@ -124,41 +125,113 @@ function Header({
 }
 
 function LessonLibrary({ api, locale, instructionLocale }: { api: CobriApi; locale: Locale; instructionLocale: Locale }) {
-  const [packages, setPackages] = useState<PackageSummary[] | null>(null);
+  const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
+  const [discovery, setDiscovery] = useState<TopicDiscoveryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const t = copy[locale];
 
-  useEffect(() => {
-    let active = true;
-    api.packages().then((result) => active && setPackages(result)).catch((reason: unknown) => active && setError(errorMessage(reason, locale)));
-    return () => { active = false; };
-  }, [api, locale]);
+  const discover = async () => {
+    const topic = query.trim();
+    if (!topic || busy) return;
+    setSubmittedQuery(topic);
+    setQuery("");
+    setDiscovery(null);
+    setError(null);
+    setBusy(true);
+    try {
+      setDiscovery(await api.discoverTopic(topic));
+    } catch (reason) {
+      setError(errorMessage(reason, locale));
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
-    <section className="library page-width">
-      <div className="library-intro">
-        <span className="section-icon"><BookOpen size={24} weight="duotone" /></span>
-        <h1>{t.choose}</h1>
-        <p>{t.chooseHelp}</p>
+    <section className="topic-chat page-width" aria-labelledby="topic-chat-title">
+      <div className="chat-heading">
+        <span className="section-icon"><ChatCircleDots size={25} weight="duotone" /></span>
+        <div>
+          <h1 id="topic-chat-title">{t.chatTitle}</h1>
+          <p>{t.chatSubtitle}</p>
+        </div>
       </div>
-      {error && <ErrorNotice message={error} />}
-      {!packages && !error && <LessonSkeleton />}
-      {packages?.length === 0 && <p className="empty-state">{t.noLessons}</p>}
-      <div className="lesson-grid">
-        {packages?.flatMap((pkg) => pkg.lessons.map((lesson, index) => (
-          <article className="lesson-card" key={`${pkg.content_version}:${lesson.item_id}`}>
-            <div className="lesson-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div>
-            <div>
-              <h2>{lesson.title[instructionLocale]}</h2>
-              <p>{lesson.prompt[instructionLocale]}</p>
+
+      <div className="conversation" aria-live="polite">
+        <div className="message-row assistant-message">
+          <span className="message-avatar" aria-hidden="true">C</span>
+          <div className="message-bubble"><p>{t.chatGreeting}</p></div>
+        </div>
+
+        {submittedQuery && (
+          <div className="message-row learner-message">
+            <div className="message-bubble"><p>{submittedQuery}</p></div>
+          </div>
+        )}
+
+        {busy && (
+          <div className="message-row assistant-message">
+            <span className="message-avatar" aria-hidden="true">C</span>
+            <div className="message-bubble typing-message"><span /><span /><span /><span className="sr-only">{t.findingTopics}</span></div>
+          </div>
+        )}
+
+        {discovery && (
+          <div className="message-row assistant-message">
+            <span className="message-avatar" aria-hidden="true">C</span>
+            <div className="message-bubble discovery-message">
+              {discovery.status === "supported" ? (
+                <>
+                  <p>{t.supportedTopic}</p>
+                  <div className="topic-options">
+                    {discovery.options.map((lesson) => (
+                      <Link
+                        className="topic-option"
+                        key={lesson.item_id}
+                        to={`/lesson/${discovery.content_package_id}/${discovery.content_version}/${lesson.item_id}`}
+                      >
+                        <span><strong>{lesson.title[instructionLocale]}</strong><small>{lesson.prompt[instructionLocale]}</small></span>
+                        {locale === "ar" ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p>{t.unsupportedTopic}</p>
+                  <small className="availability-note">{t.availableNow}</small>
+                </>
+              )}
             </div>
-            <Link className="primary-link" to={`/lesson/${pkg.content_package_id}/${pkg.content_version}/${lesson.item_id}`}>
-              {t.start}
-              {locale === "ar" ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
-            </Link>
-          </article>
-        ))) }
+          </div>
+        )}
+
+        {error && <ErrorNotice message={error} />}
       </div>
+
+      <form className="topic-composer" onSubmit={(event) => { event.preventDefault(); void discover(); }}>
+        <label className="sr-only" htmlFor="topic-query">{t.topicLabel}</label>
+        <textarea
+          id="topic-query"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              void discover();
+            }
+          }}
+          placeholder={t.topicPlaceholder}
+          rows={2}
+          maxLength={300}
+        />
+        <button className="send-button" type="submit" disabled={busy || !query.trim()} aria-label={t.sendTopic}>
+          <PaperPlaneTilt size={21} weight="fill" aria-hidden="true" />
+        </button>
+      </form>
+      <p className="composer-hint">{t.composerHint}</p>
     </section>
   );
 }

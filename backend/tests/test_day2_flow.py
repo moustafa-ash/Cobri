@@ -38,6 +38,40 @@ def test_catalogue_hides_evaluator_only_material(tmp_path: Path) -> None:
         assert "expected_code" not in detail.text
         assert "tests" not in detail.text
 
+        supported = client.post(
+            "/api/v1/content/topics/discover", json={"query": "Python functions"}
+        )
+        assert supported.status_code == 200
+        assert supported.json()["status"] == "supported"
+        assert supported.json()["content_version"] == "2.0.0"
+        assert len(supported.json()["options"]) == 3
+        assert "expected_code" not in supported.text
+
+        specific = client.post(
+            "/api/v1/content/topics/discover", json={"query": "function call composition"}
+        )
+        assert specific.status_code == 200
+        assert [option["item_id"] for option in specific.json()["options"]] == [
+            "compose-function-calls"
+        ]
+
+        arabic = client.post(
+            "/api/v1/content/topics/discover", json={"query": "القيم المعادة من الدوال"}
+        )
+        assert arabic.status_code == 200
+        assert [option["item_id"] for option in arabic.json()["options"]] == [
+            "function-return-value"
+        ]
+
+        unsupported = client.post("/api/v1/content/topics/discover", json={"query": "Python loops"})
+        assert unsupported.status_code == 200
+        assert unsupported.json() == {
+            "status": "unsupported",
+            "options": [],
+            "content_package_id": None,
+            "content_version": None,
+        }
+
 
 def test_supported_remediation_practice_and_transfer_flow(tmp_path: Path) -> None:
     settings = Settings(

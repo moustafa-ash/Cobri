@@ -1,6 +1,6 @@
 # Cobri
 
-Cobri is a bilingual Arabic/English tutoring platform. The local Day 2 vertical slice includes the FastAPI API, durable SQLite/PostgreSQL-compatible persistence, a lease-aware evaluation worker, reviewed lesson retrieval, provider and sandbox adapters, and a React/Vite guided learner app.
+Cobri is a bilingual Arabic/English tutoring platform. The local Day 2 vertical slice includes the FastAPI API, durable SQLite/PostgreSQL-compatible persistence, a lease-aware evaluation worker, reviewed lesson retrieval, provider and sandbox adapters, and a React/Vite conversational learner app.
 
 ## Repository
 
@@ -64,6 +64,7 @@ Public health routes are `/health/live` and `/health/ready`. Authenticated route
 - `POST /api/v1/sessions/{session_id}/submissions`
 - `GET /api/v1/submissions/{submission_id}`
 - `GET /api/v1/content/packages`
+- `POST /api/v1/content/topics/discover`
 - `GET /api/v1/content/packages/{package}/{version}/lessons/{item}`
 - `GET /api/v1/submissions/{submission_id}/next`
 - `GET /api/v1/operations/metrics`
@@ -74,7 +75,7 @@ Evaluations keep outcome correctness, reasoning quality, diagnostic support, evi
 
 ## Content and evaluation
 
-The historical package is `python-functions` version `1.0.0`. The reviewed `2.0.0` package adds three bilingual lessons covering return values, parameters and arguments, and composing function calls. Each lesson owns evidence, rubric, misconception remediation, targeted practice, and a changed-context transfer item. Only reviewed packages are selectable, and learner responses never expose evaluator-only answers or hidden tests.
+The historical package is `python-functions` version `1.0.0`. The reviewed `2.0.0` package adds three bilingual lessons covering return values, parameters and arguments, and composing function calls. Each lesson owns evidence, rubric, misconception remediation, targeted practice, and a changed-context transfer item. The learner starts by describing any topic in chat. Cobri offers options from the newest matching reviewed package or clearly reports that reviewed material is unavailable. Only reviewed packages are selectable, and learner responses never expose evaluator-only answers or hidden tests. The topic-discovery boundary can later add trusted-source web retrieval without changing the assessment flow.
 
 Without model credentials, the worker uses the deterministic fixture evaluator. With credentials, it tries Groq first and OpenRouter second, validates structured responses against the canonical Pydantic schema, and retries provider failures.
 

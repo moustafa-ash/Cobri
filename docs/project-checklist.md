@@ -82,6 +82,7 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 
 - [x] Create the React and TypeScript frontend application.
 - [x] Add accessible login, lesson/session, submission, evaluation, remediation, and transfer routes.
+- [x] Start with bilingual topic chat, offer matching reviewed lesson options, and clearly reject unsupported topics.
 - [x] Add a centrally typed or generated API client to prevent contract drift.
 - [x] Add a repeatable frontend lint gate.
 - [x] Handle `202` polling, retries, expired authentication, and ownership-safe errors.
@@ -92,10 +93,10 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 
 ### Real browser authentication
 
-- [ ] Create and configure the Auth0 single-page application using Authorization Code with PKCE.
+- [x] Create and configure the local Auth0 single-page application using Authorization Code with PKCE.
 - [ ] Configure exact callback, logout, allowed-origin, issuer, and API-audience values for each environment.
-- [ ] Use API access tokens rather than ID tokens for backend authorization.
-- [ ] Approve and document the browser token-storage and refresh strategy.
+- [x] Use API access tokens rather than ID tokens for backend authorization.
+- [x] Approve and document in-memory browser token storage with refresh-token rotation.
 - [ ] Verify login, logout, reload, expiry recovery, and authenticated API calls in the browser.
 - [ ] Add an opt-in live browser authentication test that skips clearly when credentials are unavailable.
 

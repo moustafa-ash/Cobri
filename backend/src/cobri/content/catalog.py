@@ -1,5 +1,7 @@
 """Versioned JSON content catalog with reviewed-package enforcement."""
 
+import re
+import unicodedata
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -147,6 +149,52 @@ class FileContentCatalog:
             key=lambda package: (package.content_package_id, package.content_version),
         )
 
+    def match_topic(self, query: str) -> tuple[ContentPackage | None, list[ContentItem]]:
+        """Match a learner topic only against the newest reviewed package versions."""
+        query_tokens = _topic_tokens(query)
+        if not query_tokens:
+            return None, []
+
+        newest: dict[str, ContentPackage] = {}
+        for package in self.list_reviewed():
+            current = newest.get(package.content_package_id)
+            if current is None or _version_key(package.content_version) > _version_key(
+                current.content_version
+            ):
+                newest[package.content_package_id] = package
+
+        best: tuple[int, ContentPackage, list[ContentItem]] | None = None
+        for package in newest.values():
+            package_tokens = _topic_tokens(package.topic)
+            specific_query = query_tokens - _GENERIC_TOPIC_TOKENS
+            lesson_scores = [
+                len(specific_query & (_lesson_topic_tokens(item) - _GENERIC_TOPIC_TOKENS))
+                for item in package.items
+            ]
+            package_specific = package_tokens - _GENERIC_TOPIC_TOKENS
+            specific_overlap = len(specific_query & package_specific)
+            lesson_overlap = max(lesson_scores, default=0)
+            broad_topic_match = _is_supported_topic_phrase(query_tokens, package_tokens)
+            if not broad_topic_match and specific_overlap == 0 and lesson_overlap == 0:
+                continue
+
+            score = (3 if broad_topic_match else 0) + specific_overlap + lesson_overlap
+            options = (
+                package.items
+                if broad_topic_match
+                else [
+                    item
+                    for item, lesson_score in zip(package.items, lesson_scores, strict=True)
+                    if lesson_score
+                ]
+            )
+            if best is None or score > best[0]:
+                best = (score, package, options)
+
+        if best is None:
+            return None, []
+        return best[1], best[2]
+
     def get_package(self, content_package_id: str, content_version: str) -> ContentPackage:
         package = self._packages.get((content_package_id, content_version))
         if package is None or package.review_status != "reviewed":
@@ -245,3 +293,88 @@ class FileContentCatalog:
 def write_example_package(path: Path) -> None:
     """Validate a package file without making it selectable at runtime."""
     ContentPackage.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+_GENERIC_TOPIC_TOKENS = {
+    "python",
+    "function",
+    "functions",
+    "code",
+    "coding",
+    "programming",
+    "بايثون",
+    "دالة",
+    "دوال",
+    "برمجة",
+    "كود",
+    "a",
+    "an",
+    "and",
+    "about",
+    "do",
+    "for",
+    "how",
+    "i",
+    "in",
+    "of",
+    "on",
+    "the",
+    "to",
+    "understand",
+    "want",
+    "أن",
+    "عن",
+    "على",
+    "في",
+    "كيف",
+    "ما",
+    "من",
+    "و",
+}
+
+_LESSON_TOPIC_ALIASES = {
+    "function-return-value": (
+        "return returns returned value values إرجاع ارجاع يعيد عودة قيمة قيم القيمة القيم"
+    ),
+    "parameters-and-arguments": (
+        "parameter parameters argument arguments معامل معاملات وسيط وسائط المعاملات الوسائط"
+    ),
+    "compose-function-calls": (
+        "compose composition nested chaining call calls تركيب استدعاء استدعاءات متداخلة"
+    ),
+}
+
+
+def _topic_tokens(value: str) -> set[str]:
+    normalized = unicodedata.normalize("NFKC", value).casefold()
+    normalized = re.sub(r"[\u064b-\u065f\u0670]", "", normalized)
+    tokens = set(re.findall(r"[\w]+", normalized, flags=re.UNICODE))
+    expanded = set(tokens)
+    for token in tokens:
+        if token.startswith("ال") and len(token) > 4:
+            expanded.discard(token)
+            expanded.add(token[2:])
+        if token.endswith("s") and len(token) > 4:
+            expanded.add(token[:-1])
+    return expanded
+
+
+def _lesson_topic_tokens(item: ContentItem) -> set[str]:
+    aliases = _LESSON_TOPIC_ALIASES.get(item.item_id, "")
+    return _topic_tokens(
+        f"{item.title.en} {item.title.ar} {item.prompt.en} {item.prompt.ar} {aliases}"
+    )
+
+
+def _is_supported_topic_phrase(query_tokens: set[str], package_tokens: set[str]) -> bool:
+    generic_overlap = query_tokens & package_tokens & _GENERIC_TOPIC_TOKENS
+    return len(generic_overlap) >= 2 or (
+        {"python", "function"} <= query_tokens or {"بايثون", "دوال"} <= query_tokens
+    )
+
+
+def _version_key(version: str) -> tuple[int, ...]:
+    parts = version.split(".")
+    if all(part.isdigit() for part in parts):
+        return tuple(int(part) for part in parts)
+    return (0,)

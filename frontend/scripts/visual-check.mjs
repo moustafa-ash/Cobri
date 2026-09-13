@@ -30,7 +30,9 @@ for (const viewport of [
   const hasContent = (await page.locator("body").innerText()).trim().length > 0;
   const overlay = await page.locator(".vite-error-overlay").count();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-  await page.getByRole("link", { name: arabic ? /ابدأ الدرس/ : /Start lesson/ }).click();
+  await page.getByLabel(arabic ? "الموضوع المراد التحقق منه" : "Topic to check").fill(arabic ? "دوال بايثون" : "Python functions");
+  await page.getByRole("button", { name: arabic ? "إرسال الموضوع" : "Send topic" }).click();
+  await page.getByRole("link", { name: arabic ? /إرجاع قيمة/ : /Return a value/ }).click();
   await page.getByLabel(arabic ? "كود Python الخاص بك" : "Your Python code").fill("def double(n):\n    print(n * 2)");
   await page.getByLabel(arabic ? "اشرح تفكيرك" : "Explain your reasoning").fill(arabic ? "تعرض الطباعة القيمة المحسوبة." : "Printing shows the calculated value.");
   await page.getByRole("button", { name: arabic ? "تحقق من إجابتي" : "Check my answer" }).click();

@@ -6,6 +6,7 @@ export type AttemptPurpose = components["schemas"]["AttemptPurpose"];
 type ApiLessonSummary = components["schemas"]["LessonSummary"];
 type ApiLessonDetail = components["schemas"]["LessonDetail"];
 type ApiPackageSummary = components["schemas"]["PackageSummary"];
+type ApiTopicDiscoveryResponse = components["schemas"]["TopicDiscoveryResponse"];
 type ApiSubmissionView = components["schemas"]["SubmissionView"];
 type ApiNextStepView = components["schemas"]["NextStepView"];
 
@@ -21,6 +22,14 @@ export type LessonSummary = Omit<ApiLessonSummary, "title" | "prompt"> & {
 };
 export type PackageSummary = Omit<ApiPackageSummary, "lessons"> & {
   lessons: LessonSummary[];
+};
+export type TopicDiscoveryResponse = Omit<
+  ApiTopicDiscoveryResponse,
+  "options" | "content_package_id" | "content_version"
+> & {
+  options: LessonSummary[];
+  content_package_id: string | null;
+  content_version: string | null;
 };
 export type LessonDetail = Omit<ApiLessonDetail, "title" | "prompt" | "evidence" | "rubric"> & {
   title: Localized;
@@ -91,6 +100,13 @@ export class CobriApi {
 
   packages() {
     return this.request<PackageSummary[]>("/api/v1/content/packages");
+  }
+
+  discoverTopic(query: string) {
+    return this.request<TopicDiscoveryResponse>("/api/v1/content/topics/discover", {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    });
   }
 
   lesson(packageId: string, version: string, itemId: string) {

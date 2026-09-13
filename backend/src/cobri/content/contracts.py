@@ -1,6 +1,8 @@
 """Learner-safe content API contracts."""
 
-from pydantic import BaseModel, ConfigDict
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field
 
 from cobri.content.catalog import (
     ContentItem,
@@ -38,6 +40,21 @@ class PackageSummary(BaseModel):
                 for item in package.items
             ],
         )
+
+
+class TopicDiscoveryRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    query: str = Field(min_length=2, max_length=300)
+
+
+class TopicDiscoveryResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    status: Literal["supported", "unsupported"]
+    options: list[LessonSummary]
+    content_package_id: str | None = None
+    content_version: str | None = None
 
 
 class LessonDetail(LessonSummary):
