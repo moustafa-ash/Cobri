@@ -6,7 +6,7 @@ Day 1 is implemented locally across the API, persistence, evaluation, content, w
 
 | Area | Current state |
 | --- | --- |
-| Repository and tooling | Python 3.12, uv lockfile, Alembic, Ruff, tests, environment template |
+| Repository and tooling | Private GitHub repository created at `moustafa-ash/Cobri` and pushed to `origin/main`; Python 3.12, uv lockfile, Alembic, Ruff, tests, environment template |
 | API | FastAPI health, auth, session, submission, and polling routes |
 | Identity | JWT signature, issuer, audience, JWKS, expiry, algorithm, and ownership checks |
 | Persistence | Async SQLAlchemy repositories compatible with SQLite and PostgreSQL |
@@ -25,8 +25,12 @@ The default API process uses `cobri.main:app`. It installs the local SQLite repo
 
 ## Verification status
 
+The external checks below are the Day 1 record. They are not evidence that those services are
+available in the current environment. At the Day 2 baseline audit, Docker was unavailable on
+`PATH`; live Auth0, provider, Docker, and PostgreSQL checks remained pending re-verification.
+
 - Locked dependency synchronization: passed.
-- API and integration suite: passed, `125 passed, 1 skipped`; the skipped test is live OIDC.
+- API and integration suite at Day 1: passed, `125 passed, 1 skipped`; the skipped test is live OIDC.
 - SQLite acceptance, replay, conflict, concurrent duplicate requests, worker evaluation, and restart-compatible schema: passed.
 - Provider fallback and structured response validation: passed with mocked providers; live Groq and OpenRouter structured-output requests passed.
 - Reviewed-content rejection: passed.

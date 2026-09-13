@@ -99,7 +99,7 @@ class StructuredModelGateway:
             raise ProviderUnavailable("provider response was unavailable or invalid") from exc
 
 
-def evaluation_prompt(input_data: EvaluationInput, evidence: str) -> str:
+def evaluation_prompt(input_data: EvaluationInput, evidence: object) -> str:
     return json.dumps(
         {
             "submission": input_data.model_dump(mode="json"),

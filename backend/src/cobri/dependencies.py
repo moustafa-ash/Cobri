@@ -5,6 +5,7 @@ from fastapi import Request
 from cobri.assessments.contracts import SubmissionService
 from cobri.content.ports import ContentCatalog
 from cobri.errors import DependencyUnavailable
+from cobri.rate_limit import RateLimiter
 from cobri.tutoring.contracts import SessionStore
 
 
@@ -27,3 +28,7 @@ def get_content_catalog(request: Request) -> ContentCatalog:
     if adapter is None:
         raise DependencyUnavailable
     return adapter
+
+
+def get_rate_limiter(request: Request) -> RateLimiter:
+    return request.app.state.rate_limiter

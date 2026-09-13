@@ -31,6 +31,18 @@ class IdempotencyConflict(ApplicationError):
     message = "This idempotency key was already used for a different submission."
 
 
+class ProgressionConflict(ApplicationError):
+    status_code = 409
+    code = "invalid_progression"
+    message = "This tutoring step is not available from the selected attempt."
+
+
+class RateLimitExceeded(ApplicationError):
+    status_code = 429
+    code = "rate_limit_exceeded"
+    message = "Too many requests. Try again shortly."
+
+
 class IntegrationContractError(ApplicationError):
     code = "invalid_dependency_response"
     message = "A service returned an invalid response. No learner verdict was produced."

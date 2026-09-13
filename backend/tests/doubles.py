@@ -121,3 +121,8 @@ class CannedContentCatalog:
         if self.error:
             raise self.error
         return self.item
+
+    def get_lesson(self, content_package_id: str, content_version: str, item_id: str) -> Any:
+        if self.error:
+            raise self.error
+        return self.item

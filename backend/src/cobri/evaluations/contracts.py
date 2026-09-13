@@ -41,3 +41,4 @@ class EvaluationInput(BaseModel):
     item_id: str = Field(min_length=1, max_length=128)
     content_package_id: str = Field(min_length=1, max_length=128)
     content_version: str = Field(min_length=1, max_length=128)
+    sandbox_passed: bool | None = None

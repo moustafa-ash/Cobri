@@ -37,6 +37,8 @@ class SubmissionRecord(Base):
     item_id: Mapped[str] = mapped_column(String(128), nullable=False)
     answer: Mapped[str] = mapped_column(Text, nullable=False)
     reasoning: Mapped[str | None] = mapped_column(Text, nullable=True)
+    purpose: Mapped[str] = mapped_column(String(16), nullable=False, default="assessment")
+    parent_submission_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
@@ -62,6 +64,7 @@ class EvaluationJobRecord(Base):
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    lease_owner: Mapped[str | None] = mapped_column(String(128), nullable=True)
     last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 

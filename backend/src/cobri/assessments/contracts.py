@@ -1,6 +1,7 @@
 """Provisional API views only. Ahmed owns the canonical evaluation schemas."""
 
 from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Annotated, Literal, Protocol, Self
 from uuid import UUID
 
@@ -13,6 +14,7 @@ from pydantic import (
     model_validator,
 )
 
+from cobri.content.catalog import LocalizedText
 from cobri.content.ports import Reference
 from cobri.evaluations.contracts import (
     DiagnosticStatus,
@@ -23,12 +25,26 @@ from cobri.evaluations.contracts import (
 from cobri.identity.auth import Principal
 
 
+class AttemptPurpose(StrEnum):
+    ASSESSMENT = "assessment"
+    PRACTICE = "practice"
+    TRANSFER = "transfer"
+
+
 class SubmissionCreate(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, revalidate_instances="always")
 
     item_id: Reference
     answer: Annotated[str, Field(min_length=1, max_length=10_000, pattern=r"\S")]
     reasoning: Annotated[str | None, Field(max_length=10_000)] = None
+    purpose: AttemptPurpose = AttemptPurpose.ASSESSMENT
+    parent_submission_id: UUID | None = None
+
+    @model_validator(mode="after")
+    def parent_matches_purpose(self) -> Self:
+        if (self.purpose is AttemptPurpose.ASSESSMENT) != (self.parent_submission_id is None):
+            raise ValueError("assessment has no parent; practice and transfer require one")
+        return self
 
 
 class EvaluationView(BaseModel):
@@ -71,6 +87,23 @@ class SubmissionView(SubmissionCreate):
         if (self.job.status == "succeeded") != (self.evaluation is not None):
             raise ValueError("Only succeeded jobs must have an evaluation")
         return self
+
+
+class NextItemView(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    item_id: str
+    purpose: AttemptPurpose
+    prompt: LocalizedText
+
+
+class NextStepView(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    action: Literal["pending", "retry", "remediation", "transfer", "complete", "failed"]
+    message: LocalizedText
+    remediation: LocalizedText | None = None
+    next_item: NextItemView | None = None
 
 
 class SubmissionService(Protocol):

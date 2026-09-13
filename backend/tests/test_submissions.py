@@ -35,7 +35,12 @@ def test_accept_and_poll_preserve_arabic_and_verified_identity(api: ApiHarness) 
     assert response.json()["evaluation"] is None
     principal, session_id, request, key = api.submissions.accept_calls[0]
     assert (principal, session_id, key) == (OWNER, SESSION_ID, "attempt-1")
-    assert request.model_dump() == {**SUBMISSION_BODY, "reasoning": None}
+    assert request.model_dump(mode="json") == {
+        **SUBMISSION_BODY,
+        "reasoning": None,
+        "purpose": "assessment",
+        "parent_submission_id": None,
+    }
     assert api.sessions.get_calls == [(OWNER, SESSION_ID)]
     assert api.catalog.item_calls == [("test-only-programming", "0.0.0-test", "test-item-1")]
 

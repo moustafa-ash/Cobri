@@ -91,3 +91,14 @@ def test_content_catalog_rejects_unreviewed_package(tmp_path: Path) -> None:
     catalog = FileContentCatalog(tmp_path)
     with pytest.raises(ResourceNotFound):
         asyncio.run(catalog.require_package("draft", "1.0.0"))
+
+
+def test_approved_day2_content_is_valid_and_selectable() -> None:
+    root = Path(__file__).parents[2] / "content-packages"
+    catalog = FileContentCatalog(root)
+    selected = asyncio.run(catalog.require_package("python-functions", "2.0.0"))
+    assert selected.content_version == "2.0.0"
+    package = catalog._packages[("python-functions", "2.0.0")]
+    assert package.review_status == "reviewed"
+    assert len(package.items) == 3
+    assert all(item.evidence and item.rubric and item.transfer for item in package.items)

@@ -1,6 +1,7 @@
 """Docker-backed Python execution with bounded resources and no network."""
 
 import json
+import secrets
 import shutil
 import subprocess
 import tempfile
@@ -15,7 +16,6 @@ class SandboxUnavailable(RuntimeError):
 @dataclass(frozen=True)
 class SandboxResult:
     passed: bool
-    timed_out: bool
     output: str
 
 
@@ -31,11 +31,15 @@ class DockerSandbox:
         with tempfile.TemporaryDirectory(prefix="cobri-sandbox-") as directory:
             root = Path(directory)
             harness = root / "harness.py"
-            harness.write_text(self._harness(code, tests), encoding="utf-8")
+            nonce = secrets.token_urlsafe(24)
+            harness.write_text(self._harness(code, tests, nonce), encoding="utf-8")
+            container_name = f"cobri-sandbox-{secrets.token_hex(12)}"
             command = [
                 docker,
                 "run",
                 "--rm",
+                "--name",
+                container_name,
                 "--network",
                 "none",
                 "--read-only",
@@ -68,24 +72,38 @@ class DockerSandbox:
                     check=False,
                 )
             except subprocess.TimeoutExpired as exc:
-                return SandboxResult(False, True, str(exc)[:4000])
+                subprocess.run(
+                    [docker, "rm", "--force", container_name],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                    check=False,
+                )
+                raise SandboxUnavailable("sandbox execution timed out") from exc
             output = (completed.stdout + completed.stderr)[-4000:]
             if completed.returncode != 0:
-                return SandboxResult(False, False, output)
+                raise SandboxUnavailable("sandbox container failed")
+            prefix = f"COBRI_RESULT:{nonce}:"
             marker = next(
                 (
-                    line.removeprefix("COBRI_RESULT:")
+                    line.removeprefix(prefix)
                     for line in completed.stdout.splitlines()
-                    if line.startswith("COBRI_RESULT:")
+                    if line.startswith(prefix)
                 ),
                 None,
             )
             if marker is None:
-                return SandboxResult(False, False, output)
-            return SandboxResult(bool(json.loads(marker)["passed"]), False, output)
+                raise SandboxUnavailable("sandbox returned no trusted result")
+            try:
+                passed = json.loads(marker)["passed"]
+            except (json.JSONDecodeError, KeyError, TypeError) as exc:
+                raise SandboxUnavailable("sandbox returned an invalid result") from exc
+            if not isinstance(passed, bool):
+                raise SandboxUnavailable("sandbox returned an invalid result")
+            return SandboxResult(passed, output)
 
     @staticmethod
-    def _harness(code: str, tests: list[str]) -> str:
+    def _harness(code: str, tests: list[str], nonce: str) -> str:
         return (
             "import json\n"
             "passed = False\n"
@@ -94,7 +112,7 @@ class DockerSandbox:
             f"    exec({code!r}, namespace)\n"
             + "\n".join(f"    exec({test!r}, namespace)" for test in tests)
             + "\n    passed = True\n"
-            "except Exception as exc:\n"
+            "except BaseException as exc:\n"
             "    print(type(exc).__name__ + ': ' + str(exc))\n"
-            "print('COBRI_RESULT:' + json.dumps({'passed': passed}))\n"
+            f"print('COBRI_RESULT:{nonce}:' + json.dumps({{'passed': passed}}))\n"
         )

@@ -6,9 +6,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Response
 
 from cobri.content.ports import ContentCatalog, PackageReference
-from cobri.dependencies import get_content_catalog, get_session_store
+from cobri.dependencies import get_content_catalog, get_rate_limiter, get_session_store
 from cobri.errors import IntegrationContractError, validate_result
 from cobri.identity.auth import Principal, get_current_principal
+from cobri.rate_limit import RateLimiter
 from cobri.tutoring.contracts import SessionCreate, SessionStore, SessionView
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
@@ -21,7 +22,9 @@ async def create_session(
     principal: Annotated[Principal, Depends(get_current_principal)],
     store: Annotated[SessionStore, Depends(get_session_store)],
     catalog: Annotated[ContentCatalog, Depends(get_content_catalog)],
+    limiter: Annotated[RateLimiter, Depends(get_rate_limiter)],
 ) -> SessionView:
+    await limiter.check(principal, "create_session")
     package = validate_result(
         PackageReference,
         await catalog.require_package(body.content_package_id, body.content_version),

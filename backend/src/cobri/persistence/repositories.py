@@ -5,7 +5,7 @@ import json
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select, update
 from sqlalchemy.exc import IntegrityError
 
 from cobri.assessments.contracts import (
@@ -145,7 +145,7 @@ class DatabaseStore:
                     subject=principal.subject,
                     content_package_id=owned_session.content_package_id,
                     content_version=owned_session.content_version,
-                    **request.model_dump(),
+                    **request.model_dump(mode="json"),
                     created_at=utc_now(),
                 )
                 job = EvaluationJobRecord(
@@ -191,12 +191,29 @@ class DatabaseStore:
         now = utc_now()
         async with self.database.session() as session:
             async with session.begin():
+                await session.execute(
+                    update(EvaluationJobRecord)
+                    .where(
+                        EvaluationJobRecord.status == "running",
+                        EvaluationJobRecord.lease_until < now,
+                        EvaluationJobRecord.attempts >= max_attempts,
+                    )
+                    .values(
+                        status="failed",
+                        lease_until=None,
+                        lease_owner=None,
+                        last_error="attempts_exhausted_after_lease_expiry",
+                    )
+                )
                 job = await session.scalar(
                     select(EvaluationJobRecord)
                     .where(
                         or_(
                             EvaluationJobRecord.status == "pending",
-                            EvaluationJobRecord.lease_until < now,
+                            and_(
+                                EvaluationJobRecord.status == "running",
+                                EvaluationJobRecord.lease_until < now,
+                            ),
                         ),
                         EvaluationJobRecord.available_at <= now,
                         EvaluationJobRecord.attempts < max_attempts,
@@ -206,9 +223,31 @@ class DatabaseStore:
                 )
                 if job is None:
                     return None
-                job.status = "running"
-                job.attempts += 1
-                job.lease_until = now + timedelta(seconds=lease_seconds)
+                claimed = await session.execute(
+                    update(EvaluationJobRecord)
+                    .where(
+                        EvaluationJobRecord.job_id == job.job_id,
+                        or_(
+                            EvaluationJobRecord.status == "pending",
+                            and_(
+                                EvaluationJobRecord.status == "running",
+                                EvaluationJobRecord.lease_until < now,
+                            ),
+                        ),
+                        EvaluationJobRecord.available_at <= now,
+                        EvaluationJobRecord.attempts < max_attempts,
+                    )
+                    .values(
+                        status="running",
+                        attempts=EvaluationJobRecord.attempts + 1,
+                        lease_until=now + timedelta(seconds=lease_seconds),
+                        lease_owner=worker_id,
+                    )
+                    .execution_options(synchronize_session=False)
+                )
+                if claimed.rowcount != 1:
+                    return None
+                await session.refresh(job)
                 submission = await session.get(SubmissionRecord, job.submission_id)
                 if submission is None:
                     job.status = "failed"
@@ -217,12 +256,32 @@ class DatabaseStore:
                 await session.flush()
                 return submission, job
 
-    async def finish_job(self, job_id: str, evaluation: EvaluationView) -> None:
+    async def renew_job_lease(self, job_id: str, worker_id: str, lease_seconds: int) -> bool:
         async with self.database.session() as session:
             async with session.begin():
-                job = await session.get(EvaluationJobRecord, job_id)
+                result = await session.execute(
+                    update(EvaluationJobRecord)
+                    .where(
+                        EvaluationJobRecord.job_id == job_id,
+                        EvaluationJobRecord.status == "running",
+                        EvaluationJobRecord.lease_owner == worker_id,
+                    )
+                    .values(lease_until=utc_now() + timedelta(seconds=lease_seconds))
+                )
+                return result.rowcount == 1
+
+    async def finish_job(self, job_id: str, worker_id: str, evaluation: EvaluationView) -> bool:
+        async with self.database.session() as session:
+            async with session.begin():
+                job = await session.scalar(
+                    select(EvaluationJobRecord).where(
+                        EvaluationJobRecord.job_id == job_id,
+                        EvaluationJobRecord.status == "running",
+                        EvaluationJobRecord.lease_owner == worker_id,
+                    )
+                )
                 if job is None:
-                    return
+                    return False
                 existing = await session.get(EvaluationRecord, job.submission_id)
                 if existing is None:
                     session.add(
@@ -233,20 +292,28 @@ class DatabaseStore:
                     )
                 job.status = "succeeded"
                 job.lease_until = None
+                job.lease_owner = None
                 job.last_error = None
+                return True
 
-    async def fail_job(self, job_id: str, error: str, retry: bool) -> None:
+    async def fail_job(self, job_id: str, worker_id: str, error: str, retry: bool) -> bool:
         async with self.database.session() as session:
             async with session.begin():
-                job = await session.get(EvaluationJobRecord, job_id)
+                job = await session.scalar(
+                    select(EvaluationJobRecord).where(
+                        EvaluationJobRecord.job_id == job_id,
+                        EvaluationJobRecord.status == "running",
+                        EvaluationJobRecord.lease_owner == worker_id,
+                    )
+                )
                 if job is None:
-                    return
-                if job.status == "succeeded":
-                    return
+                    return False
                 job.status = "pending" if retry else "failed"
                 job.available_at = utc_now() + timedelta(seconds=min(60, 2**job.attempts))
                 job.lease_until = None
+                job.lease_owner = None
                 job.last_error = error[:2000]
+                return True
 
     async def heartbeat(self, worker_id: str) -> None:
         async with self.database.session() as session:
@@ -288,6 +355,10 @@ class DatabaseStore:
                 "item_id": record.item_id,
                 "answer": record.answer,
                 "reasoning": record.reasoning,
+                "purpose": record.purpose,
+                "parent_submission_id": (
+                    UUID(record.parent_submission_id) if record.parent_submission_id else None
+                ),
                 "created_at": as_utc(record.created_at),
                 "job": {"job_id": UUID(job.job_id), "status": job.status},
                 "evaluation": (

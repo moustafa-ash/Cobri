@@ -1,0 +1,171 @@
+{
+  "content_package_id": "python-functions",
+  "content_version": "2.0.0",
+  "topic": "Python functions: values, parameters, and composition",
+  "review_status": "reviewed",
+  "reviewed_by": "Moustafa",
+  "items": [
+    {
+      "item_id": "function-return-value",
+      "title": {"en": "Return a value", "ar": "إرجاع قيمة"},
+      "prompt": {
+        "en": "Write double(n), which returns twice n. Do not print the result.",
+        "ar": "اكتب الدالة double(n) بحيث تعيد ضعف n. لا تطبع النتيجة."
+      },
+      "expected_code": "def double(n):\n    return n * 2",
+      "tests": ["assert double(0) == 0", "assert double(4) == 8", "assert double(-3) == -6"],
+      "evidence_references": ["python-functions:2.0.0:return-values"],
+      "misconception_ids": ["print-instead-of-return"],
+      "transfer_prompt": {
+        "en": "Write rectangle_area(width, height), which returns the area.",
+        "ar": "اكتب الدالة rectangle_area(width, height) بحيث تعيد المساحة."
+      },
+      "evidence": [
+        {
+          "evidence_id": "python-functions:2.0.0:return-values",
+          "source_title": "Python Tutorial: Defining Functions",
+          "source_url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+          "explanation": {
+            "en": "A return statement sends a value back to the caller. Printing only displays output and does not supply that value to the calling expression.",
+            "ar": "تعيد جملة return قيمة إلى موضع استدعاء الدالة. أما print فتعرض ناتجًا فقط ولا توفر هذه القيمة للتعبير الذي استدعى الدالة."
+          }
+        }
+      ],
+      "rubric": [
+        {"criterion_id": "defines-function", "description": {"en": "Defines double with one parameter.", "ar": "يعرّف double بمعامل واحد."}},
+        {"criterion_id": "returns-product", "description": {"en": "Returns n multiplied by 2 for positive, zero, and negative inputs.", "ar": "يعيد حاصل ضرب n في 2 للقيم الموجبة والصفر والسالبة."}},
+        {"criterion_id": "explains-return", "description": {"en": "Explains that the caller receives the returned value.", "ar": "يوضح أن موضع الاستدعاء يستقبل القيمة المعادة."}}
+      ],
+      "misconceptions": [
+        {
+          "misconception_id": "print-instead-of-return",
+          "detection_criteria": ["The function prints the computed value and has no value-returning return statement."],
+          "remediation": {
+            "en": "Use return when later code must receive or combine the result. print is only for displaying text.",
+            "ar": "استخدم return عندما يحتاج الكود اللاحق إلى استلام النتيجة أو دمجها. تُستخدم print لعرض النص فقط."
+          },
+          "practice": {
+            "item_id": "practice-return-square",
+            "prompt": {"en": "Write square(n), which returns n multiplied by itself.", "ar": "اكتب الدالة square(n) بحيث تعيد حاصل ضرب n في نفسه."},
+            "expected_code": "def square(n):\n    return n * n",
+            "tests": ["assert square(0) == 0", "assert square(5) == 25", "assert square(-3) == 9"]
+          }
+        }
+      ],
+      "transfer": {
+        "item_id": "transfer-rectangle-area",
+        "prompt": {"en": "Write rectangle_area(width, height), which returns the area.", "ar": "اكتب الدالة rectangle_area(width, height) بحيث تعيد المساحة."},
+        "expected_code": "def rectangle_area(width, height):\n    return width * height",
+        "tests": ["assert rectangle_area(3, 4) == 12", "assert rectangle_area(0, 8) == 0", "assert rectangle_area(2.5, 4) == 10"]
+      }
+    },
+    {
+      "item_id": "parameters-and-arguments",
+      "title": {"en": "Parameters and arguments", "ar": "المعاملات والوسائط"},
+      "prompt": {
+        "en": "Write greet(name, greeting), which returns greeting, a space, and name.",
+        "ar": "اكتب الدالة greet(name, greeting) بحيث تعيد greeting ثم مسافة ثم name."
+      },
+      "expected_code": "def greet(name, greeting):\n    return greeting + ' ' + name",
+      "tests": ["assert greet('Mona', 'Hello') == 'Hello Mona'", "assert greet('علي', 'مرحبًا') == 'مرحبًا علي'", "assert greet('', 'Hi') == 'Hi '"],
+      "evidence_references": ["python-functions:2.0.0:parameter-binding"],
+      "misconception_ids": ["hard-coded-argument"],
+      "transfer_prompt": {
+        "en": "Write total(price, quantity), which returns their product.",
+        "ar": "اكتب الدالة total(price, quantity) بحيث تعيد حاصل ضربهما."
+      },
+      "evidence": [
+        {
+          "evidence_id": "python-functions:2.0.0:parameter-binding",
+          "source_title": "Python Tutorial: Defining Functions",
+          "source_url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+          "explanation": {
+            "en": "Parameters name the inputs in a function definition. Each call binds its argument values to those parameter names for that call.",
+            "ar": "تسمي المعاملات مدخلات الدالة في تعريفها. عند كل استدعاء تُربط قيم الوسائط بأسماء المعاملات لذلك الاستدعاء."
+          }
+        }
+      ],
+      "rubric": [
+        {"criterion_id": "two-parameters", "description": {"en": "Defines both name and greeting as parameters.", "ar": "يعرّف name و greeting كمعاملين."}},
+        {"criterion_id": "uses-arguments", "description": {"en": "Builds the result from the values supplied by each call.", "ar": "يبني النتيجة من القيم المرسلة في كل استدعاء."}},
+        {"criterion_id": "explains-binding", "description": {"en": "Distinguishes definition parameters from call arguments.", "ar": "يميّز بين معاملات التعريف ووسائط الاستدعاء."}}
+      ],
+      "misconceptions": [
+        {
+          "misconception_id": "hard-coded-argument",
+          "detection_criteria": ["The function ignores a parameter and uses a fixed value in its place."],
+          "remediation": {
+            "en": "Use the parameter names inside the body. They receive new argument values each time the function is called.",
+            "ar": "استخدم أسماء المعاملات داخل جسم الدالة، فهي تستقبل قيم وسائط جديدة في كل استدعاء."
+          },
+          "practice": {
+            "item_id": "practice-format-name",
+            "prompt": {"en": "Write full_name(first, last), which returns first, a space, and last.", "ar": "اكتب الدالة full_name(first, last) بحيث تعيد first ثم مسافة ثم last."},
+            "expected_code": "def full_name(first, last):\n    return first + ' ' + last",
+            "tests": ["assert full_name('Ada', 'Lovelace') == 'Ada Lovelace'", "assert full_name('نور', 'علي') == 'نور علي'"]
+          }
+        }
+      ],
+      "transfer": {
+        "item_id": "transfer-line-total",
+        "prompt": {"en": "Write total(price, quantity), which returns their product.", "ar": "اكتب الدالة total(price, quantity) بحيث تعيد حاصل ضربهما."},
+        "expected_code": "def total(price, quantity):\n    return price * quantity",
+        "tests": ["assert total(5, 3) == 15", "assert total(2.5, 4) == 10", "assert total(10, 0) == 0"]
+      }
+    },
+    {
+      "item_id": "compose-function-calls",
+      "title": {"en": "Compose function calls", "ar": "تركيب استدعاءات الدوال"},
+      "prompt": {
+        "en": "Write square(n), then write sum_of_squares(a, b) using square for both inputs.",
+        "ar": "اكتب الدالة square(n)، ثم اكتب sum_of_squares(a, b) باستخدام square لكلا المدخلين."
+      },
+      "expected_code": "def square(n):\n    return n * n\n\ndef sum_of_squares(a, b):\n    return square(a) + square(b)",
+      "tests": ["assert sum_of_squares(3, 4) == 25", "assert sum_of_squares(0, 5) == 25", "assert sum_of_squares(-2, 3) == 13"],
+      "evidence_references": ["python-functions:2.0.0:function-calls"],
+      "misconception_ids": ["ignores-returned-value"],
+      "transfer_prompt": {
+        "en": "Write increment(n), then twice_incremented(n) by composing two calls.",
+        "ar": "اكتب increment(n)، ثم twice_incremented(n) بتركيب استدعاءين."
+      },
+      "evidence": [
+        {
+          "evidence_id": "python-functions:2.0.0:function-calls",
+          "source_title": "Python Language Reference: Calls",
+          "source_url": "https://docs.python.org/3/reference/expressions.html#calls",
+          "explanation": {
+            "en": "A function call is an expression that produces a value unless it raises an exception. That value can be passed into another call or used in a larger expression.",
+            "ar": "استدعاء الدالة تعبير ينتج قيمة ما لم يحدث استثناء. يمكن تمرير هذه القيمة إلى استدعاء آخر أو استخدامها داخل تعبير أكبر."
+          }
+        }
+      ],
+      "rubric": [
+        {"criterion_id": "helper-function", "description": {"en": "Defines square so it returns the square of its input.", "ar": "يعرّف square بحيث تعيد مربع مدخلها."}},
+        {"criterion_id": "composes-calls", "description": {"en": "Calls square for both inputs and combines the returned values.", "ar": "يستدعي square لكلا المدخلين ويدمج القيم المعادة."}},
+        {"criterion_id": "explains-composition", "description": {"en": "Explains how returned values participate in the outer expression.", "ar": "يوضح كيف تشارك القيم المعادة في التعبير الخارجي."}}
+      ],
+      "misconceptions": [
+        {
+          "misconception_id": "ignores-returned-value",
+          "detection_criteria": ["The helper is called, but its returned value is not used in the final expression."],
+          "remediation": {
+            "en": "Place each function call where its value is needed. The call expression is replaced by the value that the function returns.",
+            "ar": "ضع كل استدعاء في موضع استخدام قيمته. يُستبدل تعبير الاستدعاء بالقيمة التي تعيدها الدالة."
+          },
+          "practice": {
+            "item_id": "practice-compose-double",
+            "prompt": {"en": "Write double(n), then quadruple(n) using double twice.", "ar": "اكتب double(n)، ثم quadruple(n) باستخدام double مرتين."},
+            "expected_code": "def double(n):\n    return n * 2\n\ndef quadruple(n):\n    return double(double(n))",
+            "tests": ["assert quadruple(3) == 12", "assert quadruple(0) == 0", "assert quadruple(-2) == -8"]
+          }
+        }
+      ],
+      "transfer": {
+        "item_id": "transfer-twice-incremented",
+        "prompt": {"en": "Write increment(n), then twice_incremented(n) by composing two calls.", "ar": "اكتب increment(n)، ثم twice_incremented(n) بتركيب استدعاءين."},
+        "expected_code": "def increment(n):\n    return n + 1\n\ndef twice_incremented(n):\n    return increment(increment(n))",
+        "tests": ["assert twice_incremented(3) == 5", "assert twice_incremented(0) == 2", "assert twice_incremented(-2) == 0"]
+      }
+    }
+  ]
+}

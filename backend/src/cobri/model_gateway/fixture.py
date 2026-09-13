@@ -14,7 +14,12 @@ class FixtureEvaluator:
     def evaluate(self, input_data: EvaluationInput, item: ContentItem) -> Evaluation:
         submitted = " ".join(input_data.answer.strip().split())
         expected = " ".join(item.expected_code.strip().split())
-        outcome = OutcomeVerdict.CORRECT if submitted == expected else OutcomeVerdict.INCORRECT
+        if input_data.sandbox_passed is None:
+            outcome = OutcomeVerdict.CORRECT if submitted == expected else OutcomeVerdict.INCORRECT
+        else:
+            outcome = (
+                OutcomeVerdict.CORRECT if input_data.sandbox_passed else OutcomeVerdict.INCORRECT
+            )
         if not input_data.reasoning or len(input_data.reasoning.strip()) < 5:
             reasoning = ReasoningVerdict.INSUFFICIENT
             status = DiagnosticStatus.UNCERTAIN

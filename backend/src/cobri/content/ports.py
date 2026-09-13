@@ -1,6 +1,6 @@
 """Only the content references consumed by the Day 1 API, pending team review."""
 
-from typing import Annotated, Protocol
+from typing import Annotated, Any, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -32,3 +32,13 @@ class ContentCatalog(Protocol):
     async def require_item(
         self, content_package_id: str, content_version: str, item_id: str
     ) -> ItemReference: ...
+
+    def list_reviewed(self) -> list[Any]: ...
+
+    def get_lesson(self, content_package_id: str, content_version: str, item_id: str) -> Any: ...
+
+    def get_item(self, content_package_id: str, content_version: str, item_id: str) -> Any: ...
+
+    def lesson_for_item(
+        self, content_package_id: str, content_version: str, item_id: str
+    ) -> Any: ...
