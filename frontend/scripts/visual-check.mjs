@@ -21,7 +21,7 @@ for (const viewport of [
   page.on("response", (response) => {
     if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`);
   });
-  await page.goto("http://127.0.0.1:5173/visual.html", { waitUntil: "networkidle" });
+  await page.goto("http://localhost:5173/visual.html", { waitUntil: "networkidle" });
   const arabic = viewport.name === "mobile";
   if (arabic) {
     await page.getByLabel("Interface").selectOption("ar");
@@ -33,11 +33,27 @@ for (const viewport of [
   await page.getByLabel(arabic ? "الموضوع المراد التحقق منه" : "Topic to check").fill(arabic ? "دوال بايثون" : "Python functions");
   await page.getByRole("button", { name: arabic ? "إرسال الموضوع" : "Send topic" }).click();
   await page.getByRole("link", { name: arabic ? /إرجاع قيمة/ : /Return a value/ }).click();
-  await page.getByLabel(arabic ? "كود Python الخاص بك" : "Your Python code").fill("def double(n):\n    print(n * 2)");
+  const chatVisibleWithEditor = await page.getByLabel(arabic ? "المحادثة مع كوبري" : "Conversation with Cobri").isVisible();
+  const editorVisible = await page.getByLabel(arabic ? "مساحة كتابة الكود" : "Coding workspace").isVisible();
+  const expectedEditorLabel = arabic ? "كود Python الخاص بك" : "Your Python code";
+  const codeEditor = page.locator(".monaco-editor").locator(`[aria-label="${expectedEditorLabel}"]`).first();
+  try {
+    await page.locator(".monaco-editor").waitFor({ timeout: 10_000 });
+  } catch (error) {
+    console.error(JSON.stringify({ consoleErrors, failedResponses, body: (await page.locator("body").innerText()).slice(-2000) }, null, 2));
+    throw error;
+  }
+  await codeEditor.waitFor({ state: "attached" });
+  const editorAccessible = (await codeEditor.getAttribute("aria-label")) === expectedEditorLabel;
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: `${output}/cobri-${viewport.name}-editor.png`, fullPage: false });
+  await page.locator(".monaco-editor").click({ position: { x: 120, y: 70 } });
+  await page.keyboard.insertText("def double(n):\n    print(n * 2)");
   await page.getByLabel(arabic ? "اشرح تفكيرك" : "Explain your reasoning").fill(arabic ? "تعرض الطباعة القيمة المحسوبة." : "Printing shows the calculated value.");
   await page.getByRole("button", { name: arabic ? "تحقق من إجابتي" : "Check my answer" }).click();
   await page.getByRole("heading", { name: arabic ? "ملاحظاتك" : "Your feedback" }).waitFor({ timeout: 10_000 });
   const feedbackVisible = await page.getByText(arabic ? "فكرة للمراجعة" : "A point to review").isVisible();
+  const editorClosedAfterSubmit = (await page.getByLabel(arabic ? "مساحة كتابة الكود" : "Coding workspace").count()) === 0;
   await page.screenshot({
     path: `${output}/cobri-${viewport.name}.png`,
     fullPage: !arabic,
@@ -50,6 +66,10 @@ for (const viewport of [
     consoleErrors,
     failedResponses,
     feedbackVisible,
+    chatVisibleWithEditor,
+    editorVisible,
+    editorClosedAfterSubmit,
+    editorAccessible,
   });
   await page.close();
 }
@@ -64,7 +84,11 @@ if (
       item.overflow ||
       item.consoleErrors.length ||
       item.failedResponses.length ||
-      !item.feedbackVisible,
+      !item.feedbackVisible ||
+      !item.chatVisibleWithEditor ||
+      !item.editorVisible ||
+      !item.editorClosedAfterSubmit ||
+      !item.editorAccessible,
   )
 ) {
   process.exitCode = 1;

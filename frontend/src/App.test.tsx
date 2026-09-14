@@ -6,6 +6,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LearnerApp } from "./App";
 import type { CobriApi, PackageSummary } from "./api/client";
 
+vi.mock("./CodeEditor", () => ({
+  default: ({ value, onChange, ariaLabel }: { value: string; onChange: (value: string) => void; ariaLabel: string }) => (
+    <textarea aria-label={ariaLabel} value={value} onChange={(event) => onChange(event.target.value)} />
+  ),
+}));
+
 const packages: PackageSummary[] = [
   {
     content_package_id: "python-functions",
@@ -36,6 +42,34 @@ function mockApi(): CobriApi {
             content_version: "2.0.0",
           },
     ),
+    lesson: vi.fn().mockResolvedValue({
+      ...packages[0].lessons[0],
+      evidence: [],
+      rubric: [],
+    }),
+    createSession: vi.fn().mockResolvedValue({ session_id: "session-1" }),
+    submit: vi.fn().mockResolvedValue({
+      submission_id: "submission-1",
+      job: { job_id: "job-1", status: "succeeded" },
+      evaluation: null,
+    }),
+    submission: vi.fn().mockResolvedValue({
+      submission_id: "submission-1",
+      job: { job_id: "job-1", status: "succeeded" },
+      evaluation: {
+        outcome_verdict: "correct",
+        reasoning_verdict: "correct",
+        diagnostic_status: "supported",
+        evidence_references: [],
+        misconception_id: null,
+      },
+    }),
+    next: vi.fn().mockResolvedValue({
+      action: "complete",
+      message: { en: "You completed this learning loop.", ar: "أكملت مسار التعلّم." },
+      remediation: null,
+      next_item: null,
+    }),
   } as unknown as CobriApi;
 }
 
@@ -59,6 +93,40 @@ describe("topic discovery chat", () => {
       "href",
       "/lesson/python-functions/2.0.0/function-return-value",
     );
+  });
+
+  it("keeps the conversation visible when the coding workspace opens", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <LearnerApp api={mockApi()} onSignOut={vi.fn()} userName="Learner" />
+      </MemoryRouter>,
+    );
+    await user.type(screen.getByLabelText("Topic to check"), "Python functions");
+    await user.click(screen.getByRole("button", { name: "Send topic" }));
+    await user.click(await screen.findByRole("link", { name: /Return a value/ }));
+
+    expect(await screen.findByLabelText("Coding workspace")).toBeInTheDocument();
+    expect(await screen.findByRole("textbox", { name: "Your Python code" }, { timeout: 5000 })).toBeInTheDocument();
+    expect(screen.getByLabelText("Conversation with Cobri")).toBeInTheDocument();
+    expect(screen.getByText(/What topic would you like/)).toBeInTheDocument();
+  });
+
+  it("returns to chat and presents evaluation feedback after submission", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/lesson/python-functions/2.0.0/function-return-value"]}>
+        <LearnerApp api={mockApi()} onSignOut={vi.fn()} />
+      </MemoryRouter>,
+    );
+
+    await user.type(await screen.findByRole("textbox", { name: "Your Python code" }, { timeout: 5000 }), "def double(n):\n    return n * 2");
+    await user.type(screen.getByLabelText("Explain your reasoning"), "It returns twice the input.");
+    await user.click(screen.getByRole("button", { name: "Check my answer" }));
+
+    expect(await screen.findByRole("heading", { name: "Your feedback" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Coding workspace")).not.toBeInTheDocument();
+    expect(screen.getByText("I sent my code and reasoning for evaluation.")).toBeInTheDocument();
   });
 
   it("explains when a topic has no reviewed material", async () => {

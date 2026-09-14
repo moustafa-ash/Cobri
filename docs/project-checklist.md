@@ -83,6 +83,8 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 - [x] Create the React and TypeScript frontend application.
 - [x] Add accessible login, lesson/session, submission, evaluation, remediation, and transfer routes.
 - [x] Start with bilingual topic chat, offer matching reviewed lesson options, and clearly reject unsupported topics.
+- [x] Keep the tutoring chat mounted while a Monaco coding workspace opens beside it on desktop and as a full-screen drawer on mobile.
+- [x] Return to the chat after code and reasoning submission, then present evaluation, remediation, practice, and transfer progression in the conversation.
 - [x] Add a centrally typed or generated API client to prevent contract drift.
 - [x] Add a repeatable frontend lint gate.
 - [x] Handle `202` polling, retries, expired authentication, and ownership-safe errors.
