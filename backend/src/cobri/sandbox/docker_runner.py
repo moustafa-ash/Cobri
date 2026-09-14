@@ -84,6 +84,11 @@ class DockerSandbox:
             if completed.returncode != 0:
                 raise SandboxUnavailable("sandbox container failed")
             prefix = f"COBRI_RESULT:{nonce}:"
+            if any(
+                line.startswith("COBRI_RESULT:") and not line.startswith(prefix)
+                for line in completed.stdout.splitlines()
+            ):
+                raise SandboxUnavailable("sandbox returned an untrusted result marker")
             marker = next(
                 (
                     line.removeprefix(prefix)
@@ -105,14 +110,38 @@ class DockerSandbox:
     @staticmethod
     def _harness(code: str, tests: list[str], nonce: str) -> str:
         return (
+            "import contextlib\n"
             "import json\n"
+            "class _BoundedWriter:\n"
+            "    def __init__(self, limit):\n"
+            "        self.limit = limit\n"
+            "        self.parts = []\n"
+            "        self.size = 0\n"
+            "    def write(self, value):\n"
+            "        self.size += len(value)\n"
+            "        if self.size > self.limit:\n"
+            "            raise RuntimeError('sandbox output limit exceeded')\n"
+            "        self.parts.append(value)\n"
+            "        return len(value)\n"
+            "    def flush(self):\n"
+            "        return None\n"
+            "    def getvalue(self):\n"
+            "        return ''.join(self.parts)\n"
             "passed = False\n"
             "namespace = {'__name__': '__main__'}\n"
+            "stdout = _BoundedWriter(8192)\n"
+            "stderr = _BoundedWriter(8192)\n"
+            "error = None\n"
             "try:\n"
-            f"    exec({code!r}, namespace)\n"
-            + "\n".join(f"    exec({test!r}, namespace)" for test in tests)
+            "    with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):\n"
+            f"        exec({code!r}, namespace)\n"
+            + "\n".join(f"        exec({test!r}, namespace)" for test in tests)
             + "\n    passed = True\n"
             "except BaseException as exc:\n"
-            "    print(type(exc).__name__ + ': ' + str(exc))\n"
+            "    error = type(exc).__name__ + ': ' + str(exc)\n"
+            "print(stdout.getvalue(), end='')\n"
+            "print(stderr.getvalue(), end='')\n"
+            "if error:\n"
+            "    print(error)\n"
             f"print('COBRI_RESULT:{nonce}:' + json.dumps({{'passed': passed}}))\n"
         )

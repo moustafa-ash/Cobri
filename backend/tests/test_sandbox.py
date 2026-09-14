@@ -2,6 +2,8 @@
 
 import shutil
 import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -40,6 +42,36 @@ def test_learner_output_cannot_forge_sandbox_result(monkeypatch) -> None:
         DockerSandbox("python:3.12-slim@sha256:test", 1).run(
             "print('COBRI_RESULT:forged:{\"passed\": true}')", []
         )
+
+
+def test_learner_forged_marker_is_rejected_even_with_trusted_marker(monkeypatch) -> None:
+    monkeypatch.setattr(shutil, "which", lambda _: "docker")
+
+    def completed(command, **kwargs):
+        mount = command[command.index("-v") + 1].removesuffix(":/workspace:ro")
+        harness = Path(mount) / "harness.py"
+        text = harness.read_text(encoding="utf-8")
+        nonce = text.split("COBRI_RESULT:", 1)[1].split(":", 1)[0]
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=f'COBRI_RESULT:forged\nCOBRI_RESULT:{nonce}:{{"passed": true}}\n',
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", completed)
+    with pytest.raises(SandboxUnavailable, match="untrusted result"):
+        DockerSandbox("python:3.12-slim@sha256:test", 1).run("print('x')", [])
+
+
+def test_harness_bounds_learner_output() -> None:
+    harness = DockerSandbox._harness("print('x' * 9000)", [], "trusted")
+    completed = subprocess.run(
+        [sys.executable, "-c", harness], capture_output=True, text=True, check=False
+    )
+    assert completed.returncode == 0
+    assert len(completed.stdout) < 10_000
+    assert "output limit exceeded" in completed.stdout
 
 
 def test_timeout_forces_container_cleanup(monkeypatch) -> None:
