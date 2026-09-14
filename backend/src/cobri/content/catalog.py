@@ -290,11 +290,6 @@ class FileContentCatalog:
         )
 
 
-def write_example_package(path: Path) -> None:
-    """Validate a package file without making it selectable at runtime."""
-    ContentPackage.model_validate_json(path.read_text(encoding="utf-8"))
-
-
 _GENERIC_TOPIC_TOKENS = {
     "python",
     "function",
