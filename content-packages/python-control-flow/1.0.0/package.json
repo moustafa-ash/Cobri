@@ -1,0 +1,37 @@
+{
+     
+
+  "content_package_id": "python-control-flow",
+  "content_version": "1.0.0-draft",
+  "topic": "Python Control Flow: Booleans, Conditionals, and Loops",
+  "review_status": "draft",
+  "reviewed_by": "AHMED",
+  "items": [
+    {
+      "item_id": "conditionals-even-check-1",
+      "title": {
+        "en": "Check if a number is even",
+        "ar": "التحقق مما إذا كان العدد زوجياً"
+      },
+      "prompt": {
+        "en": "Write a function is_even(n) that returns True if n is even and False otherwise.",
+        "ar": "اكتب دالة is_even(n) تعيد True إذا كان n زوجياً و False غير ذلك."
+      },
+      "expected_code": "def is_even(n):\n    return n % 2 == 0",
+      "tests": [
+        "assert is_even(4) == True",
+        "assert is_even(7) == False",
+        "assert is_even(0) == True"
+      ],
+      "evidence_references": [
+        "python-control-flow:1.0.0-draft:booleans",
+        "python-control-flow:1.0.0-draft:modulo-operator"
+      ],
+      "misconception_ids": ["assignment-vs-equality", "string-boolean-return"],
+      "transfer_prompt": {
+        "en": "Write is_odd(n) that returns True if n is odd and False otherwise.",
+        "ar": "اكتب is_odd(n) تعيد True إذا كان n فردياً و False غير ذلك."
+      }
+    }
+  ]
+}
