@@ -173,7 +173,6 @@ def create_app(
 
     return app
 
-
 async def _latest_heartbeat(database: Database):
     async with database.session() as session:
         return await session.scalar(
@@ -181,4 +180,3 @@ async def _latest_heartbeat(database: Database):
         )
 
 
-app = create_app(install_runtime_adapters=True)
