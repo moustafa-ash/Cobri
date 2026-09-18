@@ -58,14 +58,14 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 ### Day 1 verification record
 
 - [x] Pass locked dependency synchronization.
-- [x] Pass the current offline backend suite: `156 passed, 4 skipped` (live integrations remain opt-in).
+- [x] Pass the current offline backend suite: `157 passed, 4 skipped` (live integrations remain opt-in).
 - [x] Pass Ruff check and formatting validation.
 - [x] Pass SQLite acceptance, replay, conflict, concurrency, worker, and restart-compatible schema tests.
 - [x] Pass mocked provider fallback and structured-response validation.
-- [x] Smoke-test live Groq and OpenRouter structured responses locally.
-- [x] Smoke-test Docker sandbox success and learner-test failure locally.
-- [x] Smoke-test Auth0 OIDC locally using the configured EU tenant and RS256 API.
-- [x] Smoke-test PostgreSQL 16 locally in a disposable container.
+- [ ] Pass the independent 120-case Groq and OpenRouter quality gates (Groq failed; OpenRouter blocked; see verification report).
+- [x] Verify Docker sandbox failure semantics with mocked/host-independent tests; real container evidence remains open.
+- [ ] Smoke-test Auth0 OIDC locally using the configured EU tenant and RS256 API (configuration unavailable to the test process).
+- [ ] Pass PostgreSQL 16 lease/concurrency evidence against a clean disposable database (configured database had pre-existing job state).
 - [ ] Automate opt-in live OIDC and provider checks in an approved secure environment.
 - [ ] Verify all external integrations in the shared preview or staging environment.
 
@@ -142,8 +142,8 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 
 ## 5. Content and retrieval maturity
 
-- [ ] Formalize the content lifecycle: draft, review, publish, supersede, and rollback. (Validation and review gates implemented; human publication approval pending.)
-- [ ] Define reviewer roles and acceptance criteria for educational accuracy, sources, rubrics, and bilingual quality.
+- [x] Formalize the content lifecycle: draft, review, publish, supersede, and rollback (no supersede/rollback entries for this release).
+- [x] Define reviewer roles and acceptance criteria for educational accuracy, sources, rubrics, and bilingual quality.
 - [ ] Add more reviewed concepts and transfer items beyond the initial Python-functions package.
 - [ ] Validate every package for stable IDs, prerequisites, evidence, misconceptions, interventions, tests, and language mappings.
 - [ ] Add content-version migration and compatibility checks without mutating historical packages.

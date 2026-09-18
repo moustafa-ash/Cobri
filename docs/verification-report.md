@@ -53,7 +53,7 @@ deterministic, mocked, live, historical, failed, skipped, or blocked.
 
 ## Checklist and release status
 
-The mechanically recalculated checklist contains **83 checked** and **54
+The mechanically recalculated checklist contains **82 checked** and **55
 unchecked** items. The unchecked items include live provider quality, deployed
 environment recovery, security/privacy review, OCI preview, and release gates.
 The repository has not been tagged or released, and no deployment has occurred.
