@@ -364,7 +364,8 @@ def _lesson_topic_tokens(item: ContentItem) -> set[str]:
 def _is_supported_topic_phrase(query_tokens: set[str], package_tokens: set[str]) -> bool:
     generic_overlap = query_tokens & package_tokens & _GENERIC_TOPIC_TOKENS
     return len(generic_overlap) >= 2 or (
-        {"python", "function"} <= query_tokens or {"بايثون", "دوال"} <= query_tokens
+        ({"python", "function"} <= query_tokens and "function" in package_tokens)
+        or ({"بايثون", "دوال"} <= query_tokens and "دوال" in package_tokens)
     )
 
 

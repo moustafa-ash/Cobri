@@ -18,6 +18,7 @@ from cobri.assessments.router import router as submissions_router
 from cobri.config import Settings
 from cobri.content.catalog import FileContentCatalog
 from cobri.content.ports import ContentCatalog
+from cobri.content.retrieval import LocalE5Embedder, SemanticTopicRetriever, load_index
 from cobri.content.router import router as content_router
 from cobri.dependencies import get_session_store
 from cobri.errors import register_error_handlers
@@ -82,6 +83,30 @@ def create_app(
     app.state.session_store = session_store
     app.state.submission_service = submission_service
     app.state.content_catalog = content_catalog
+    if (
+        semantic_retriever is None
+        and content_catalog is not None
+        and settings.embedding_model_revision
+    ):
+        try:
+            index_path = settings.embedding_index_path
+            records = load_index(index_path) if index_path.is_file() else []
+            if records:
+                semantic_retriever = SemanticTopicRetriever(
+                    settings.content_root,
+                    content_catalog,
+                    LocalE5Embedder(
+                        settings.embedding_model,
+                        settings.embedding_model_revision,
+                        settings.embedding_dimensions,
+                        settings.resolved_embedding_model_path,
+                    ),
+                    records,
+                    settings.embedding_min_score,
+                    app.state.metrics,
+                )
+        except (OSError, ValueError, TypeError):
+            app.state.metrics.increment("retrieval.unavailable")
     app.state.semantic_retriever = semantic_retriever
     register_error_handlers(app)
 

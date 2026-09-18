@@ -77,11 +77,14 @@ Evaluations keep outcome correctness, reasoning quality, diagnostic support, evi
 
 ## Content and evaluation
 
-The historical package is `python-functions` version `1.0.0`. The reviewed `2.0.0` package adds three bilingual lessons covering return values, parameters and arguments, and composing function calls. Each lesson owns evidence, rubric, misconception remediation, targeted practice, and a changed-context transfer item. The learner starts by describing any topic in chat. Cobri offers options from the newest matching reviewed package or clearly reports that reviewed material is unavailable. Choosing a lesson keeps the chat mounted while a Monaco editor and separate reasoning field open beside it on desktop or in a full-screen mobile drawer. Submitting returns the learner to the chat for evaluation, remediation, practice, and transfer. Only reviewed packages are selectable, and learner responses never expose evaluator-only answers or hidden tests. The topic-discovery boundary can later add trusted-source web retrieval without changing the assessment flow.
+The reviewed packages are `python-functions` `2.0.0` and `python-control-flow` `1.0.0`. Each lesson owns evidence, rubric, misconception remediation, targeted practice, and a changed-context transfer item. The learner starts by describing any topic in chat. Cobri offers options from the newest matching reviewed package or clearly reports that reviewed material is unavailable. Choosing a lesson keeps the chat mounted while a Monaco editor and separate reasoning field open beside it on desktop or in a full-screen mobile drawer. Submitting returns the learner to the chat for evaluation, remediation, practice, and transfer. Only reviewed packages are selectable, and learner responses never expose evaluator-only answers or hidden tests. Trusted-source retrieval is quarantined and excluded from learner responses until separately reviewed and published.
 
 Without model credentials, the worker uses the deterministic fixture evaluator. Explicit provider runs can target Groq or OpenRouter independently; responses are validated against the canonical Pydantic schema, and infrastructure failures never become learner verdicts.
 
 Content packages are checked with `uv run --project backend --locked python -m cobri.content.lifecycle validate content-packages`.
+The active local semantic index is built with the pinned E5 model revision and
+fails closed when its package, digest, tokenizer, dimension, or normalization
+metadata does not match the published content.
 The versioned evaluation harness lives under `backend/tests/fixtures/evaluations/v1`; its
 deterministic report validates allocation and schema but does not claim provider quality.
 Operator deletion requires the exact target-bound confirmation documented in the Day 2 runbook.

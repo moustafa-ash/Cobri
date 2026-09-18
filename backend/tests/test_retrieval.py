@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 from cobri.content.retrieval import (
+    SemanticTopicRetriever,
     VectorRecord,
     cosine,
     load_index,
@@ -9,6 +10,7 @@ from cobri.content.retrieval import (
     save_index,
 )
 from cobri.content.web_sources import quarantine, validate_source_url
+from cobri.observability import OperationalMetrics
 from cobri.persistence.database import Database
 from cobri.persistence.repositories import DatabaseStore
 
@@ -83,5 +85,46 @@ def test_embedding_records_are_filtered_by_digest_and_model(tmp_path) -> None:
         assert len(await store.load_embeddings("pkg", "1.0.0", "digest", "model@1")) == 1
         assert await store.load_embeddings("pkg", "1.0.0", "other", "model@1") == []
         await database.dispose()
+
+    asyncio.run(scenario())
+
+
+def test_semantic_retriever_fails_closed_for_stale_metadata(tmp_path) -> None:
+    import asyncio
+
+    class Embedder:
+        dimensions = 2
+        revision = "revision"
+
+        async def encode(self, text: str, *, prefix: str) -> tuple[float, ...]:
+            return (1.0, 0.0)
+
+    class Catalog:
+        pass
+
+    async def scenario() -> None:
+        metrics = OperationalMetrics()
+        retriever = SemanticTopicRetriever(
+            tmp_path,
+            Catalog(),
+            Embedder(),
+            [
+                VectorRecord(
+                    "item",
+                    "digest",
+                    "revision",
+                    (1.0, 0.0),
+                    dimensions=2,
+                    normalized=True,
+                    tokenizer_revision="revision",
+                    content_package_id="pkg",
+                    content_version="1.0.0",
+                )
+            ],
+            0.8,
+            metrics,
+        )
+        assert await retriever.match("query") is None
+        assert metrics.snapshot()["retrieval.stale_index"] == 1
 
     asyncio.run(scenario())

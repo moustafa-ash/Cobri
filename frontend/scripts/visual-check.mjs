@@ -1,7 +1,11 @@
 import { chromium } from "playwright";
 
 const chrome = process.env.COBRI_BROWSER_EXECUTABLE ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const output = process.env.COBRI_BROWSER_ARTIFACT_DIR ?? ".data/browser-artifacts/visual";
+const artifactFlag = process.argv.indexOf("--artifacts");
+const output = artifactFlag >= 0
+  ? process.argv[artifactFlag + 1]
+  : process.env.COBRI_BROWSER_ARTIFACT_DIR ?? ".data/browser-artifacts/visual";
+if (!output) throw new Error("--artifacts requires a directory");
 const baseUrl = process.env.COBRI_VISUAL_BASE_URL ?? "http://localhost:5173";
 await import("node:fs/promises").then(({ mkdir }) => mkdir(output, { recursive: true }));
 const browser = await chromium.launch({ headless: true, executablePath: chrome });

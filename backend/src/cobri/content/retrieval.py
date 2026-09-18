@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from math import sqrt
 from pathlib import Path
 
+from cobri.content.lifecycle import active_digests
 from cobri.errors import ResourceNotFound
 
 
@@ -116,12 +117,15 @@ def validate_metadata(record: VectorRecord, expected_digest: str, expected_model
 class LocalE5Embedder:
     """Lazy local embedder; absence of the optional runtime fails closed."""
 
-    def __init__(self, model_name: str, revision: str, dimensions: int) -> None:
+    def __init__(
+        self, model_name: str, revision: str, dimensions: int, model_path: Path | None = None
+    ) -> None:
         if not revision:
             raise ValueError("an immutable embedding model revision is required")
         self.model_name = model_name
         self.revision = revision
         self.dimensions = dimensions
+        self.model_path = model_path
         self._model = None
 
     def _load(self):
@@ -131,7 +135,7 @@ class LocalE5Embedder:
             except ImportError as exc:
                 raise RuntimeError("sentence-transformers is not installed") from exc
             self._model = SentenceTransformer(
-                self.model_name,
+                str(self.model_path) if self.model_path else self.model_name,
                 revision=self.revision,
                 device="cpu",
                 local_files_only=True,
@@ -161,12 +165,18 @@ class SemanticTopicRetriever:
         embedder: LocalE5Embedder,
         records: list[VectorRecord],
         min_score: float,
+        metrics=None,
     ):
         self.root = root
         self.catalog = catalog
         self.embedder = embedder
         self.records = records
         self.min_score = min_score
+        self.metrics = metrics
+
+    def _count(self, name: str) -> None:
+        if self.metrics is not None:
+            self.metrics.increment(f"retrieval.{name}")
 
     async def match(self, query: str):
         try:
@@ -176,20 +186,37 @@ class SemanticTopicRetriever:
                 or record.tokenizer_revision != self.embedder.revision
                 for record in self.records
             ):
+                self._count("stale_index")
+                return None
+            first = self.records[0]
+            if not first.content_package_id or not first.content_version:
+                self._count("stale_index")
+                return None
+            if any(
+                record.package_digest != first.package_digest
+                or record.model_revision != first.model_revision
+                or record.content_package_id != first.content_package_id
+                or record.content_version != first.content_version
+                for record in self.records
+            ):
+                self._count("stale_index")
+                return None
+            if (
+                active_digests(self.root).get((first.content_package_id, first.content_version))
+                != first.package_digest
+            ):
+                self._count("stale_index")
                 return None
             query_vector = await self.embedder.encode(query, prefix="query")
             candidates = []
             for score, record in rank(
                 query_vector,
                 self.records,
-                self.records[0].package_digest if self.records else "",
+                first.package_digest,
                 self.embedder.revision,
             )[:3]:
-                if (
-                    score < self.min_score
-                    or not record.content_package_id
-                    or not record.content_version
-                ):
+                if score < self.min_score:
+                    self._count("below_threshold")
                     continue
                 package_path = (
                     self.root / record.content_package_id / record.content_version / "package.json"
@@ -206,11 +233,13 @@ class SemanticTopicRetriever:
                     )
                 )
             if not candidates:
+                self._count("miss")
                 return None
-            first = self.records[0]
+            self._count("hit")
             return (
                 self.catalog.get_package(first.content_package_id, first.content_version),
                 candidates,
             )
         except (OSError, ResourceNotFound, RuntimeError, ValueError, IndexError):
+            self._count("unavailable")
             return None

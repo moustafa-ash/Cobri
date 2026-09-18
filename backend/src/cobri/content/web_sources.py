@@ -53,6 +53,11 @@ async def fetch_quarantined(
                     validate_source_url(current)
                     continue
                 response.raise_for_status()
+                content_type = response.headers.get("content-type", "")
+                if content_type and not content_type.lower().startswith(
+                    ("text/", "application/xhtml+xml")
+                ):
+                    raise ValueError("source content is not text")
                 if int(response.headers.get("content-length", "0")) > max_bytes:
                     raise ValueError("source exceeds quarantine size limit")
                 chunks = bytearray()
@@ -73,6 +78,7 @@ async def search_tavily(
 ) -> list[str]:
     if not api_key:
         raise ValueError("Tavily API key is required")
+    max_results = min(max_results, 3)
     async with httpx.AsyncClient(timeout=timeout) as client:
         response = await client.post(
             "https://api.tavily.com/search",
@@ -90,7 +96,10 @@ async def search_tavily(
         url = result.get("url") if isinstance(result, dict) else None
         if not isinstance(url, str):
             continue
-        validate_source_url(url)
+        try:
+            validate_source_url(url)
+        except ValueError:
+            continue
         urls.append(url)
     return urls
 
@@ -101,6 +110,7 @@ def store_quarantine(path: Path, source: QuarantinedSource, text: str) -> None:
     metadata_path = path / f"{source.digest}.json"
     if not content_path.exists():
         content_path.write_text(text, encoding="utf-8")
+    if not metadata_path.exists():
         metadata_path.write_text(
             json.dumps({**source.__dict__, "stored_at": datetime.now(UTC).isoformat()}, indent=2)
             + "\n",

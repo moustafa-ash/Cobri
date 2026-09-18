@@ -48,6 +48,8 @@ class Settings(BaseSettings):
     openrouter_model: str = "openrouter/free"
     embedding_model: str = "intfloat/multilingual-e5-small"
     embedding_model_revision: str | None = None
+    embedding_model_path: Path | None = None
+    embedding_index_path: Path = Path(".data/semantic-index.json")
     embedding_dimensions: int = Field(default=384, ge=1, le=4096)
     embedding_min_score: float = Field(default=0.8, ge=-1, le=1)
     tavily_api_key: str | None = None
@@ -99,3 +101,17 @@ class Settings(BaseSettings):
     @property
     def model_configured(self) -> bool:
         return bool(self.groq_api_key or self.openrouter_api_key)
+
+    @property
+    def resolved_embedding_model_path(self) -> Path | None:
+        if self.embedding_model_path is not None:
+            return self.embedding_model_path
+        if self.embedding_model_revision:
+            model_id = self.embedding_model.rsplit("/", 1)[-1]
+            return (
+                self.content_root.parent
+                / ".data"
+                / "models"
+                / (f"{model_id}-{self.embedding_model_revision}")
+            )
+        return None
