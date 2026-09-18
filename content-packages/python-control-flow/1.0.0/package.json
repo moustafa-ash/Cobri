@@ -4,8 +4,8 @@
   "content_package_id": "python-control-flow",
   "content_version": "1.0.0",
   "topic": "Python Control Flow: Booleans, Conditionals, and Loops",
-  "review_status": "draft",
-  "reviewed_by": null,
+  "review_status": "reviewed",
+  "reviewed_by": "Moustafa Mohamed (@moustafa-ash)",
   "items": [
     {
       "item_id": "conditionals-even-check-1",
