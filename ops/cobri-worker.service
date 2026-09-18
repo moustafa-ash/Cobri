@@ -1,0 +1,22 @@
+[Unit]
+Description=Cobri evaluation worker
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+User=cobri
+Group=cobri
+WorkingDirectory=/opt/cobri/current
+EnvironmentFile=/etc/cobri/cobri.env
+EnvironmentFile=-/etc/cobri/docker.env
+ExecStart=/usr/local/bin/uv run --project /opt/cobri/current/backend --locked cobri-worker
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cobri /opt/cobri/current
+
+[Install]
+WantedBy=multi-user.target

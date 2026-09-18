@@ -1,0 +1,45 @@
+{
+    email {$COBRI_TLS_EMAIL}
+}
+
+{$COBRI_PREVIEW_HOST} {
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle /health/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+    handle {
+        root * /opt/cobri/current/frontend/dist
+        try_files {path} /index.html
+        file_server
+    }
+}
+
+{$COBRI_CANDIDATE_HOST} {
+    encode gzip
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8001
+    }
+    handle /health/* {
+        reverse_proxy 127.0.0.1:8001
+    }
+    handle {
+        root * /opt/cobri/candidate/current/frontend/dist
+        try_files {path} /index.html
+        file_server
+    }
+}

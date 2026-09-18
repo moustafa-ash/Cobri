@@ -5,6 +5,14 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cobri-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   backend-checks:
@@ -38,6 +46,22 @@ jobs:
       - name: Validate migrations
         run: uv run --project backend --locked pytest backend/tests/test_migrations.py -p no:cacheprovider
 
+      - name: Audit Python dependencies
+        run: uv run --project backend --locked --with pip-audit pip-audit --strict
+
+      - name: Build backend artifact
+        run: |
+          mkdir -p /tmp/cobri-artifacts/backend
+          uv build --project backend --wheel --out-dir /tmp/cobri-artifacts/backend
+          sha256sum /tmp/cobri-artifacts/backend/* > /tmp/cobri-artifacts/backend/SHA256SUMS
+
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cobri-backend-${{ github.sha }}
+          path: /tmp/cobri-artifacts/backend
+          if-no-files-found: error
+
   frontend-checks:
     runs-on: ubuntu-latest
     steps:
@@ -64,3 +88,52 @@ jobs:
 
       - name: Build Application
         run: cd frontend && npm run build
+
+      - name: Audit npm dependencies
+        run: cd frontend && npm audit --audit-level=high
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cobri-frontend-${{ github.sha }}
+          path: frontend/dist
+          if-no-files-found: error
+
+  browser-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22.14.0"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+      - name: Install Chromium
+        run: cd frontend && npx playwright install --with-deps chromium
+      - name: Start visual test server
+        shell: bash
+        run: |
+          cd frontend
+          nohup npm run dev -- --host 127.0.0.1 > /tmp/cobri-vite.log 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:5173/visual.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/cobri-vite.log
+          exit 1
+      - name: Run deterministic browser check
+        run: cd frontend && npm run verify:browser
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Scan tracked files for credential markers
+        shell: bash
+        run: |
+          if git grep -n -I -E 'AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|-----BEGIN ([A-Z]+ )?PRIVATE KEY-----|sk-[A-Za-z0-9]{20,}' -- . ':(exclude)frontend/package-lock.json'; then
+            echo "credential marker found in tracked files"
+            exit 1
+          fi

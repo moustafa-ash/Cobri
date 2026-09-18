@@ -1,0 +1,201 @@
+name: Cobri Tagged Preview Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Preview tag (for example v0.2.0-preview.1)"
+        required: true
+        default: v0.2.0-preview.1
+        type: string
+
+permissions:
+  contents: write
+  deployments: write
+
+concurrency:
+  group: cobri-preview-release
+  cancel-in-progress: false
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - id: source
+        shell: bash
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          git fetch --force origin main --tags
+          sha="$(git rev-parse origin/main)"
+          test "$sha" = "$GITHUB_SHA"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - id: version
+        env:
+          VERSION: ${{ inputs.version }}
+        shell: bash
+        run: |
+          [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+$ ]]
+          if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" >/dev/null 2>&1; then
+            echo "tag already exists: $VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  ci:
+    needs: source
+    uses: ./.github/workflows/ci.yml
+
+  package:
+    needs: [source, ci]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ needs.source.outputs.sha }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: cobri-*-*
+          merge-multiple: true
+          path: .release-artifacts
+      - name: Build immutable release bundle
+        env:
+          VERSION: ${{ needs.source.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d .release-artifacts/dist
+          mkdir -p .release/frontend
+          cp -a .release-artifacts/dist .release/frontend/dist
+          cp -a backend content-packages ops frontend/package.json frontend/package-lock.json .release/
+          printf '%s\n' "$GITHUB_SHA" > .release/COMMIT_SHA
+          tar -czf "cobri-${VERSION}.tar.gz" -C .release .
+          sha256sum "cobri-${VERSION}.tar.gz" > "cobri-${VERSION}.sha256"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cobri-release-${{ needs.source.outputs.version }}
+          path: |
+            cobri-${{ needs.source.outputs.version }}.tar.gz
+            cobri-${{ needs.source.outputs.version }}.sha256
+          if-no-files-found: error
+
+  candidate:
+    needs: [source, ci, package]
+    runs-on: ubuntu-latest
+    environment:
+      name: preview
+      url: ${{ vars.PREVIEW_CANDIDATE_URL }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: cobri-release-${{ needs.source.outputs.version }}
+      - name: Install SSH identity
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PREVIEW_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.PREVIEW_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SSH_PRIVATE_KEY" -a -n "$KNOWN_HOSTS"
+          install -m 700 -d "$RUNNER_TEMP/ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/ssh/id_ed25519"
+          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/ssh/known_hosts"
+          chmod 600 "$RUNNER_TEMP/ssh/id_ed25519" "$RUNNER_TEMP/ssh/known_hosts"
+      - name: Upload and validate candidate
+        env:
+          HOST: ${{ secrets.PREVIEW_HOST }}
+          USER: ${{ secrets.PREVIEW_SSH_USER }}
+          VERSION: ${{ needs.source.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="cobri-${VERSION}.tar.gz"
+          checksum="cobri-${VERSION}.sha256"
+          ssh=(ssh -i "$RUNNER_TEMP/ssh/id_ed25519" -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts")
+          scp=(scp -i "$RUNNER_TEMP/ssh/id_ed25519" -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts")
+          "${scp[@]}" "$archive" "$checksum" "$USER@$HOST:/tmp/"
+          "${ssh[@]}" "$USER@$HOST" "sudo /opt/cobri/ops/candidate.sh '$VERSION' '/tmp/$archive' '/tmp/$checksum'"
+          "${ssh[@]}" "$USER@$HOST" "sudo /opt/cobri/ops/live-gates.sh"
+          curl --fail --silent --show-error "${{ vars.PREVIEW_CANDIDATE_URL }}/health/live"
+          curl --fail --silent --show-error "${{ vars.PREVIEW_CANDIDATE_URL }}/health/ready"
+
+  promote:
+    needs: [source, candidate]
+    runs-on: ubuntu-latest
+    environment:
+      name: preview
+      url: ${{ vars.PREVIEW_URL }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: cobri-release-${{ needs.source.outputs.version }}
+      - name: Create tag after all pre-release gates
+        env:
+          VERSION: ${{ needs.source.outputs.version }}
+          SHA: ${{ needs.source.outputs.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git tag -a "$VERSION" "$SHA" -m "Release Cobri $VERSION"
+          git push origin "$VERSION"
+      - name: Install SSH identity
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PREVIEW_SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.PREVIEW_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SSH_PRIVATE_KEY" -a -n "$KNOWN_HOSTS"
+          install -m 700 -d "$RUNNER_TEMP/ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/ssh/id_ed25519"
+          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/ssh/known_hosts"
+          chmod 600 "$RUNNER_TEMP/ssh/id_ed25519" "$RUNNER_TEMP/ssh/known_hosts"
+      - name: Promote exact candidate artifact
+        env:
+          HOST: ${{ secrets.PREVIEW_HOST }}
+          USER: ${{ secrets.PREVIEW_SSH_USER }}
+          VERSION: ${{ needs.source.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh=(ssh -i "$RUNNER_TEMP/ssh/id_ed25519" -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts")
+          scp=(scp -i "$RUNNER_TEMP/ssh/id_ed25519" -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts")
+          "${scp[@]}" "cobri-${VERSION}.tar.gz" "cobri-${VERSION}.sha256" "$USER@$HOST:/tmp/"
+          "${ssh[@]}" "$USER@$HOST" "sudo /opt/cobri/ops/promote.sh '$VERSION' '/tmp/cobri-${VERSION}.tar.gz' '/tmp/cobri-${VERSION}.sha256'"
+          curl --fail --silent --show-error "${{ vars.PREVIEW_URL }}/health/live"
+          curl --fail --silent --show-error "${{ vars.PREVIEW_URL }}/health/ready"
+      - name: Run authenticated post-promotion smoke check
+        env:
+          COBRI_LIVE_BASE_URL: ${{ vars.PREVIEW_URL }}
+          COBRI_LIVE_TOKEN: ${{ secrets.PREVIEW_LIVE_ACCESS_TOKEN }}
+        run: node frontend/scripts/live-check.mjs
+
+  publish:
+    needs: [source, promote]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: cobri-release-${{ needs.source.outputs.version }}
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.source.outputs.version }}
+          SHA: ${{ needs.source.outputs.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$VERSION" \
+            --verify-tag \
+            --prerelease \
+            --title "Cobri $VERSION" \
+            --notes "Preview release for commit $SHA. This is not production readiness evidence." \
+            "cobri-${VERSION}.tar.gz" "cobri-${VERSION}.sha256"

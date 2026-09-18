@@ -1,0 +1,21 @@
+[Unit]
+Description=Cobri FastAPI preview API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+User=cobri
+Group=cobri
+WorkingDirectory=/opt/cobri/current
+EnvironmentFile=/etc/cobri/cobri.env
+ExecStart=/usr/local/bin/uv run --project /opt/cobri/current/backend --locked uvicorn cobri.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cobri /opt/cobri/current
+
+[Install]
+WantedBy=multi-user.target

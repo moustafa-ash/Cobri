@@ -1,10 +1,10 @@
 import { chromium } from "playwright";
 
-const chrome = process.env.COBRI_BROWSER_EXECUTABLE ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const executablePath = process.env.COBRI_BROWSER_EXECUTABLE;
 const output = process.env.COBRI_BROWSER_ARTIFACT_DIR ?? ".data/browser-artifacts/visual";
 const baseUrl = process.env.COBRI_VISUAL_BASE_URL ?? "http://localhost:5173";
 await import("node:fs/promises").then(({ mkdir }) => mkdir(output, { recursive: true }));
-const browser = await chromium.launch({ headless: true, executablePath: chrome });
+const browser = await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) });
 const findings = [];
 
 for (const viewport of [

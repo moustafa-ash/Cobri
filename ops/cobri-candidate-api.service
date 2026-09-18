@@ -1,0 +1,21 @@
+[Unit]
+Description=Cobri isolated candidate API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+User=cobri
+Group=cobri
+WorkingDirectory=/opt/cobri/candidate/current
+EnvironmentFile=/etc/cobri/candidate.env
+ExecStart=/usr/local/bin/uv run --project /opt/cobri/candidate/current/backend --locked uvicorn cobri.main:app --host 127.0.0.1 --port 8001
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cobri /opt/cobri/candidate/current
+
+[Install]
+WantedBy=multi-user.target
