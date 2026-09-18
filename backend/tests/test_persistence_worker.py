@@ -2,14 +2,16 @@
 
 import asyncio
 import shutil
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from sqlalchemy import update
 
 from cobri.assessments.contracts import EvaluationView, SubmissionCreate
 from cobri.config import Settings
 from cobri.content.catalog import FileContentCatalog
-from cobri.errors import IdempotencyConflict, IntegrationContractError
+from cobri.errors import IdempotencyConflict, IntegrationContractError, ResourceNotFound
 from cobri.evaluations.contracts import (
     DiagnosticStatus,
     Evaluation,
@@ -18,6 +20,7 @@ from cobri.evaluations.contracts import (
 )
 from cobri.identity.auth import Principal
 from cobri.persistence.database import Database
+from cobri.persistence.models import EvaluationJobRecord
 from cobri.persistence.repositories import DatabaseStore
 from cobri.tutoring.contracts import SessionCreate
 from cobri.worker import EvaluationWorker
@@ -112,6 +115,12 @@ def test_worker_rejects_evaluation_outside_selected_content(tmp_path: Path) -> N
     with pytest.raises(IntegrationContractError, match="uncertain evaluations"):
         worker._validate_evaluation(contradictory, item)
 
+    unsupported = fabricated.model_copy(
+        update={"evidence_references": [], "misconception_id": "print-instead-of-return"}
+    )
+    with pytest.raises(IntegrationContractError, match="must cite evidence"):
+        worker._validate_evaluation(unsupported, item)
+
 
 def test_sandbox_failure_is_retried_without_learner_verdict(tmp_path: Path, monkeypatch) -> None:
     async def scenario() -> None:
@@ -189,6 +198,88 @@ def test_only_lease_owner_can_finish_job(tmp_path: Path) -> None:
         assert await store.finish_job(claimed[1].job_id, "worker-a", evaluation)
         result = await store.get_submission(principal, accepted.submission_id)
         assert result.job.status == "succeeded"
+        await database.dispose()
+
+    asyncio.run(scenario())
+
+
+def test_operator_deletion_requires_exact_target_confirmation(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        database = Database(f"sqlite+aiosqlite:///{tmp_path / 'delete.db'}")
+        await database.create_schema()
+        store = DatabaseStore(database)
+        principal = Principal(issuer="https://issuer.example", subject="delete-me")
+        session = await store.create_session(
+            principal,
+            SessionCreate(
+                content_package_id="python-functions",
+                content_version="1.0.0",
+                ui_locale="en",
+                instructional_language="en",
+            ),
+        )
+        await store.accept_submission(
+            principal,
+            session.session_id,
+            SubmissionCreate(item_id="python-function-return-1", answer="answer"),
+            "delete-key",
+        )
+        with pytest.raises(PermissionError):
+            await store.delete_learner("", principal.issuer, principal.subject, "wrong")
+        await store.delete_learner(
+            "operator-1",
+            principal.issuer,
+            principal.subject,
+            f"DELETE:{principal.issuer}:{principal.subject}",
+        )
+        with pytest.raises(ResourceNotFound):
+            await store.get_session(principal, session.session_id)
+        await database.dispose()
+
+    asyncio.run(scenario())
+
+
+def test_stale_worker_cannot_finish_after_lease_reclaimed(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        database = Database(f"sqlite+aiosqlite:///{tmp_path / 'stale.db'}")
+        await database.create_schema()
+        store = DatabaseStore(database)
+        principal = Principal(issuer="https://issuer.example", subject="stale-worker")
+        session = await store.create_session(
+            principal,
+            SessionCreate(
+                content_package_id="python-functions",
+                content_version="1.0.0",
+                ui_locale="en",
+                instructional_language="en",
+            ),
+        )
+        await store.accept_submission(
+            principal,
+            session.session_id,
+            SubmissionCreate(item_id="python-function-return-1", answer="answer"),
+            "stale-key",
+        )
+        claimed = await store.claim_job("worker-a", 60, 3)
+        assert claimed is not None
+        job_id = claimed[1].job_id
+        async with database.session() as db:
+            await db.execute(
+                update(EvaluationJobRecord)
+                .where(EvaluationJobRecord.job_id == job_id)
+                .values(lease_until=datetime.now(UTC) - timedelta(seconds=1))
+            )
+            await db.commit()
+        reclaimed = await store.claim_job("worker-b", 60, 3)
+        assert reclaimed is not None
+        evaluation = EvaluationView(
+            outcome_verdict=OutcomeVerdict.INCORRECT,
+            reasoning_verdict=ReasoningVerdict.INSUFFICIENT,
+            diagnostic_status=DiagnosticStatus.UNCERTAIN,
+            evidence_references=[],
+        )
+        assert not await store.finish_job(job_id, "worker-a", evaluation)
+        assert await store.finish_job(job_id, "worker-b", evaluation)
         await database.dispose()
 
     asyncio.run(scenario())

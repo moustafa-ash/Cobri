@@ -70,6 +70,8 @@ function mockApi(): CobriApi {
       remediation: null,
       next_item: null,
     }),
+    progress: vi.fn().mockResolvedValue([]),
+    history: vi.fn().mockResolvedValue([]),
   } as unknown as CobriApi;
 }
 
@@ -152,5 +154,21 @@ describe("topic discovery chat", () => {
     );
     expect(await screen.findByRole("heading", { name: "ما الذي تريد أن تفهمه؟" })).toBeInTheDocument();
     expect(container.firstElementChild).toHaveAttribute("dir", "rtl");
+  });
+
+  it("shows persisted activity details without exposing submission content", async () => {
+    const api = mockApi();
+    vi.mocked(api.progress).mockResolvedValue([{
+      content_package_id: "python-functions",
+      content_version: "2.0.0",
+      item_id: "function-return-value",
+      status: "mastered",
+      version: 2,
+      updated_at: "2026-01-01T12:00:00Z",
+    }]);
+    render(<MemoryRouter><LearnerApp api={api} onSignOut={vi.fn()} /></MemoryRouter>);
+    expect(await screen.findByText("Saved activity")).toBeInTheDocument();
+    expect(screen.getByText(/function-return-value/)).toBeInTheDocument();
+    expect(screen.queryByText(/answer|reasoning/i)).not.toBeInTheDocument();
   });
 });

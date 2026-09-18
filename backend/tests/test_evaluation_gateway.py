@@ -55,6 +55,13 @@ class FakeClient:
         return FakeResponse()
 
 
+class MalformedClient(FakeClient):
+    async def post(self, url: str, **_: object):
+        self.calls.append(url)
+        self.bodies.append(_["json"])
+        raise httpx.ReadTimeout("provider timed out")
+
+
 def test_provider_fallback_returns_validated_canonical_evaluation(monkeypatch) -> None:
     monkeypatch.setattr(httpx, "AsyncClient", FakeClient)
     FakeClient.calls.clear()
@@ -76,6 +83,22 @@ def test_provider_fallback_returns_validated_canonical_evaluation(monkeypatch) -
     schema = FakeClient.bodies[-1]["response_format"]["json_schema"]["schema"]
     assert set(schema["required"]) == set(schema["properties"])
     assert FakeClient.bodies[-1]["provider"] == {"require_parameters": True}
+
+
+def test_provider_exhaustion_is_classified_as_unavailable(monkeypatch) -> None:
+    monkeypatch.setattr(httpx, "AsyncClient", MalformedClient)
+    settings = Settings(
+        _env_file=None,
+        groq_api_key="groq-test",
+        openrouter_api_key="openrouter-test",
+        auth_issuer=None,
+        auth_audience=None,
+        auth_jwks_url=None,
+    )
+    from cobri.model_gateway.gateway import ProviderUnavailable
+
+    with pytest.raises(ProviderUnavailable):
+        asyncio.run(StructuredModelGateway(settings).evaluate("evidence"))
 
 
 def test_content_catalog_rejects_unreviewed_package(tmp_path: Path) -> None:

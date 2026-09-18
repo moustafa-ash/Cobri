@@ -52,6 +52,8 @@ export const copy = {
     back: "Back to chat",
     configTitle: "Authentication needs configuration",
     configBody: "Add the Auth0 SPA domain, client ID, and API audience to frontend/.env.local.",
+    savedProgress: "{progress} progress items · {history} events",
+    activity: "Saved activity",
   },
   ar: {
     brand: "كوبري",
@@ -104,5 +106,7 @@ export const copy = {
     back: "العودة للمحادثة",
     configTitle: "يلزم إعداد المصادقة",
     configBody: "أضف نطاق Auth0 ومعرّف العميل وجمهور الواجهة البرمجية إلى frontend/.env.local.",
+    savedProgress: "{progress} عناصر تقدم · {history} أحداث",
+    activity: "النشاط المحفوظ",
   },
 } satisfies Record<Locale, Record<string, string>>;

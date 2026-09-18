@@ -33,6 +33,14 @@ class StructuredModelGateway:
                 last_error = exc
         raise ProviderUnavailable(str(last_error or "all providers failed"))
 
+    async def evaluate_provider(self, provider: str, prompt: str) -> Evaluation:
+        """Evaluate against exactly one named provider; never falls back."""
+        if provider == "groq":
+            return await self._groq(prompt)
+        if provider == "openrouter":
+            return await self._openrouter(prompt)
+        raise ValueError(f"unsupported provider: {provider}")
+
     async def _groq(self, prompt: str) -> Evaluation:
         return await self._request(
             self.settings.groq_base_url,

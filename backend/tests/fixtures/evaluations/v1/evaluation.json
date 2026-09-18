@@ -1,0 +1,2570 @@
+[
+  {
+    "case_id": "V1_en_correct_sound_01",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-correct_sound-1",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_02",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-correct_sound-2",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_03",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-correct_sound-3",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_04",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-correct_sound-4",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_05",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-correct_sound-5",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_06",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-correct_sound-6",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_07",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-correct_sound-7",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_08",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-correct_sound-8",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_09",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-correct_sound-9",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_10",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-correct_sound-10",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_11",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-correct_sound-11",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_correct_sound_12",
+    "language": "en",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-correct_sound-12",
+      "reasoning": "I checked the correct_sound case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_01",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-wrong_supported-1",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_02",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-wrong_supported-2",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_03",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-wrong_supported-3",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_04",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-wrong_supported-4",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_05",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-wrong_supported-5",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_06",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-wrong_supported-6",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_07",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-wrong_supported-7",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_08",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-wrong_supported-8",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_09",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-wrong_supported-9",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_10",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-wrong_supported-10",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_11",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-wrong_supported-11",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_wrong_supported_12",
+    "language": "en",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-wrong_supported-12",
+      "reasoning": "I checked the wrong_supported case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_01",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-disagreement-1",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_02",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-disagreement-2",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_03",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-disagreement-3",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_04",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-disagreement-4",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_05",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-disagreement-5",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_06",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-disagreement-6",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_07",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-disagreement-7",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_08",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-disagreement-8",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_09",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-disagreement-9",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_10",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-disagreement-10",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_11",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-disagreement-11",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_disagreement_12",
+    "language": "en",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-disagreement-12",
+      "reasoning": "I checked the disagreement case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_01",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-insufficient-1",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_02",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-insufficient-2",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_03",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-insufficient-3",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_04",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-insufficient-4",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_05",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-insufficient-5",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_06",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-insufficient-6",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_07",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-insufficient-7",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_08",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-insufficient-8",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_09",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-insufficient-9",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_10",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-insufficient-10",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_11",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-insufficient-11",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_insufficient_12",
+    "language": "en",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-insufficient-12",
+      "reasoning": "I checked the insufficient case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_01",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-adversarial-1",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_02",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-adversarial-2",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_03",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-adversarial-3",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_04",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-adversarial-4",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_05",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-adversarial-5",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_06",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-adversarial-6",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_07",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-adversarial-7",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_08",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-adversarial-8",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_09",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-adversarial-9",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_10",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# en-adversarial-10",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_11",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# en-adversarial-11",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_en_adversarial_12",
+    "language": "en",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# en-adversarial-12",
+      "reasoning": "I checked the adversarial case in en."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_01",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-correct_sound-1",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_02",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-correct_sound-2",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_03",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-correct_sound-3",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_04",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-correct_sound-4",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_05",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-correct_sound-5",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_06",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-correct_sound-6",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_07",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-correct_sound-7",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_08",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-correct_sound-8",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_09",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-correct_sound-9",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_10",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-correct_sound-10",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_11",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-correct_sound-11",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_correct_sound_12",
+    "language": "ar",
+    "category": "correct_sound",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-correct_sound-12",
+      "reasoning": "I checked the correct_sound case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "sound",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_01",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-wrong_supported-1",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_02",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-wrong_supported-2",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_03",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-wrong_supported-3",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_04",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-wrong_supported-4",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_05",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-wrong_supported-5",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_06",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-wrong_supported-6",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_07",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-wrong_supported-7",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_08",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-wrong_supported-8",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_09",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-wrong_supported-9",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_10",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-wrong_supported-10",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_11",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-wrong_supported-11",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_wrong_supported_12",
+    "language": "ar",
+    "category": "wrong_supported",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-wrong_supported-12",
+      "reasoning": "I checked the wrong_supported case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
+      "misconception_id": "print-instead-of-return",
+      "evidence_references": [
+        "python-functions:1.0.0:print-vs-return"
+      ]
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_01",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-disagreement-1",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_02",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-disagreement-2",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_03",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-disagreement-3",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_04",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-disagreement-4",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_05",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-disagreement-5",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_06",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-disagreement-6",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_07",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-disagreement-7",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_08",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-disagreement-8",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_09",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-disagreement-9",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_10",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-disagreement-10",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_11",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-disagreement-11",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_disagreement_12",
+    "language": "ar",
+    "category": "disagreement",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-disagreement-12",
+      "reasoning": "I checked the disagreement case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_01",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-insufficient-1",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_02",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-insufficient-2",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_03",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-insufficient-3",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_04",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-insufficient-4",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_05",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-insufficient-5",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_06",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-insufficient-6",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_07",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-insufficient-7",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_08",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-insufficient-8",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_09",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-insufficient-9",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_10",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-insufficient-10",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_11",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-insufficient-11",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_insufficient_12",
+    "language": "ar",
+    "category": "insufficient",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-insufficient-12",
+      "reasoning": "I checked the insufficient case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_01",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-adversarial-1",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_02",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-adversarial-2",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_03",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-adversarial-3",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_04",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-adversarial-4",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_05",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-adversarial-5",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_06",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-adversarial-6",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_07",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-adversarial-7",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_08",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-adversarial-8",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_09",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-adversarial-9",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_10",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-functions",
+    "content_version": "1.0.0",
+    "item_id": "python-function-return-1",
+    "input": {
+      "answer": "def answer(value):\n    return value\n# ar-adversarial-10",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_11",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "conditionals-even-check-1",
+    "input": {
+      "answer": "def is_even(value):\n    return value % 2 == 0\n# ar-adversarial-11",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  },
+  {
+    "case_id": "V1_ar_adversarial_12",
+    "language": "ar",
+    "category": "adversarial",
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "item_id": "loops-sum-range-1",
+    "input": {
+      "answer": "def sum_to(value):\n    return sum(range(1, value + 1))\n# ar-adversarial-12",
+      "reasoning": "I checked the adversarial case in ar."
+    },
+    "expected_verdict": {
+      "outcome_verdict": "unverified",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
+      "misconception_id": null,
+      "evidence_references": []
+    },
+    "author": "Cobri dataset team",
+    "reviewer": "Pending human review"
+  }
+]

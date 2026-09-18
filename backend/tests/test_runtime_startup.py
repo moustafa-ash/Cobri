@@ -6,6 +6,15 @@ from cobri.config import Settings
 from cobri.main import create_app
 
 
+def test_uvicorn_entrypoint_exports_runtime_app() -> None:
+    from cobri.main import app
+
+    assert app.state.database is not None
+    assert app.state.session_store is not None
+    assert app.state.submission_service is not None
+    assert app.state.content_catalog is not None
+
+
 def test_runtime_app_starts_and_reports_worker_readiness(tmp_path) -> None:
     settings = Settings(
         _env_file=None,

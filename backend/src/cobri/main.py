@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 from time import perf_counter
+from typing import Annotated
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI, Request
@@ -18,15 +19,16 @@ from cobri.config import Settings
 from cobri.content.catalog import FileContentCatalog
 from cobri.content.ports import ContentCatalog
 from cobri.content.router import router as content_router
+from cobri.dependencies import get_session_store
 from cobri.errors import register_error_handlers
-from cobri.identity.auth import TokenVerifier, get_current_principal
+from cobri.identity.auth import Principal, TokenVerifier, get_current_principal
 from cobri.identity.router import router as identity_router
 from cobri.observability import OperationalMetrics
 from cobri.persistence.database import Database
 from cobri.persistence.models import WorkerHeartbeatRecord
 from cobri.persistence.repositories import DatabaseStore
 from cobri.rate_limit import InMemoryRateLimiter, RateLimiter
-from cobri.tutoring.contracts import SessionStore
+from cobri.tutoring.contracts import LearnerProgressView, SessionStore
 from cobri.tutoring.router import router as sessions_router
 
 logger = logging.getLogger(__name__)
@@ -38,6 +40,7 @@ def create_app(
     session_store: SessionStore | None = None,
     submission_service: SubmissionService | None = None,
     content_catalog: ContentCatalog | None = None,
+    semantic_retriever: object | None = None,
     rate_limiter: RateLimiter | None = None,
     install_runtime_adapters: bool = False,
 ) -> FastAPI:
@@ -79,6 +82,7 @@ def create_app(
     app.state.session_store = session_store
     app.state.submission_service = submission_service
     app.state.content_catalog = content_catalog
+    app.state.semantic_retriever = semantic_retriever
     register_error_handlers(app)
 
     @app.middleware("http")
@@ -119,6 +123,13 @@ def create_app(
     app.include_router(content_router, prefix="/api/v1")
     app.include_router(sessions_router, prefix="/api/v1")
     app.include_router(submissions_router, prefix="/api/v1")
+
+    @app.get("/api/v1/progress", response_model=list[LearnerProgressView], tags=["progress"])
+    async def progress(
+        principal: Annotated[Principal, Depends(get_current_principal)],
+        store: Annotated[SessionStore, Depends(get_session_store)],
+    ) -> list[LearnerProgressView]:
+        return await store.list_progress(principal)
 
     @app.get(
         "/api/v1/operations/metrics",
@@ -173,6 +184,7 @@ def create_app(
 
     return app
 
+
 async def _latest_heartbeat(database: Database):
     async with database.session() as session:
         return await session.scalar(
@@ -180,3 +192,4 @@ async def _latest_heartbeat(database: Database):
         )
 
 
+app = create_app(install_runtime_adapters=True)

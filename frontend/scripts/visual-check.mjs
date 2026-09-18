@@ -1,8 +1,9 @@
 import { chromium } from "playwright";
 
-const chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const output =
-  "C:/Users/ps420/.codex/visualizations/2026/09/10/01a08ac3-9ac8-7c52-aa92-377d28ded443";
+const chrome = process.env.COBRI_BROWSER_EXECUTABLE ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const output = process.env.COBRI_BROWSER_ARTIFACT_DIR ?? ".data/browser-artifacts/visual";
+const baseUrl = process.env.COBRI_VISUAL_BASE_URL ?? "http://localhost:5173";
+await import("node:fs/promises").then(({ mkdir }) => mkdir(output, { recursive: true }));
 const browser = await chromium.launch({ headless: true, executablePath: chrome });
 const findings = [];
 
@@ -21,7 +22,9 @@ for (const viewport of [
   page.on("response", (response) => {
     if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`);
   });
-  await page.goto("http://localhost:5173/visual.html", { waitUntil: "networkidle" });
+  // Vite keeps a hot-reload socket open, so networkidle never settles in dev.
+  await page.goto(`${baseUrl}/visual.html`, { waitUntil: "domcontentloaded" });
+  await page.locator("#root").waitFor({ state: "attached" });
   const arabic = viewport.name === "mobile";
   if (arabic) {
     await page.getByLabel("Interface").selectOption("ar");

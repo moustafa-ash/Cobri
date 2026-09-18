@@ -1,14 +1,14 @@
-import os
 import asyncio
-import json
+import os
 from uuid import uuid4
+
 import pytest
 
+from cobri.assessments.contracts import SubmissionCreate
+from cobri.identity.auth import Principal
 from cobri.persistence.database import Database
 from cobri.persistence.repositories import DatabaseStore
-from cobri.identity.auth import Principal
 from cobri.tutoring.contracts import SessionCreate
-from cobri.assessments.contracts import SubmissionCreate
 
 
 @pytest.mark.anyio
@@ -17,10 +17,11 @@ async def test_competing_workers_lease_claiming():
     Verifies that when two workers try to claim a job concurrently,
     only ONE worker gets the lease and the second receives None.
     """
-    db_url = os.environ.get(
-        "COBRI_DATABASE_URL",
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/cobri_db"
-    )
+    if os.getenv("COBRI_RUN_POSTGRES_TESTS") != "1":
+        pytest.skip("Set COBRI_RUN_POSTGRES_TESTS=1 to run PostgreSQL integration tests")
+    db_url = os.getenv("COBRI_TEST_POSTGRES_URL")
+    if not db_url:
+        pytest.fail("COBRI_TEST_POSTGRES_URL must point to a disposable PostgreSQL database")
     database = Database(db_url)
     store = DatabaseStore(database)
     principal = Principal(issuer="test_issuer", subject="test_subject")
@@ -30,7 +31,7 @@ async def test_competing_workers_lease_claiming():
         session_view = await store.create_session(
             principal=principal,
             request=SessionCreate(
-                content_package_id="python-control-flow",
+                content_package_id="python-functions",
                 content_version="1.0.0",
                 ui_locale="en",
                 instructional_language="en",
@@ -39,8 +40,8 @@ async def test_competing_workers_lease_claiming():
 
         # 2. Construct valid SubmissionCreate request
         submission_req = SubmissionCreate(
-            item_id="item_01",
-            answer=json.dumps({"code": "x = 1"}),
+            item_id="python-function-return-1",
+            answer="def double(n):\n    return n * 2",
             reasoning="Testing concurrency",
             purpose="assessment",
         )
@@ -63,8 +64,10 @@ async def test_competing_workers_lease_claiming():
         assert len(successful_claims) == 1
 
         claimed_submission, claimed_job = successful_claims[0]
+        assert claimed_submission.submission_id == claimed_job.submission_id
         assert claimed_job.status == "running"
         assert claimed_job.lease_owner in ["worker_A", "worker_B"]
+        assert claimed_job.attempts == 1
 
     finally:
         if hasattr(database, "engine"):

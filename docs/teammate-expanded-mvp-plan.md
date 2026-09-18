@@ -15,7 +15,7 @@
 - Real sandbox success, learner-test failure, timeout cleanup, forged-marker rejection, bounded output, non-root, no-network, read-only, and temporary-filesystem probes passed.
 - Real API → database → worker Docker flow passed: 3 tests.
 - Focused sandbox tests passed: 6 tests.
-- Full backend suite passed: 135 passed, 1 skipped.
+- Historical Stage One backend suite: 135 passed, 1 skipped. Current offline suite is recorded in `docs/verification-report.md`.
 - Ruff check and format check passed.
 - No Cobri sandbox containers remain.
 - The existing shell did not inherit the user-local Docker PATH entry; use a new shell or the installed CLI path. Elevated Docker access was required by this environment.

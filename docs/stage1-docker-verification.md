@@ -25,7 +25,7 @@ Date: 2026-09-14
 | Non-root/read-only/no-network/tmpfs probe | Passed; UID 65532, `/tmp` writable, network and `/etc` write blocked |
 | API → database → worker real sandbox flow | Passed, 3 tests |
 | Focused sandbox regression suite | Passed, 6 tests |
-| Backend suite | Passed, 135 passed, 1 skipped |
+| Backend suite | Historical Stage One result: 135 passed, 1 skipped |
 | Ruff check and format check | Passed |
 
 The skipped backend test is the existing opt-in live Auth0 check. No secrets were recorded.

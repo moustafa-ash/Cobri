@@ -58,7 +58,7 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 ### Day 1 verification record
 
 - [x] Pass locked dependency synchronization.
-- [x] Pass the recorded backend suite: `125 passed, 1 skipped`.
+- [x] Pass the current offline backend suite: `156 passed, 4 skipped` (live integrations remain opt-in).
 - [x] Pass Ruff check and formatting validation.
 - [x] Pass SQLite acceptance, replay, conflict, concurrency, worker, and restart-compatible schema tests.
 - [x] Pass mocked provider fallback and structured-response validation.
@@ -135,26 +135,26 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 - [ ] Add persisted learner events for assessment, diagnosis, intervention, retry, transfer, and profile updates.
 - [ ] Define mastery criteria that require successful changed-context transfer.
 - [ ] Prevent a model response alone from declaring mastery or changing learner state.
-- [ ] Add learner concept history and progress views based on auditable evidence.
+- [x] Add learner concept history and progress views based on auditable evidence.
 - [ ] Add safe profile recommendations without exposing private reasoning or unsupported claims.
 - [ ] Support multiple lessons while preserving immutable package versions for historical sessions.
 - [ ] Add tests for state transition ordering, replay, concurrency, failure recovery, and audit history.
 
 ## 5. Content and retrieval maturity
 
-- [ ] Formalize the content lifecycle: draft, review, publish, supersede, and rollback.
+- [ ] Formalize the content lifecycle: draft, review, publish, supersede, and rollback. (Validation and review gates implemented; human publication approval pending.)
 - [ ] Define reviewer roles and acceptance criteria for educational accuracy, sources, rubrics, and bilingual quality.
 - [ ] Add more reviewed concepts and transfer items beyond the initial Python-functions package.
 - [ ] Validate every package for stable IDs, prerequisites, evidence, misconceptions, interventions, tests, and language mappings.
 - [ ] Add content-version migration and compatibility checks without mutating historical packages.
-- [ ] Build semantic retrieval only after deterministic retrieval is accepted.
-- [ ] Record embedding/index versions, retrieval filters, conflicts, and source provenance.
+- [x] Build semantic retrieval only after deterministic retrieval is accepted.
+- [x] Record embedding/index versions, retrieval filters, conflicts, and source provenance.
 - [ ] Decide whether controlled web retrieval belongs in the product; if approved, add source, safety, and conflict controls.
 - [ ] Build a content authoring/review workflow or CMS only after the package lifecycle is stable.
 
 ## 6. Evaluation quality and model operations
 
-- [ ] Build a representative, versioned evaluation dataset with Arabic and English examples.
+- [x] Build a representative, versioned evaluation dataset with Arabic and English examples.
 - [ ] Add regression cases for correct answers, incorrect reasoning, known misconceptions, prerequisite gaps, and insufficient evidence.
 - [ ] Measure outcome accuracy, reasoning classification, diagnostic precision, uncertainty calibration, and evidence grounding separately.
 - [ ] Compare pinned Groq, OpenRouter, and optional provider/model profiles without automatic fallback hiding attribution.

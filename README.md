@@ -68,6 +68,8 @@ Public health routes are `/health/live` and `/health/ready`. Authenticated route
 - `GET /api/v1/content/packages/{package}/{version}/lessons/{item}`
 - `GET /api/v1/submissions/{submission_id}/next`
 - `GET /api/v1/operations/metrics`
+- `GET /api/v1/sessions/{session_id}/history`
+- `GET /api/v1/progress`
 
 Ownership derives only from a verified `(issuer, subject)` pair. Submission acceptance requires `Idempotency-Key` and commits the submission, idempotency record, and evaluation job together before returning `202`.
 
@@ -77,7 +79,12 @@ Evaluations keep outcome correctness, reasoning quality, diagnostic support, evi
 
 The historical package is `python-functions` version `1.0.0`. The reviewed `2.0.0` package adds three bilingual lessons covering return values, parameters and arguments, and composing function calls. Each lesson owns evidence, rubric, misconception remediation, targeted practice, and a changed-context transfer item. The learner starts by describing any topic in chat. Cobri offers options from the newest matching reviewed package or clearly reports that reviewed material is unavailable. Choosing a lesson keeps the chat mounted while a Monaco editor and separate reasoning field open beside it on desktop or in a full-screen mobile drawer. Submitting returns the learner to the chat for evaluation, remediation, practice, and transfer. Only reviewed packages are selectable, and learner responses never expose evaluator-only answers or hidden tests. The topic-discovery boundary can later add trusted-source web retrieval without changing the assessment flow.
 
-Without model credentials, the worker uses the deterministic fixture evaluator. With credentials, it tries Groq first and OpenRouter second, validates structured responses against the canonical Pydantic schema, and retries provider failures.
+Without model credentials, the worker uses the deterministic fixture evaluator. Explicit provider runs can target Groq or OpenRouter independently; responses are validated against the canonical Pydantic schema, and infrastructure failures never become learner verdicts.
+
+Content packages are checked with `uv run --project backend --locked python -m cobri.content.lifecycle validate content-packages`.
+The versioned evaluation harness lives under `backend/tests/fixtures/evaluations/v1`; its
+deterministic report validates allocation and schema but does not claim provider quality.
+Operator deletion requires the exact target-bound confirmation documented in the Day 2 runbook.
 
 Set `COBRI_SANDBOX_ENABLED=true` to execute package-owned Python tests inside Docker. The sandbox requires Docker Desktop with Linux containers and applies no-network, read-only, non-root, capability, CPU, memory, process, temporary-filesystem, timeout, and cleanup limits. If Docker is unavailable, the worker reports an infrastructure failure and does not produce a learner verdict.
 
@@ -106,12 +113,15 @@ npm run build
 npm run verify:browser
 ```
 
-The live OIDC check is opt-in through `COBRI_RUN_LIVE_AUTH=1` and `COBRI_LIVE_ACCESS_TOKEN`. Groq/OpenRouter smoke tests are also opt-in and require their respective keys. Local cryptographic tests, SQLite persistence, deterministic evaluation, and API contract tests do not require external credentials.
+The live OIDC check is opt-in through `COBRI_RUN_LIVE_AUTH=1` and `COBRI_LIVE_ACCESS_TOKEN`. Groq/OpenRouter smoke tests and PostgreSQL concurrency checks are also opt-in and require their respective local configuration. Docker sandbox checks require Docker Desktop with Linux containers. Local cryptographic tests, SQLite persistence, deterministic evaluation, and API contract tests do not require external credentials.
 
 See [API contracts](docs/day1-contracts.md), [architecture](docs/architecture.md), [Day 1 handoff](docs/day1-handoff.md), the [Day 2 plan](docs/day2-plan.md), and the [project checklist](docs/project-checklist.md).
 
 ## Scope and license
 
-Semantic RAG, mastery scoring, profile recommendations, production deployment, license selection,
-and live Auth0, Docker, provider, and PostgreSQL checks remain external or later milestones. The
-local deterministic flow includes remediation, practice, and transfer progression.
+Local versioned semantic retrieval primitives, durable learner history, the bilingual learner flow,
+trusted-web quarantine helpers, and parameterized offline browser evidence are implemented. The
+pinned E5 model, Tavily access, Auth0, Groq, OpenRouter, PostgreSQL, and Docker have local smoke
+evidence recorded in `docs/verification-report.md`. Human content publication, active semantic-index
+promotion, provider-quality scoring, authenticated live browser journeys, production deployment,
+and license selection remain separate approval gates.

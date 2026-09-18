@@ -26,6 +26,8 @@ import {
   ApiError,
   CobriApi,
   type AttemptPurpose,
+  type LearnerEvent,
+  type LearnerProgress,
   type LessonDetail,
   type Locale,
   type NextStepView,
@@ -50,6 +52,13 @@ interface CurrentItem {
 
 function readLocale(key: string, fallback: Locale): Locale {
   return localStorage.getItem(key) === "ar" ? "ar" : fallback;
+}
+
+function formatDate(value: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
 }
 
 export function LearnerApp({ api, onSignOut, userName }: LearnerAppProps) {
@@ -158,6 +167,8 @@ function TutorExperience({ api, locale, instructionLocale }: { api: CobriApi; lo
   const [submittedForReview, setSubmittedForReview] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<LearnerProgress[]>([]);
+  const [history, setHistory] = useState<LearnerEvent[]>([]);
   const pollCount = useRef(0);
   const conversationEnd = useRef<HTMLDivElement>(null);
   const localeRef = useRef(locale);
@@ -205,6 +216,15 @@ function TutorExperience({ api, locale, instructionLocale }: { api: CobriApi; lo
     });
     return () => { active = false; };
   }, [api, hasLessonRoute, itemId, lessonRouteKey, packageId, version]);
+
+  useEffect(() => {
+    api.progress().then(setProgress).catch(() => undefined);
+  }, [api]);
+
+  useEffect(() => {
+    if (!sessionId) return;
+    api.history(sessionId).then(setHistory).catch(() => undefined);
+  }, [api, sessionId, submission]);
 
   const loadResult = useCallback(async (submissionId: string) => {
     const result = await api.submission(submissionId);
@@ -353,6 +373,16 @@ function TutorExperience({ api, locale, instructionLocale }: { api: CobriApi; lo
           <div>
             <h1 id="topic-chat-title">{lesson ? lesson.title[instructionLocale] : t.chatTitle}</h1>
             <p>{lesson ? t.lessonChatSubtitle : t.chatSubtitle}</p>
+            <small aria-label={t.savedProgress}>{t.savedProgress.replace("{progress}", String(progress.length)).replace("{history}", String(history.length))}</small>
+            {(progress.length > 0 || history.length > 0) && (
+              <details className="activity-panel">
+                <summary>{t.activity}</summary>
+                <ul>
+                  {progress.map((item) => <li key={`${item.content_package_id}:${item.content_version}:${item.item_id}`}><strong>{item.item_id}</strong> · {item.status} · {formatDate(item.updated_at, locale)}</li>)}
+                  {history.map((event) => <li key={event.event_id}>{event.event_type} · {formatDate(event.created_at, locale)}</li>)}
+                </ul>
+              </details>
+            )}
           </div>
           {lesson && currentItem && !editorOpen && !submittedForReview && (
             <button className="open-editor-button" type="button" onClick={() => setEditorOpen(true)}>

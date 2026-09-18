@@ -22,7 +22,7 @@
 
 The locked environment passes Ruff, formatting, Alembic SQLite upgrade, runtime imports, API tests, persistence tests, worker tests, provider-fallback tests, content tests, and sandbox tests. Live Docker sandbox execution, Groq/OpenRouter structured-output requests, a PostgreSQL migration smoke test, and Auth0 OIDC authentication also passed.
 
-Current offline result: `125 passed, 1 skipped`; the default suite leaves the opt-in live-auth test skipped. The separately enabled Auth0 live-auth check passed: `1 passed`.
+Historical Day 1 result: `125 passed, 1 skipped`; current offline evidence is maintained in `docs/verification-report.md`.
 
 ## Educational and security invariants
 

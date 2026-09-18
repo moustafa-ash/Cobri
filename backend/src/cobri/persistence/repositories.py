@@ -5,6 +5,7 @@ import json
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
+import sqlalchemy as sa
 from sqlalchemy import and_, or_, select, update
 from sqlalchemy.exc import IntegrityError
 
@@ -17,14 +18,23 @@ from cobri.errors import IdempotencyConflict, ResourceNotFound
 from cobri.identity.auth import Principal
 from cobri.persistence.database import Database
 from cobri.persistence.models import (
+    EmbeddingRecord,
     EvaluationJobRecord,
     EvaluationRecord,
     IdempotencyRecord,
+    LearnerEventRecord,
+    LearnerProgressRecord,
+    QuarantinedSourceRecord,
     SessionRecord,
     SubmissionRecord,
     WorkerHeartbeatRecord,
 )
-from cobri.tutoring.contracts import SessionCreate, SessionView
+from cobri.tutoring.contracts import (
+    LearnerEventView,
+    LearnerProgressView,
+    SessionCreate,
+    SessionView,
+)
 
 
 def utc_now() -> datetime:
@@ -71,6 +81,153 @@ class DatabaseStore:
         if result is None:
             raise ResourceNotFound
         return self._session_view(result)
+
+    async def list_events(self, principal: Principal, session_id: UUID) -> list[LearnerEventView]:
+        async with self.database.session() as session:
+            rows = await session.scalars(
+                select(LearnerEventRecord)
+                .where(
+                    LearnerEventRecord.issuer == principal.issuer,
+                    LearnerEventRecord.subject == principal.subject,
+                    LearnerEventRecord.session_id == str(session_id),
+                )
+                .order_by(LearnerEventRecord.created_at, LearnerEventRecord.event_id)
+            )
+            return [LearnerEventView.model_validate(row, from_attributes=True) for row in rows]
+
+    async def list_progress(self, principal: Principal) -> list[LearnerProgressView]:
+        async with self.database.session() as session:
+            rows = await session.scalars(
+                select(LearnerProgressRecord)
+                .where(
+                    LearnerProgressRecord.issuer == principal.issuer,
+                    LearnerProgressRecord.subject == principal.subject,
+                )
+                .order_by(LearnerProgressRecord.content_package_id, LearnerProgressRecord.item_id)
+            )
+            return [LearnerProgressView.model_validate(row, from_attributes=True) for row in rows]
+
+    async def save_quarantined_source(self, url: str, digest: str, retrieved_at: datetime) -> None:
+        async with self.database.session() as session:
+            async with session.begin():
+                existing = await session.get(QuarantinedSourceRecord, digest)
+                if existing is None:
+                    session.add(
+                        QuarantinedSourceRecord(
+                            digest=digest,
+                            url=url,
+                            retrieved_at=retrieved_at,
+                            review_status="quarantined",
+                        )
+                    )
+
+    async def save_embeddings(
+        self,
+        package_id: str,
+        version: str,
+        package_digest: str,
+        model_revision: str,
+        vectors: dict[str, list[float]],
+        *,
+        tokenizer_revision: str = "",
+        normalized: bool = True,
+    ) -> None:
+        async with self.database.session() as session:
+            async with session.begin():
+                for item_id, vector in vectors.items():
+                    existing = await session.scalar(
+                        select(EmbeddingRecord).where(
+                            EmbeddingRecord.content_package_id == package_id,
+                            EmbeddingRecord.content_version == version,
+                            EmbeddingRecord.item_id == item_id,
+                            EmbeddingRecord.model_revision == model_revision,
+                        )
+                    )
+                    if existing is None:
+                        session.add(
+                            EmbeddingRecord(
+                                content_package_id=package_id,
+                                content_version=version,
+                                item_id=item_id,
+                                package_digest=package_digest,
+                                model_revision=model_revision,
+                                tokenizer_revision=tokenizer_revision,
+                                dimensions=len(vector),
+                                normalized=normalized,
+                                vector=vector,
+                            )
+                        )
+
+    async def load_embeddings(
+        self, package_id: str, version: str, package_digest: str, model_revision: str
+    ) -> list[EmbeddingRecord]:
+        async with self.database.session() as session:
+            rows = await session.scalars(
+                select(EmbeddingRecord).where(
+                    EmbeddingRecord.content_package_id == package_id,
+                    EmbeddingRecord.content_version == version,
+                    EmbeddingRecord.package_digest == package_digest,
+                    EmbeddingRecord.model_revision == model_revision,
+                )
+            )
+            return list(rows)
+
+    async def delete_learner(
+        self, operator_id: str, issuer: str, subject: str, confirmation: str
+    ) -> None:
+        """Operator-only deletion guarded by an exact, target-bound confirmation."""
+        if not operator_id or confirmation != f"DELETE:{issuer}:{subject}":
+            raise PermissionError("operator identity and exact learner confirmation are required")
+        async with self.database.session() as session:
+            async with session.begin():
+                submission_ids = list(
+                    await session.scalars(
+                        select(SubmissionRecord.submission_id).where(
+                            SubmissionRecord.issuer == issuer,
+                            SubmissionRecord.subject == subject,
+                        )
+                    )
+                )
+                if submission_ids:
+                    await session.execute(
+                        sa.delete(EvaluationRecord).where(
+                            EvaluationRecord.submission_id.in_(submission_ids)
+                        )
+                    )
+                    await session.execute(
+                        sa.delete(EvaluationJobRecord).where(
+                            EvaluationJobRecord.submission_id.in_(submission_ids)
+                        )
+                    )
+                    await session.execute(
+                        sa.delete(IdempotencyRecord).where(
+                            IdempotencyRecord.submission_id.in_(submission_ids)
+                        )
+                    )
+                await session.execute(
+                    sa.delete(LearnerEventRecord).where(
+                        LearnerEventRecord.issuer == issuer,
+                        LearnerEventRecord.subject == subject,
+                    )
+                )
+                await session.execute(
+                    sa.delete(LearnerProgressRecord).where(
+                        LearnerProgressRecord.issuer == issuer,
+                        LearnerProgressRecord.subject == subject,
+                    )
+                )
+                await session.execute(
+                    sa.delete(SubmissionRecord).where(
+                        SubmissionRecord.issuer == issuer,
+                        SubmissionRecord.subject == subject,
+                    )
+                )
+                await session.execute(
+                    sa.delete(SessionRecord).where(
+                        SessionRecord.issuer == issuer,
+                        SessionRecord.subject == subject,
+                    )
+                )
 
     async def accept_submission(
         self,
@@ -170,6 +327,18 @@ class DatabaseStore:
                     ]
                 )
                 await session.flush()
+                session.add(
+                    LearnerEventRecord(
+                        event_id=str(uuid4()),
+                        issuer=principal.issuer,
+                        subject=principal.subject,
+                        session_id=str(session_id),
+                        submission_id=submission.submission_id,
+                        event_type="submission_accepted",
+                        payload={"purpose": request.purpose.value},
+                        created_at=utc_now(),
+                    )
+                )
                 return await self._submission_view(session, submission)
 
     async def get_submission(self, principal: Principal, submission_id: UUID) -> SubmissionView:
@@ -290,6 +459,73 @@ class DatabaseStore:
                             **evaluation.model_dump(),
                         )
                     )
+                submission = await session.get(SubmissionRecord, job.submission_id)
+                if submission is not None:
+                    session.add(
+                        LearnerEventRecord(
+                            event_id=str(uuid4()),
+                            issuer=submission.issuer,
+                            subject=submission.subject,
+                            session_id=submission.session_id,
+                            submission_id=submission.submission_id,
+                            event_type="evaluation_succeeded",
+                            payload=evaluation.model_dump(mode="json"),
+                            created_at=utc_now(),
+                        )
+                    )
+                    status = "started"
+                    if (
+                        submission.purpose == "transfer"
+                        and evaluation.outcome_verdict == "correct"
+                        and evaluation.reasoning_verdict == "sound"
+                        and submission.parent_submission_id
+                    ):
+                        parent = await session.get(
+                            SubmissionRecord, submission.parent_submission_id
+                        )
+                        parent_eval = (
+                            await session.get(EvaluationRecord, submission.parent_submission_id)
+                            if parent
+                            else None
+                        )
+                        if (
+                            parent
+                            and parent.session_id == submission.session_id
+                            and parent.content_package_id == submission.content_package_id
+                            and parent.content_version == submission.content_version
+                            and parent.item_id != submission.item_id
+                            and parent.purpose in {"assessment", "practice"}
+                            and parent_eval
+                            and parent_eval.outcome_verdict == "correct"
+                            and parent_eval.reasoning_verdict == "sound"
+                        ):
+                            status = "mastered"
+                    progress = await session.scalar(
+                        select(LearnerProgressRecord).where(
+                            LearnerProgressRecord.issuer == submission.issuer,
+                            LearnerProgressRecord.subject == submission.subject,
+                            LearnerProgressRecord.content_package_id
+                            == submission.content_package_id,
+                            LearnerProgressRecord.content_version == submission.content_version,
+                            LearnerProgressRecord.item_id == submission.item_id,
+                        )
+                    )
+                    if progress is None:
+                        session.add(
+                            LearnerProgressRecord(
+                                issuer=submission.issuer,
+                                subject=submission.subject,
+                                content_package_id=submission.content_package_id,
+                                content_version=submission.content_version,
+                                item_id=submission.item_id,
+                                status=status,
+                                updated_at=utc_now(),
+                            )
+                        )
+                    elif status == "mastered":
+                        progress.status = status
+                        progress.version += 1
+                        progress.updated_at = utc_now()
                 job.status = "succeeded"
                 job.lease_until = None
                 job.lease_owner = None

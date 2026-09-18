@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
 from cobri.content.contracts import (
     LessonDetail,
@@ -29,10 +29,17 @@ async def list_packages(
 @router.post("/topics/discover", response_model=TopicDiscoveryResponse)
 async def discover_topic(
     body: TopicDiscoveryRequest,
+    request: Request,
     _: Annotated[Principal, Depends(get_current_principal)],
     catalog: Annotated[ContentCatalog, Depends(get_content_catalog)],
 ) -> TopicDiscoveryResponse:
     package, items = catalog.match_topic(body.query)
+    if package is None:
+        retriever = getattr(request.app.state, "semantic_retriever", None)
+        if retriever is not None:
+            result = await retriever.match(body.query)
+            if result is not None:
+                package, items = result
     if package is None:
         return TopicDiscoveryResponse(status="unsupported", options=[])
     return TopicDiscoveryResponse(

@@ -84,3 +84,60 @@ class WorkerHeartbeatRecord(Base):
 
     worker_id: Mapped[str] = mapped_column(String(128), primary_key=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class LearnerEventRecord(Base):
+    __tablename__ = "learner_events"
+    __table_args__ = (Index("ix_learner_events_owner", "issuer", "subject", "created_at"),)
+
+    event_id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    issuer: Mapped[str] = mapped_column(String(512), nullable=False)
+    subject: Mapped[str] = mapped_column(String(512), nullable=False)
+    session_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    submission_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    event_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class LearnerProgressRecord(Base):
+    __tablename__ = "learner_progress"
+    __table_args__ = (
+        UniqueConstraint("issuer", "subject", "content_package_id", "content_version", "item_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    issuer: Mapped[str] = mapped_column(String(512), nullable=False)
+    subject: Mapped[str] = mapped_column(String(512), nullable=False)
+    content_package_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    content_version: Mapped[str] = mapped_column(String(128), nullable=False)
+    item_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="started")
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class EmbeddingRecord(Base):
+    __tablename__ = "content_embeddings"
+    __table_args__ = (
+        UniqueConstraint("content_package_id", "content_version", "item_id", "model_revision"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    content_package_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    content_version: Mapped[str] = mapped_column(String(128), nullable=False)
+    item_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    package_digest: Mapped[str] = mapped_column(String(64), nullable=False)
+    model_revision: Mapped[str] = mapped_column(String(256), nullable=False)
+    tokenizer_revision: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    dimensions: Mapped[int] = mapped_column(Integer, nullable=False)
+    normalized: Mapped[bool] = mapped_column(nullable=False, default=True)
+    vector: Mapped[list[float]] = mapped_column(JSON, nullable=False)
+
+
+class QuarantinedSourceRecord(Base):
+    __tablename__ = "quarantined_sources"
+    digest: Mapped[str] = mapped_column(String(64), primary_key=True)
+    url: Mapped[str] = mapped_column(String(2048), nullable=False)
+    retrieved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    review_status: Mapped[str] = mapped_column(String(32), nullable=False, default="quarantined")

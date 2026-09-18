@@ -10,16 +10,16 @@ jobs:
   backend-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@8d55fbecc275b1c35dbe060458839f8d30439ccf
         with:
-          version: "latest"
+          version: "0.11.7"
           enable-cache: true
 
       - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
         with:
           python-version: "3.12"
 
@@ -33,17 +33,20 @@ jobs:
         run: uv run --project backend --locked ruff format --check backend
 
       - name: Run Pytest Suite
-        run: uv run --project backend --locked pytest backend/tests
+        run: uv run --project backend --locked pytest backend/tests -p no:cacheprovider
+
+      - name: Validate migrations
+        run: uv run --project backend --locked pytest backend/tests/test_migrations.py -p no:cacheprovider
 
   frontend-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: "20"
+          node-version: "22.14.0"
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
@@ -55,6 +58,9 @@ jobs:
 
       - name: Run Frontend Tests
         run: cd frontend && npm test -- --run
+
+      - name: Lint Frontend
+        run: cd frontend && npm run lint
 
       - name: Build Application
         run: cd frontend && npm run build

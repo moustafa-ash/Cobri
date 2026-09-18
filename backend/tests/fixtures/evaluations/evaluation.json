@@ -1,17 +1,17 @@
 [
   {
-    "case_id": "EVAL_CASE_01_UNCERTAIN_EVIDENCE",
+    "case_id": "EVAL_CASE_01_SUPPORTED_PRINT_MISCONCEPTION",
     "content_package_id": "python-functions",
     "content_version": "1.0.0",
     "item_id": "python-function-return-1",
     "input": {
-      "code": "def double(n):\n    print(n * 2)",
+      "answer": "def double(n):\n    print(n * 2)",
       "reasoning": "I used print to display the result."
     },
     "expected_verdict": {
-      "outcome": "incorrect",
-      "reasoning_verdict": "flawed",
-      "diagnostic_support": "supported",
+      "outcome_verdict": "incorrect",
+      "reasoning_verdict": "incorrect",
+      "diagnostic_status": "supported",
       "misconception_id": "print-instead-of-return",
       "evidence_references": ["python-functions:1.0.0:print-vs-return"]
     }
@@ -22,13 +22,13 @@
     "content_version": "1.0.0",
     "item_id": "python-function-return-1",
     "input": {
-      "code": "def double(n):\n    return n + n",
+      "answer": "def double(n):\n    return n + n",
       "reasoning": ""
     },
     "expected_verdict": {
-      "outcome": "correct",
-      "reasoning_verdict": "absent",
-      "diagnostic_support": "uncertain",
+      "outcome_verdict": "correct",
+      "reasoning_verdict": "insufficient",
+      "diagnostic_status": "uncertain",
       "misconception_id": null,
       "evidence_references": []
     }

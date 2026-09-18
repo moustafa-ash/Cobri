@@ -37,6 +37,8 @@ def test_unconfigured_app_is_live_but_not_ready(api_settings: Settings) -> None:
             "/api/v1/content/packages": "get",
             "/api/v1/content/topics/discover": "post",
             "/api/v1/operations/metrics": "get",
+            "/api/v1/sessions/{session_id}/history": "get",
+            "/api/v1/progress": "get",
             (
                 "/api/v1/content/packages/{content_package_id}/{content_version}/lessons/{item_id}"
             ): "get",

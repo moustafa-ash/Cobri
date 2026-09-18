@@ -10,9 +10,24 @@ from cobri.dependencies import get_content_catalog, get_rate_limiter, get_sessio
 from cobri.errors import IntegrationContractError, validate_result
 from cobri.identity.auth import Principal, get_current_principal
 from cobri.rate_limit import RateLimiter
-from cobri.tutoring.contracts import SessionCreate, SessionStore, SessionView
+from cobri.tutoring.contracts import (
+    LearnerEventView,
+    SessionCreate,
+    SessionStore,
+    SessionView,
+)
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
+
+
+@router.get("/{session_id}/history", response_model=list[LearnerEventView])
+async def session_history(
+    session_id: UUID,
+    principal: Annotated[Principal, Depends(get_current_principal)],
+    store: Annotated[SessionStore, Depends(get_session_store)],
+) -> list[LearnerEventView]:
+    await store.get_session(principal, session_id)
+    return await store.list_events(principal, session_id)
 
 
 @router.post("", response_model=SessionView, status_code=201)

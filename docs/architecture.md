@@ -50,4 +50,11 @@ The API is responsible for authentication, ownership, validation, and durable ac
 
 Local development defaults to SQLite, deterministic evaluation, and the API plus `cobri-worker` processes. PostgreSQL is supported through `COBRI_DATABASE_URL`. Real OIDC and provider checks are opt-in. Docker sandbox execution is enabled with `COBRI_SANDBOX_ENABLED=true` and requires Docker Desktop Linux containers.
 
-Frontend, full retrieval/RAG, remediation, mastery, profile recommendations, and transfer execution remain later milestones.
+The frontend now exposes persisted activity counts; durable learner history and transfer-gated
+mastery are implemented. Retrieval vectors and quarantined official-source metadata have durable
+boundaries, while model downloads, live provider quality, profile recommendations, and hosted
+journeys remain gated integrations.
+
+Learner events are append-only and progress is a versioned projection keyed by verified owner,
+package version, and item. Content release actions append immutable ledger records; package bytes
+are never rewritten by review, publication, supersession, or rollback.

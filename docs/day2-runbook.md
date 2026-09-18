@@ -24,3 +24,20 @@ allowed web origin in Auth0. Tokens use the Auth0 React in-memory cache with ref
 Run the locked backend suite, Ruff checks, frontend typecheck/tests/build, and `npm run verify:browser`.
 Docker, live Auth0, configured providers, and PostgreSQL checks are opt-in and remain incomplete
 when those services are unavailable.
+
+## Durable learner data
+
+- `GET /api/v1/sessions/{session_id}/history` returns owner-scoped learner events.
+- `GET /api/v1/progress` returns the authenticated learner's progress projection.
+- Operator deletion is repository/operations-only and requires an explicit target plus the exact
+  confirmation `DELETE:{issuer}:{subject}`; there is no public deletion endpoint.
+  Run `uv run --project backend --locked python backend/scripts/delete_learner.py --operator OPERATOR
+  --issuer ISSUER --subject SUBJECT --confirmation DELETE:ISSUER:SUBJECT` only after independently
+  confirming the target.
+
+## Content and live checks
+
+Validate packages with `uv run --project backend --locked python -m cobri.content.lifecycle validate content-packages`.
+The deterministic dataset report is run with `backend/scripts/evaluate_dataset.py`; provider modes
+require their own credentials and fixed approval. `npm run live-check` requires
+`COBRI_LIVE_BASE_URL` and `COBRI_LIVE_TOKEN` and fails closed when absent.

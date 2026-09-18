@@ -46,6 +46,13 @@ class Settings(BaseSettings):
     openrouter_api_key: str | None = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_model: str = "openrouter/free"
+    embedding_model: str = "intfloat/multilingual-e5-small"
+    embedding_model_revision: str | None = None
+    embedding_dimensions: int = Field(default=384, ge=1, le=4096)
+    embedding_min_score: float = Field(default=0.8, ge=-1, le=1)
+    tavily_api_key: str | None = None
+    tavily_max_results: int = Field(default=3, ge=1, le=10)
+    tavily_timeout_seconds: float = Field(default=5, gt=0, le=30)
     model_timeout_seconds: float = Field(default=30, gt=0, le=120)
     evaluation_mode: Literal["fixture", "provider"] = "fixture"
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])

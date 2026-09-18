@@ -2,10 +2,10 @@
      
 
   "content_package_id": "python-control-flow",
-  "content_version": "1.0.0-draft",
+  "content_version": "1.0.0",
   "topic": "Python Control Flow: Booleans, Conditionals, and Loops",
   "review_status": "draft",
-  "reviewed_by": "AHMED",
+  "reviewed_by": null,
   "items": [
     {
       "item_id": "conditionals-even-check-1",
@@ -24,13 +24,78 @@
         "assert is_even(0) == True"
       ],
       "evidence_references": [
-        "python-control-flow:1.0.0-draft:booleans",
-        "python-control-flow:1.0.0-draft:modulo-operator"
+        "python-control-flow:1.0.0:booleans",
+        "python-control-flow:1.0.0:modulo-operator"
+      ],
+      "evidence": [
+        {"evidence_id": "python-control-flow:1.0.0:booleans", "source_title": "Python Boolean operations", "source_url": "https://docs.python.org/3/library/stdtypes.html#boolean-values", "explanation": {"en": "Comparisons produce Boolean values.", "ar": "تنتج المقارنات قيماً منطقية."}},
+        {"evidence_id": "python-control-flow:1.0.0:modulo-operator", "source_title": "Python arithmetic operators", "source_url": "https://docs.python.org/3/reference/expressions.html#arithmetic-operations", "explanation": {"en": "The modulo operator gives a remainder.", "ar": "يعطي عامل باقي القسمة الباقي."}}
+      ],
+      "rubric": [
+        {"criterion_id": "returns-boolean", "description": {"en": "Returns a Boolean for every input.", "ar": "تعيد قيمة منطقية لكل إدخال."}},
+        {"criterion_id": "uses-remainder", "description": {"en": "Uses the remainder to distinguish even and odd values.", "ar": "تستخدم الباقي للتمييز بين الأعداد الزوجية والفردية."}}
+      ],
+      "misconceptions": [
+        {"misconception_id": "assignment-vs-equality", "detection_criteria": ["Uses = where a comparison is required."], "remediation": {"en": "Use == for comparison and = for assignment.", "ar": "استخدم == للمقارنة و = للإسناد."}, "practice": {"item_id": "conditionals-even-practice-assignment-1", "prompt": {"en": "Return whether n equals 0 without assigning to n.", "ar": "أعد ما إذا كان n يساوي صفراً دون إسناد قيمة إلى n."}, "expected_code": "def is_zero(n):\n    return n == 0", "tests": ["assert is_zero(0)", "assert not is_zero(1)"]}},
+        {"misconception_id": "string-boolean-return", "detection_criteria": ["Returns the strings 'True' or 'False'."], "remediation": {"en": "Return Boolean literals, not their text representations.", "ar": "أعد القيم المنطقية لا تمثيلها النصي."}, "practice": {"item_id": "conditionals-even-practice-boolean-1", "prompt": {"en": "Return a Boolean indicating whether n is positive.", "ar": "أعد قيمة منطقية توضح ما إذا كان n موجباً."}, "expected_code": "def is_positive(n):\n    return n > 0", "tests": ["assert is_positive(2)", "assert not is_positive(0)"]}}
       ],
       "misconception_ids": ["assignment-vs-equality", "string-boolean-return"],
       "transfer_prompt": {
         "en": "Write is_odd(n) that returns True if n is odd and False otherwise.",
         "ar": "اكتب is_odd(n) تعيد True إذا كان n فردياً و False غير ذلك."
+      },
+      "transfer": {
+        "item_id": "conditionals-odd-transfer-1",
+        "prompt": {
+          "en": "Write is_odd(n) using a boolean comparison.",
+          "ar": "اكتب is_odd(n) باستخدام مقارنة منطقية."
+        },
+        "expected_code": "def is_odd(n):\n    return n % 2 != 0",
+        "tests": ["assert is_odd(3)", "assert not is_odd(4)"]
+      }
+    },
+    {
+      "item_id": "conditionals-grade-branch-1",
+      "title": {"en": "Choose a grade label", "ar": "اختيار تقدير الدرجة"},
+      "prompt": {
+        "en": "Return 'pass' when score is at least 50, otherwise return 'retry'.",
+        "ar": "أعد 'pass' عندما تكون الدرجة 50 على الأقل، وإلا أعد 'retry'."
+      },
+      "expected_code": "def grade(score):\n    if score >= 50:\n        return 'pass'\n    return 'retry'",
+      "tests": ["assert grade(50) == 'pass'", "assert grade(49) == 'retry'"],
+      "evidence_references": ["python-control-flow:1.0.0:if-else"],
+      "evidence": [{"evidence_id": "python-control-flow:1.0.0:if-else", "source_title": "Python if statements", "source_url": "https://docs.python.org/3/reference/compound_stmts.html#if", "explanation": {"en": "Conditional branches select one block based on a condition.", "ar": "تختار الفروع الشرطية كتلة بناءً على شرط."}}],
+      "rubric": [{"criterion_id": "grade-boundary", "description": {"en": "Treats 50 as passing.", "ar": "تعتبر 50 نجاحاً."}}, {"criterion_id": "grade-fallback", "description": {"en": "Returns retry below the boundary.", "ar": "تعيد retry تحت الحد."}}],
+      "misconception_ids": ["boundary-direction"],
+      "misconceptions": [{"misconception_id": "boundary-direction", "detection_criteria": ["Uses > 50 and rejects exactly 50."], "remediation": {"en": "Use >= when the boundary is included.", "ar": "استخدم >= عندما يكون الحد مشمولاً."}, "practice": {"item_id": "conditionals-grade-practice-1", "prompt": {"en": "Return 'adult' for age 18 or older, otherwise 'minor'.", "ar": "أعد adult للعمر 18 أو أكثر وإلا minor."}, "expected_code": "def age_label(age):\n    if age >= 18:\n        return 'adult'\n    return 'minor'", "tests": ["assert age_label(18) == 'adult'", "assert age_label(17) == 'minor'"]}}],
+      "transfer_prompt": {"en": "Classify a temperature as hot or cool.", "ar": "صنّف درجة الحرارة إلى حارة أو باردة."},
+      "transfer": {
+        "item_id": "conditionals-temperature-transfer-1",
+        "prompt": {"en": "Return 'hot' for temperatures above 30, else 'cool'.", "ar": "أعد 'hot' للدرجات فوق 30 وإلا 'cool'."},
+        "expected_code": "def temperature_label(t):\n    if t > 30:\n        return 'hot'\n    return 'cool'",
+        "tests": ["assert temperature_label(31) == 'hot'", "assert temperature_label(20) == 'cool'"]
+      }
+    },
+    {
+      "item_id": "loops-sum-range-1",
+      "title": {"en": "Sum a range with a loop", "ar": "جمع نطاق باستخدام حلقة"},
+      "prompt": {
+        "en": "Return the sum of integers from 1 through n using a for loop.",
+        "ar": "أعد مجموع الأعداد من 1 إلى n باستخدام حلقة for."
+      },
+      "expected_code": "def sum_to(n):\n    total = 0\n    for value in range(1, n + 1):\n        total += value\n    return total",
+      "tests": ["assert sum_to(1) == 1", "assert sum_to(4) == 10"],
+      "evidence_references": ["python-control-flow:1.0.0:for-loop"],
+      "evidence": [{"evidence_id": "python-control-flow:1.0.0:for-loop", "source_title": "Python for statements", "source_url": "https://docs.python.org/3/reference/compound_stmts.html#for", "explanation": {"en": "A for loop iterates over each value in an iterable.", "ar": "تكرر حلقة for على كل قيمة في عنصر قابل للتكرار."}}],
+      "rubric": [{"criterion_id": "loop-range", "description": {"en": "Includes both endpoints from 1 through n.", "ar": "تشمل الطرفين من 1 إلى n."}}, {"criterion_id": "loop-accumulator", "description": {"en": "Accumulates each value and returns the total.", "ar": "تجمع كل قيمة وتعيد المجموع."}}],
+      "misconception_ids": ["range-exclusive-end"],
+      "misconceptions": [{"misconception_id": "range-exclusive-end", "detection_criteria": ["Uses range(1, n) and omits n."], "remediation": {"en": "Remember that range stops before its end; use n + 1.", "ar": "تذكر أن range تتوقف قبل النهاية؛ استخدم n + 1."}, "practice": {"item_id": "loops-sum-practice-1", "prompt": {"en": "Count from 1 through n and return the count.", "ar": "احسب عدد الأعداد من 1 إلى n وأعد العدد."}, "expected_code": "def count_to(n):\n    count = 0\n    for _ in range(1, n + 1):\n        count += 1\n    return count", "tests": ["assert count_to(1) == 1", "assert count_to(4) == 4"]}}],
+      "transfer_prompt": {"en": "Count vowels in a word using a loop.", "ar": "احسب حروف العلة في كلمة باستخدام حلقة."},
+      "transfer": {
+        "item_id": "loops-vowel-count-transfer-1",
+        "prompt": {"en": "Return the number of vowels in text.", "ar": "أعد عدد حروف العلة في النص."},
+        "expected_code": "def count_vowels(text):\n    return sum(1 for char in text.lower() if char in 'aeiou')",
+        "tests": ["assert count_vowels('Cobri') == 2", "assert count_vowels('xyz') == 0"]
       }
     }
   ]

@@ -56,4 +56,11 @@ def test_api_submission_reaches_worker_and_evaluation(tmp_path: Path) -> None:
         assert result.status_code == 200
         assert result.json()["job"]["status"] == "succeeded"
         assert result.json()["evaluation"]["outcome_verdict"] == "correct"
+        assert client.get("/api/v1/progress").status_code == 200
+        history = client.get(f"/api/v1/sessions/{session_id}/history")
+        assert history.status_code == 200
+        assert {event["event_type"] for event in history.json()} >= {
+            "submission_accepted",
+            "evaluation_succeeded",
+        }
     app.dependency_overrides.clear()

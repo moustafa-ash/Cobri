@@ -120,6 +120,12 @@ class EvaluationWorker:
         if evaluation.misconception_id not in [None, *item.misconception_ids]:
             raise IntegrationContractError("evaluation named an unsupported misconception")
         if (
+            evaluation.diagnostic_status.value == "supported"
+            and evaluation.misconception_id is not None
+            and not evaluation.evidence_references
+        ):
+            raise IntegrationContractError("supported diagnoses must cite evidence")
+        if (
             evaluation.diagnostic_status is DiagnosticStatus.UNCERTAIN
             and evaluation.misconception_id is not None
         ):

@@ -55,6 +55,8 @@ export type NextStepView = Omit<ApiNextStepView, "message" | "remediation" | "ne
   remediation: Localized | null;
   next_item: { item_id: string; purpose: AttemptPurpose; prompt: Localized } | null;
 };
+export type LearnerProgress = { content_package_id: string; content_version: string; item_id: string; status: string; version: number; updated_at: string };
+export type LearnerEvent = { event_id: string; session_id: string; submission_id: string | null; event_type: string; payload: Record<string, unknown>; created_at: string };
 
 export class ApiError extends Error {
   constructor(
@@ -151,5 +153,13 @@ export class CobriApi {
 
   next(submissionId: string) {
     return this.request<NextStepView>(`/api/v1/submissions/${submissionId}/next`);
+  }
+
+  progress() {
+    return this.request<LearnerProgress[]>("/api/v1/progress");
+  }
+
+  history(sessionId: string) {
+    return this.request<LearnerEvent[]>(`/api/v1/sessions/${encodeURIComponent(sessionId)}/history`);
   }
 }
