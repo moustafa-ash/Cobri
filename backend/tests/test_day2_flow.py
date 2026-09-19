@@ -63,14 +63,12 @@ def test_catalogue_hides_evaluator_only_material(tmp_path: Path) -> None:
             "function-return-value"
         ]
 
-        unsupported = client.post("/api/v1/content/topics/discover", json={"query": "Python loops"})
-        assert unsupported.status_code == 200
-        assert unsupported.json() == {
-            "status": "unsupported",
-            "options": [],
-            "content_package_id": None,
-            "content_version": None,
-        }
+        loops = client.post("/api/v1/content/topics/discover", json={"query": "Python loops"})
+        assert loops.status_code == 200
+        assert loops.json()["status"] == "supported"
+        assert loops.json()["content_package_id"] == "python-control-flow"
+        assert loops.json()["content_version"] == "1.0.0"
+        assert [option["item_id"] for option in loops.json()["options"]] == ["loops-sum-range-1"]
 
 
 def test_supported_remediation_practice_and_transfer_flow(tmp_path: Path) -> None:

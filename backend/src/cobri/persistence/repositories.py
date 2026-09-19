@@ -30,10 +30,13 @@ from cobri.persistence.models import (
     WorkerHeartbeatRecord,
 )
 from cobri.tutoring.contracts import (
+    LearnerEventType,
     LearnerEventView,
+    LearnerProgressState,
     LearnerProgressView,
     SessionCreate,
     SessionView,
+    next_progress_state,
 )
 
 
@@ -229,6 +232,84 @@ class DatabaseStore:
                     )
                 )
 
+    async def export_learner(
+        self, operator_id: str, issuer: str, subject: str, confirmation: str
+    ) -> dict[str, object]:
+        if not operator_id or confirmation != f"EXPORT:{issuer}:{subject}":
+            raise PermissionError("operator identity and exact learner confirmation are required")
+        async with self.database.session() as session:
+            sessions = list(
+                await session.scalars(
+                    select(SessionRecord).where(
+                        SessionRecord.issuer == issuer, SessionRecord.subject == subject
+                    )
+                )
+            )
+            submissions = list(
+                await session.scalars(
+                    select(SubmissionRecord).where(
+                        SubmissionRecord.issuer == issuer, SubmissionRecord.subject == subject
+                    )
+                )
+            )
+            events = list(
+                await session.scalars(
+                    select(LearnerEventRecord).where(
+                        LearnerEventRecord.issuer == issuer,
+                        LearnerEventRecord.subject == subject,
+                    )
+                )
+            )
+            progress = list(
+                await session.scalars(
+                    select(LearnerProgressRecord).where(
+                        LearnerProgressRecord.issuer == issuer,
+                        LearnerProgressRecord.subject == subject,
+                    )
+                )
+            )
+            ids = [row.submission_id for row in submissions]
+            evaluations = (
+                list(
+                    await session.scalars(
+                        select(EvaluationRecord).where(EvaluationRecord.submission_id.in_(ids))
+                    )
+                )
+                if ids
+                else []
+            )
+            jobs = (
+                list(
+                    await session.scalars(
+                        select(EvaluationJobRecord).where(
+                            EvaluationJobRecord.submission_id.in_(ids)
+                        )
+                    )
+                )
+                if ids
+                else []
+            )
+
+        def rows(records):
+            return [
+                {
+                    column.name: getattr(record, column.name)
+                    for column in type(record).__table__.columns
+                }
+                for record in records
+            ]
+
+        return {
+            "issuer": issuer,
+            "subject": subject,
+            "sessions": rows(sessions),
+            "submissions": rows(submissions),
+            "evaluations": rows(evaluations),
+            "jobs": rows(jobs),
+            "events": rows(events),
+            "progress": rows(progress),
+        }
+
     async def accept_submission(
         self,
         principal: Principal,
@@ -327,6 +408,15 @@ class DatabaseStore:
                     ]
                 )
                 await session.flush()
+                event_type = (
+                    LearnerEventType.TRANSFER_SUBMITTED
+                    if request.purpose.value == "transfer"
+                    else LearnerEventType.INTERVENTION_STARTED
+                    if request.purpose.value == "practice"
+                    else LearnerEventType.RETRY_SUBMITTED
+                    if request.parent_submission_id
+                    else LearnerEventType.ASSESSMENT_SUBMITTED
+                )
                 session.add(
                     LearnerEventRecord(
                         event_id=str(uuid4()),
@@ -334,7 +424,7 @@ class DatabaseStore:
                         subject=principal.subject,
                         session_id=str(session_id),
                         submission_id=submission.submission_id,
-                        event_type="submission_accepted",
+                        event_type=event_type.value,
                         payload={"purpose": request.purpose.value},
                         created_at=utc_now(),
                     )
@@ -439,7 +529,15 @@ class DatabaseStore:
                 )
                 return result.rowcount == 1
 
-    async def finish_job(self, job_id: str, worker_id: str, evaluation: EvaluationView) -> bool:
+    async def finish_job(
+        self,
+        job_id: str,
+        worker_id: str,
+        evaluation: EvaluationView,
+        *,
+        sandbox_passed: bool = False,
+        provenance: dict | None = None,
+    ) -> bool:
         async with self.database.session() as session:
             async with session.begin():
                 job = await session.scalar(
@@ -456,6 +554,7 @@ class DatabaseStore:
                     session.add(
                         EvaluationRecord(
                             submission_id=job.submission_id,
+                            provenance=provenance,
                             **evaluation.model_dump(),
                         )
                     )
@@ -468,14 +567,51 @@ class DatabaseStore:
                             subject=submission.subject,
                             session_id=submission.session_id,
                             submission_id=submission.submission_id,
-                            event_type="evaluation_succeeded",
-                            payload=evaluation.model_dump(mode="json"),
+                            event_type=LearnerEventType.EVALUATION_SUCCEEDED.value,
+                            payload={
+                                "purpose": submission.purpose,
+                                **evaluation.model_dump(mode="json"),
+                            },
                             created_at=utc_now(),
                         )
                     )
-                    status = "started"
+                    session.add(
+                        LearnerEventRecord(
+                            event_id=str(uuid4()),
+                            issuer=submission.issuer,
+                            subject=submission.subject,
+                            session_id=submission.session_id,
+                            submission_id=submission.submission_id,
+                            event_type=LearnerEventType.DIAGNOSIS_RECORDED.value,
+                            payload={
+                                "diagnostic_status": evaluation.diagnostic_status,
+                                "misconception_id": evaluation.misconception_id,
+                                "evidence_references": evaluation.evidence_references,
+                            },
+                            created_at=utc_now(),
+                        )
+                    )
+                    status = LearnerProgressState.NEEDS_RETRY
+                    if (
+                        submission.purpose == "assessment"
+                        and evaluation.outcome_verdict == "correct"
+                        and evaluation.reasoning_verdict == "sound"
+                    ):
+                        status = LearnerProgressState.TRANSFER_READY
+                    elif (
+                        submission.purpose == "practice"
+                        and evaluation.outcome_verdict == "correct"
+                        and evaluation.reasoning_verdict == "sound"
+                    ):
+                        status = LearnerProgressState.TRANSFER_READY
+                    elif evaluation.diagnostic_status == "supported":
+                        status = LearnerProgressState.PRACTICING
+                    if submission.purpose == "transfer":
+                        status = LearnerProgressState.TRANSFER_READY
+                    mastery_item_id = submission.item_id
                     if (
                         submission.purpose == "transfer"
+                        and sandbox_passed
                         and evaluation.outcome_verdict == "correct"
                         and evaluation.reasoning_verdict == "sound"
                         and submission.parent_submission_id
@@ -491,6 +627,8 @@ class DatabaseStore:
                         if (
                             parent
                             and parent.session_id == submission.session_id
+                            and parent.issuer == submission.issuer
+                            and parent.subject == submission.subject
                             and parent.content_package_id == submission.content_package_id
                             and parent.content_version == submission.content_version
                             and parent.item_id != submission.item_id
@@ -499,7 +637,33 @@ class DatabaseStore:
                             and parent_eval.outcome_verdict == "correct"
                             and parent_eval.reasoning_verdict == "sound"
                         ):
-                            status = "mastered"
+                            valid_parent_chain = parent.purpose == "assessment"
+                            root = parent
+                            if parent.purpose == "practice" and parent.parent_submission_id:
+                                root = await session.get(
+                                    SubmissionRecord, parent.parent_submission_id
+                                )
+                                root_eval = (
+                                    await session.get(EvaluationRecord, parent.parent_submission_id)
+                                    if root
+                                    else None
+                                )
+                                valid_parent_chain = bool(
+                                    root
+                                    and root.purpose == "assessment"
+                                    and root.session_id == submission.session_id
+                                    and root.issuer == submission.issuer
+                                    and root.subject == submission.subject
+                                    and root.content_package_id == submission.content_package_id
+                                    and root.content_version == submission.content_version
+                                    and root.item_id == parent.item_id
+                                    and root_eval
+                                    and root_eval.outcome_verdict == "correct"
+                                    and root_eval.reasoning_verdict == "sound"
+                                )
+                            if valid_parent_chain:
+                                status = LearnerProgressState.MASTERED
+                                mastery_item_id = root.item_id
                     progress = await session.scalar(
                         select(LearnerProgressRecord).where(
                             LearnerProgressRecord.issuer == submission.issuer,
@@ -507,25 +671,59 @@ class DatabaseStore:
                             LearnerProgressRecord.content_package_id
                             == submission.content_package_id,
                             LearnerProgressRecord.content_version == submission.content_version,
-                            LearnerProgressRecord.item_id == submission.item_id,
+                            LearnerProgressRecord.item_id == mastery_item_id,
                         )
                     )
                     if progress is None:
+                        status = next_progress_state(None, status)
                         session.add(
                             LearnerProgressRecord(
                                 issuer=submission.issuer,
                                 subject=submission.subject,
                                 content_package_id=submission.content_package_id,
                                 content_version=submission.content_version,
-                                item_id=submission.item_id,
-                                status=status,
+                                item_id=mastery_item_id,
+                                status=status.value,
                                 updated_at=utc_now(),
                             )
                         )
-                    elif status == "mastered":
-                        progress.status = status
-                        progress.version += 1
-                        progress.updated_at = utc_now()
+                        changed = True
+                    else:
+                        current_status = LearnerProgressState(progress.status)
+                        status = next_progress_state(
+                            current_status,
+                            LearnerProgressState.MASTERED
+                            if current_status is LearnerProgressState.MASTERED
+                            else status,
+                        )
+                        changed = current_status is not status
+                        if changed:
+                            progress.status = status.value
+                            progress.version += 1
+                            progress.updated_at = utc_now()
+                    if changed:
+                        event_type = (
+                            LearnerEventType.MASTERY_AWARDED
+                            if status is LearnerProgressState.MASTERED
+                            else LearnerEventType.PROFILE_UPDATED
+                        )
+                        session.add(
+                            LearnerEventRecord(
+                                event_id=str(uuid4()),
+                                issuer=submission.issuer,
+                                subject=submission.subject,
+                                session_id=submission.session_id,
+                                submission_id=submission.submission_id,
+                                event_type=event_type.value,
+                                payload={
+                                    "content_package_id": submission.content_package_id,
+                                    "content_version": submission.content_version,
+                                    "item_id": mastery_item_id,
+                                    "status": status.value,
+                                },
+                                created_at=utc_now(),
+                            )
+                        )
                 job.status = "succeeded"
                 job.lease_until = None
                 job.lease_owner = None

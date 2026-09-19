@@ -1,5 +1,7 @@
 """Versioned JSON content catalog with reviewed-package enforcement."""
 
+import hashlib
+import json
 import re
 import unicodedata
 from pathlib import Path
@@ -62,6 +64,7 @@ class ContentItem(BaseModel):
     evidence_references: list[str] = Field(min_length=1)
     misconception_ids: list[str] = Field(default_factory=list)
     transfer_prompt: LocalizedText
+    prerequisites: list["PrerequisiteReference"] = Field(default_factory=list)
     evidence: list[EvidenceSource] = Field(default_factory=list)
     rubric: list[RubricCriterion] = Field(default_factory=list)
     misconceptions: list[Misconception] = Field(default_factory=list)
@@ -91,6 +94,12 @@ class ContentPackage(BaseModel):
     items: list[ContentItem] = Field(min_length=1)
 
 
+class PrerequisiteReference(PackageReference):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    item_id: str
+
+
 class ResolvedContentItem(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -112,8 +121,27 @@ class FileContentCatalog:
         self._load()
 
     def _load(self) -> None:
+        releases_path = self.root / "releases.json"
+        releases = (
+            json.loads(releases_path.read_text(encoding="utf-8")) if releases_path.exists() else []
+        )
         for path in self.root.glob("*/**/package.json"):
             package = ContentPackage.model_validate_json(path.read_text(encoding="utf-8"))
+            package_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            approval = next(
+                (
+                    entry
+                    for entry in reversed(releases)
+                    if entry.get("action") == "review"
+                    and entry.get("digest") == package_digest
+                    and entry.get("reviewer")
+                ),
+                None,
+            )
+            if approval and package.review_status == "draft":
+                package = package.model_copy(
+                    update={"review_status": "reviewed", "reviewed_by": approval["reviewer"]}
+                )
             self._packages[(package.content_package_id, package.content_version)] = package
 
     async def require_package(
@@ -178,7 +206,13 @@ class FileContentCatalog:
             if not broad_topic_match and specific_overlap == 0 and lesson_overlap == 0:
                 continue
 
-            score = (3 if broad_topic_match else 0) + specific_overlap + lesson_overlap
+            generic_overlap = len(query_tokens & package_tokens & _GENERIC_TOPIC_TOKENS)
+            score = (
+                (3 if broad_topic_match else 0)
+                + generic_overlap
+                + specific_overlap
+                + lesson_overlap
+            )
             options = (
                 package.items
                 if broad_topic_match

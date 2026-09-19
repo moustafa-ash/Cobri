@@ -1,0 +1,912 @@
+{
+  "version": 1,
+  "dataset_digest": "423d44959321d0108fa61670698582db15f527a1905297b9337f6c9ff80f2983",
+  "reviewer": "moustafa-ash",
+  "status": "approved",
+  "content_reviews": [
+    {
+      "package_id": "python-functions",
+      "version": "2.0.0",
+      "item_id": "function-return-value",
+      "package_digest": "8737eb0ed76a244191da7b878ce0f2afed1cee21f9b5fecfb11aeb72970c34b6",
+      "item_digest": "66b59446bf99c7bb2e9e213b8cfc7dd9587f1459ffbff9b78f5cefb84d434ff5",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "package_id": "python-functions",
+      "version": "2.0.0",
+      "item_id": "parameters-and-arguments",
+      "package_digest": "8737eb0ed76a244191da7b878ce0f2afed1cee21f9b5fecfb11aeb72970c34b6",
+      "item_digest": "91587afc4f65cd506541215313ac91f5e6666ea1a18de6abc97216a85cbaa008",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "package_id": "python-functions",
+      "version": "2.0.0",
+      "item_id": "compose-function-calls",
+      "package_digest": "8737eb0ed76a244191da7b878ce0f2afed1cee21f9b5fecfb11aeb72970c34b6",
+      "item_digest": "1515c69ae8b7e7de6125791ad4892b1b4c763f3838cdd06776ece12510bbb586",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "package_id": "python-control-flow",
+      "version": "1.0.0",
+      "item_id": "conditionals-even-check-1",
+      "package_digest": "50c3042fccfebe7b005f58c36286575a7a53023f05ee5fdd69d6fd6249b896db",
+      "item_digest": "bbc28540c249988b4d5106a2cd404f50b1e8558d8ab46cc2ab55edd99f44f089",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "package_id": "python-control-flow",
+      "version": "1.0.0",
+      "item_id": "conditionals-grade-branch-1",
+      "package_digest": "50c3042fccfebe7b005f58c36286575a7a53023f05ee5fdd69d6fd6249b896db",
+      "item_digest": "3b2ead808db1bf76e910988bda6c1beccc7753f8074c42524c689d4dde276b1d",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "package_id": "python-control-flow",
+      "version": "1.0.0",
+      "item_id": "loops-sum-range-1",
+      "package_digest": "50c3042fccfebe7b005f58c36286575a7a53023f05ee5fdd69d6fd6249b896db",
+      "item_digest": "47e757be7144ac0b710860b4112c729911d2b404ab3454e010f58833028b4bce",
+      "reviewer": "moustafa-ash",
+      "status": "reviewed",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    }
+  ],
+  "case_reviews": [
+    {
+      "case_id": "V1_en_correct_sound_01",
+      "digest": "45ab47155b2f4af8f9653f1d7403b6d1913a4202420a11d65d6fc43845994ef5",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_02",
+      "digest": "a87136373e184479e5050ac5fb8138545760e6823d4d0a1839bd8fe9a9d8db03",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_03",
+      "digest": "3e5152c6875f041b582124640ca3f29df2449c1908defaa16bdc05b6275e8cec",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_04",
+      "digest": "f9e643efb206b1dd2d4ddd923811638c3ef9a3d61348443a2f932033cdd3ba9c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_05",
+      "digest": "7b9ecbcef543df7773fac0776588db15c62288aa22c2db19b3594110d24de419",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_06",
+      "digest": "6fb68f1a465756682ff59387d4488c34cdbde370ad337dd870817660fe2f5fa0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_07",
+      "digest": "194350859aee793a52fc84efff21acfa103db8a04e4e356de6fda8cb0bf00e82",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_08",
+      "digest": "6928ee45199c8f2ec1632f6486460526de7ca5967af22853c57f445480408957",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_09",
+      "digest": "6ffe61db3a886733e79f9d78524e023b991df12bcfbc6f80950e443fd9058274",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_correct_sound_10",
+      "digest": "b581d37bca62f37d1a60bb39b28324d574e3bb9ab9c2a37d355783c2b0eeb3b6",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_01",
+      "digest": "baa2b0fd53f81fff7ce82e56713aa1142ab0595f0288c63bc9b351bae43c5ff0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_02",
+      "digest": "fca487b3ccc55325ebf8cf237647e6921302924ae085320dcbf81987566820a0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_03",
+      "digest": "2b68eba46b6616a06ec6ff6378006ba58a330cc181e2f6fdfcee8ad218f5def6",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_04",
+      "digest": "0a79e621c6a891d64b69eb2528721becaa8e5909eaab045a3fca706c19a49bec",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_05",
+      "digest": "b791e25861d2a2bd4122dd632d0ec0b49f79c3187028125f3ea63ebdec5ab8d5",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_06",
+      "digest": "21f91368dd62cd816311e5cabe0ee605c4fbcc9c19214cfecb8b11d2dd384c28",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_07",
+      "digest": "1aadb4154b205a4f08de5d21e338589db1ff516183a3ee85697ce0c14d4b610b",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_08",
+      "digest": "7dee751fedc3a6735aa8d39bfbe1962ace561b0794a26400da3201f0a2e10fcc",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_09",
+      "digest": "9ca39415151373483f235a9e5b075be131a6bd76164497d0c974b86caaf03b24",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_reasoning_disagreement_10",
+      "digest": "4bb83449f47c293e8eee8c2b03bc6fb2f5a5fc7364052b762175e2ecdbf413be",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_01",
+      "digest": "495e0eed609d53db4ecee0f64188cc0c3444e4e6eb3dfe0e665704b89dc5f676",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_02",
+      "digest": "978ff0d3ce3b70a13b50a5247a2057117d8fce7f43006656395a46738040ef16",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_03",
+      "digest": "0b0e45f5d15a57881b3943d03209cf36c04bc2998d894b89cdd6e447e5d30757",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_04",
+      "digest": "66698f46cdb254716853e8aa1a06bcdcfe718f40a8a584481d79a400b036002d",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_05",
+      "digest": "823deb6261c3481d92f00ebe70882545cc6186668eef14ab4cd471ddfbea8603",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_06",
+      "digest": "9a3bb329694be73cebd40b293a3dd01643d76e9cc6a0b909a2896ab34d1556c2",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_07",
+      "digest": "8e5a6447f55cb9b15e1d10a7ba71b9c24750cb16987e46c2dcb2355f9f5491b8",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_08",
+      "digest": "eed9493c1c2b909ac0760dfbe908761e2994381712939e7c16b7ca0c79c84b01",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_09",
+      "digest": "b11d4546c2a2826dd932605873ac99f79d8b4416b9ac003dad283762dc6afc63",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_supported_misconception_10",
+      "digest": "da9bc384482f03c251479b75382dd13d9f41a6d92e642d4c736288d14534d7bc",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_01",
+      "digest": "d73b65249c192777a11d0394198d3cb04bfe30393caaaee67c549de074855f05",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_02",
+      "digest": "2f75e2e6b135b892c58d7a9790ea8e7d73e07dd75e8c76d1a9daef97130afeea",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_03",
+      "digest": "4276ad74d4ae74141d7a2a554df00e16335dab7f9c2ab30b57185539477ef870",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_04",
+      "digest": "d31a67fb0b2b2bd0dcce162ef521ad36151857deb4312fd7a026cbc1e5900474",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_05",
+      "digest": "42f3d25c55bf2c56e78551f719338ff3103c424d342262229f93d92ed505d5e5",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_06",
+      "digest": "7dae470df5b1e37783853ae4d459d63f7aae319f256dfffe6343c7299cea5e3f",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_07",
+      "digest": "c2d8730d7a945ca696fbdf7478b7f2c0101a18c98b5fa379a3de79488bd1790e",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_08",
+      "digest": "fd132103811eb6c15da47ad194b0df298f4ff67797c28dfd48bde284091eddcc",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_09",
+      "digest": "e2520117590865657ce7eaecdb97d8529134bbb82b01f1923e117db0931227f4",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_prerequisite_gap_10",
+      "digest": "8d6afcf8161732361c29042063db09c33c6ed56ef650b47a0a8a11d6cf20c2d7",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_01",
+      "digest": "cd1c8b9117df95628cb27fbd1f6db7f86baaf9aef881d292970542235f9c7937",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_02",
+      "digest": "87691474d26978ec6c11ac190fd33c04157cdb790db36bea54341c9d6d34d04c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_03",
+      "digest": "de4472cbb7a73fb64303cd601351f7bde75dac2547acb75f6376b69681d17972",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_04",
+      "digest": "47637627413609f3f7ec8559a8dbdbe3b496e74e52279913580a223f4422ae36",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_05",
+      "digest": "25b3286c6228fdaaa2780a0c720da289c5b56c1293da46a6717fb129e7e7e7d4",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_06",
+      "digest": "15e21cc4e2e19f11b55fc05b4d3af0f342149186588767b603b75005edfdf2b3",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_07",
+      "digest": "664dedcb9fcbd1074da760d73c27dba1bb7ec59e38626c2c688ffb654ca698fb",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_08",
+      "digest": "1f4ea91e4b77b9c19d65af4546a57eb23b604d01be4cca5d95db8150a3851a6a",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_09",
+      "digest": "4a91190ff13c5ffd47f5d07939c7d344cb83187672b4ff767e2019d2f2d360b2",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_insufficient_evidence_10",
+      "digest": "4d33757bf2ce553bc2731a02398e302df6aca22d119d4f8a606540fc4ac4c038",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_01",
+      "digest": "c5342f47ac005f1698bcee5cc53137494ae9a0ffe43d632652250d6152c5aa61",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_02",
+      "digest": "dddf9c87c20cce26a21cec625ab0ddd7830799165e11f7868f062b2188b085a9",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_03",
+      "digest": "f5562e5af3d751013bef49176170a262d37079e36d437212daacb4524549b1e2",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_04",
+      "digest": "1c9af699956a7928e153d1785be709345365c31221784e755252aefdf356b2bf",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_05",
+      "digest": "cb7350b00b53b6bc6482bcc23cb07411c424c54cb3ab4094ed524054d8d55319",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_06",
+      "digest": "452ce7af9350d5440cdf8489a39e8634eabdd22418232c97cbc767d3d05e5df9",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_07",
+      "digest": "582d2d3fd8353d5c94f470b610f18f6750e973ee02db526c19a630bbe2b01ed0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_08",
+      "digest": "0dc37a6f9650a8d4eeb3dff1aa9fdac4912c06d16cc8ec56ddda2a6e2022aa20",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_09",
+      "digest": "73b12de104a088d16425316eaa264ee65a474274f1aa1b72509f0f2bb51d949e",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_en_adversarial_10",
+      "digest": "22a4555c1b272204fe68a6ce55d6ae6d64c358292cd150b4609a811715669109",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_01",
+      "digest": "29d9c9c81e9e603968d1cba0cb17049fd98be5db7ff3ef9b034dac9fac157b5c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_02",
+      "digest": "13a947472dc4cec4104e2742dd191e2ced91c59959266e79beec93e901b8732c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_03",
+      "digest": "a16e1aef8be9f103d203ba4d6767e61c8b6669da833323dcf291bb8c9ad100a7",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_04",
+      "digest": "d30a141e73d1ca1f674c2b15c8c177e536f563b0559cd51ffe508a3f08ee07b0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_05",
+      "digest": "ef4f07ec67da15a4dd6452fdd9f2fe0b6b109c6b27194ac1099fe912783df895",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_06",
+      "digest": "e4db5f72aa6a9a39c6108db4d6f73b7094380b3e8d2292b153d7a2ca3759532f",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_07",
+      "digest": "c59b03f9a1266ffd4bea378ccc1183f8a54b1da28b60c9df7e707287f757649e",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_08",
+      "digest": "4eee443d72907d9ca6c00e815ad4b72350f3ac1ce2737c48c1f4cbfb8fd0c8db",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_09",
+      "digest": "d41fa8780f1864423d72114b808cf09d9019fe94116c099cc645378ee8b1693d",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_correct_sound_10",
+      "digest": "b6d3098bc0fb4fc7e64672d251ac6150704411ebe72075061c85a4db9b263db8",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_01",
+      "digest": "8b5cbe9d4f19c2cecb92ca24b74709b841aba7c88d1e39c739f1ee559f70e7c7",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_02",
+      "digest": "ae538a65920a0d742db50f83fb5221f303741d8e5d0783b45c6ff28fa4a0d1da",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_03",
+      "digest": "96ba02c0067aa240f4a7861e9c394bf290dfcd09e76a4a7b98ec9fca73f13918",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_04",
+      "digest": "9f6713aabf3fe25e1927fad1df638ab8742a97c3cde42b83f830767f6272fb65",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_05",
+      "digest": "0b86d0fe6117eb551386ee78ddff4681605254964a4719afb274253777f37a82",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_06",
+      "digest": "1d9af392d04366b7be5dc0e72fcaa7d0feabf0d7cc7941753d011efcdc52e282",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_07",
+      "digest": "dc9bbd6b1d03113a8d9c76d7ede6aa88061b6dffb59bb14b524edbf6ad4b160a",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_08",
+      "digest": "1d690c9397703bf8116e9489128f93271d6fc3805e3bedbc1d0868f46d331240",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_09",
+      "digest": "2d0eaacc0e9b0c5f642dc7d05f99ad4743db10a5b1f5f73f04dddc0d0db91f1a",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_reasoning_disagreement_10",
+      "digest": "50f8499e5343f34b9a27fcc889fb65adb434a05b665017784011e9f0942a18fe",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_01",
+      "digest": "d10ab0c739edc7d0123120decb7ff93886c3cb3c89b7d8b4944ee87b4308a8d5",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_02",
+      "digest": "b5fe1a88fa73f6a26794940911f69dfbdc41678723caa93b2e68a0a89846fbb9",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_03",
+      "digest": "fcef84ba49f611e27f2512a244822ef6ac15f448005cc61d3eecd4897fc89916",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_04",
+      "digest": "b35f34d12fa4cddd8b4589c8607d411b04cb6520117feff377038c5825841546",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_05",
+      "digest": "4c9ae640151f6c5d765f639cd54ed56be056028a21e222e252b9be813b2d0c47",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_06",
+      "digest": "8976375e7a2d6cfa571a9a21bd263d7fae1902b32cdfd1fe16da414aea52cbaa",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_07",
+      "digest": "ad9dcc9adce09450df0fb4aeb86f978d6b3865d4106f0c38f09fbbe789fbdf14",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_08",
+      "digest": "5c9adf60204b9402a60e907af97b2271036d4493dd4b6dabe87f27b232927d1c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_09",
+      "digest": "a81c3827e18b2e9126f1c540a29676917e2ae5e0087d48238728b6b324e8217c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_supported_misconception_10",
+      "digest": "2e03a25455619a1a8d21566da3f76ea8436bab24db5cc8eddff1698adda92b23",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_01",
+      "digest": "e2feaed98c5575dd5207f33a35684f3f24eec0dd6b2f8abedf0f4f992edb4786",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_02",
+      "digest": "71df8bd7674a693d6c561ccb39bf9102401c4a44019ec9d2e58f180260334a15",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_03",
+      "digest": "90cf721f565fc34af3fc36b45e0d23151d48272963f89dc4d397763805936906",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_04",
+      "digest": "293683577523004719a83fe4c96d5af408856f831b1134d2b644c1da1a072c5a",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_05",
+      "digest": "1056af330b8d48085a5831e5a3d889640976caa502f38e8df5c8115e1eded6ce",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_06",
+      "digest": "c21b509f1b363394074d20519e3eab9ccfbd2c2f4ba8fe51a7f58d45d4ff165e",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_07",
+      "digest": "0abd3899381ca863b0a17b51bebf2075fc08f4d73f7c47ae2f7095e35ef69a7c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_08",
+      "digest": "d170b2dfca6b2bf8401c8e46275f393d27c6822d63008513670d71ba8c635cda",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_09",
+      "digest": "e640a7a9c3287cbb05ee834e4bd4bc428d512894d1d884a230b901a3a03e3217",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_prerequisite_gap_10",
+      "digest": "d567b03c6fea447d8d5b9d24fbb0a5a74b839e1408f2d27efb29ce333203e485",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_01",
+      "digest": "136d5deeeddba500e66b512e21afa90a363c78be527658c7d9272eb5c5521a2c",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_02",
+      "digest": "fa222d1789a73fd3db055f9f31f9cb69c7f146c03ae0f82ee974ae37fc7677e9",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_03",
+      "digest": "c5d6f9ad5f1152635d08b407dc49304a06f05c07503611fd27a9f48f2ba73eae",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_04",
+      "digest": "c8dcf7532dfee05fb682190c79234d7e719f6526c81a9d28e76cb339d15ebe8b",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_05",
+      "digest": "3b2ae14b0fdd62dda75abc423f2c49a4f3bc32b5710192511a8014d8aad2a31b",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_06",
+      "digest": "a0d5e8f7abf214c1a8eb231e3954df0ee4db8e6163b93ad603bcdbe255911fbd",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_07",
+      "digest": "372d1845786235ac8fd71d24778c5429dba03b20853f8420b625146e1411db94",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_08",
+      "digest": "ca216fb29c558df9a80701950a80fc3e95b01c605990ad7d968e3dbc01e6f8c6",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_09",
+      "digest": "b14bd34de79192954a06f29cf9db271d88232b6fee7b3e77807b0dd815460b50",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_insufficient_evidence_10",
+      "digest": "1a699986a184006b9469bad402345c4d1eba93828b3c817789c25a2e7379fd07",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_01",
+      "digest": "73c532ab04cdf8f2adf0ca7e73f587f7fb26f5113b21cabe25274693b539b2da",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_02",
+      "digest": "1cc3db7f433c7cd9446482b26315e835f13c4ba1057a90617662ef44c45e2fbf",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_03",
+      "digest": "499b741e0e0347ce89defca5eae1cb5f4d41e59abe4a3f5c7cb4537f1171cbe3",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_04",
+      "digest": "01a13d40520cf3a69a811118220412d6374c8603ce4fad81cf1c8aabb4c37c7f",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_05",
+      "digest": "96e6293d3c3ee35ca15b2ff883549a6d39504531e2f9619cd25a8fb07e1547ca",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_06",
+      "digest": "64881a4cc34bdb4e73639f39bf55f22a42fb511871e03b05afe26ae48f66ede0",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_07",
+      "digest": "7b705d600a6db2c8d40ce84a3cc1521ee9f63ad344d778754d2358b92a063532",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_08",
+      "digest": "1277031e14daafce1a8f37fe004fff9243fac8fea2982af32cf263ab43d35097",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_09",
+      "digest": "7b7af2fd524b8cf13e5943251ac19c34c8e0ce9eae5154ac5d71d696f6ba707d",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    },
+    {
+      "case_id": "V1_ar_adversarial_10",
+      "digest": "9663e86bca0f3d09e384e415e32c3aa4318e79a81c5af14a558e270acc3a6cb4",
+      "status": "reviewed",
+      "reviewer": "moustafa-ash",
+      "reviewed_at": "2026-09-19T20:01:45.062533+00:00"
+    }
+  ],
+  "approved_at": "2026-09-19T20:01:45.062533+00:00",
+  "approval_ref": "codex-chat-approval:2026-09-19T19:56:48Z"
+}

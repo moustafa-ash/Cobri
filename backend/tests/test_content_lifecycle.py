@@ -1,8 +1,10 @@
 import json
+import shutil
 from pathlib import Path
 
 import pytest
 
+from cobri.content.catalog import FileContentCatalog
 from cobri.content.lifecycle import active_digest, append_release, validate
 
 
@@ -17,6 +19,34 @@ def test_publish_requires_prior_review(tmp_path: Path) -> None:
 
 def test_content_packages_validate_cleanly() -> None:
     assert validate(Path(__file__).parents[2] / "content-packages") == []
+
+
+def test_release_ledger_review_approves_immutable_draft_bytes(tmp_path: Path) -> None:
+    source = (
+        Path(__file__).parents[2]
+        / "content-packages"
+        / "python-control-flow"
+        / "1.0.0"
+        / "package.json"
+    )
+    package = tmp_path / "python-control-flow" / "1.0.0" / "package.json"
+    package.parent.mkdir(parents=True)
+    shutil.copy2(source, package)
+    before = package.read_bytes()
+    append_release(
+        tmp_path,
+        package,
+        "codex",
+        "review",
+        reviewer="moustafa-ash",
+        review_ref="codex-approval:test",
+    )
+    assert package.read_bytes() == before
+    assert validate(tmp_path) == []
+    selected = FileContentCatalog(tmp_path).list_reviewed()
+    assert len(selected) == 1
+    assert selected[0].review_status == "reviewed"
+    assert selected[0].reviewed_by == "moustafa-ash"
 
 
 def test_supersession_and_rollback_require_predecessor(tmp_path: Path) -> None:
@@ -100,3 +130,37 @@ def test_validate_requires_complete_control_flow_items(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     assert any("control-flow lesson is incomplete" in error for error in validate(tmp_path))
+
+
+def test_validate_rejects_missing_and_cyclic_prerequisites(tmp_path: Path) -> None:
+    package_dir = tmp_path / "python-control-flow" / "1.0.0"
+    package_dir.mkdir(parents=True)
+    source = json.loads(
+        (
+            Path(__file__).parents[2] / "content-packages/python-control-flow/1.0.0/package.json"
+        ).read_text(encoding="utf-8")
+    )
+    first, second = source["items"][:2]
+    first["prerequisites"] = [
+        {
+            "content_package_id": "python-control-flow",
+            "content_version": "1.0.0",
+            "item_id": "missing",
+        },
+        {
+            "content_package_id": "python-control-flow",
+            "content_version": "1.0.0",
+            "item_id": second["item_id"],
+        },
+    ]
+    second["prerequisites"] = [
+        {
+            "content_package_id": "python-control-flow",
+            "content_version": "1.0.0",
+            "item_id": first["item_id"],
+        }
+    ]
+    (package_dir / "package.json").write_text(json.dumps(source), encoding="utf-8")
+    errors = validate(tmp_path)
+    assert any("unknown prerequisite" in error for error in errors)
+    assert any("prerequisite cycle" in error for error in errors)

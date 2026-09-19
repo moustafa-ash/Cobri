@@ -7,7 +7,7 @@ API tests use canned responses from `backend/tests/doubles.py` solely to verify 
 Ahmed's fixture set should reference a content package ID, version, and item ID; preserve Arabic/English answer and reasoning text; and distinguish expected outcome and reasoning verdicts. Include insufficient-evidence cases labeled `uncertain`, absent reasoning, and cases where the outcome and reasoning disagree. A wrong answer alone must not establish a misconception. Infrastructure failures should be tested separately from learner verdicts.
 
 The versioned `v1/evaluation.json` artifact contains 60 English and 60 Arabic
-cases across five balanced categories. Its `reviewer` fields remain pending
+cases across six balanced categories. Its manifest remains digest-bound and pending
 human sign-off; deterministic validation is a harness check, not provider
 quality evidence. Infrastructure failures must be reported separately from
 learner verdicts.

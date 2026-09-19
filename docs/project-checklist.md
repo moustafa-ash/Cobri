@@ -2,6 +2,8 @@
 
 This is the living completion checklist for the Cobri learner-facing MVP and its production-ready release. Update it only when the corresponding implementation and acceptance checks are complete.
 
+Last reconciled against the local working tree: 2026-09-19. Remote settings and deployment were not inspected or changed.
+
 ## Status rules
 
 - `[x]` means implemented and verified in the current repository or explicitly recorded as a completed smoke test in the Day 1 handoff.
@@ -17,9 +19,9 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 - [x] Add Ruff, pytest, Alembic, environment templates, and local setup documentation.
 - [x] Ignore secrets, local databases, virtual environments, and generated local tooling state.
 - [x] Document architecture, API contracts, Day 1 handoff, Day 2 plan, and the local Day 2 runbook.
-- [ ] Select a project license and add the approved license file.
-- [ ] Add automated CI checks for backend and frontend validation.
-- [ ] Define branch protection, review, and release-tagging rules.
+- [x] Select Apache-2.0 and add `LICENSE` plus the Cobri copyright notice in `NOTICE`.
+- [x] Add automated CI checks for backend and frontend validation.
+- [ ] Apply branch protection, review, and release-tagging rules. (Required settings are specified in docs/governance.md; the GitHub rules themselves were not changed or verified.)
 
 ## 2. Day 1 backend foundation
 
@@ -66,7 +68,7 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 - [x] Smoke-test Docker sandbox success and learner-test failure locally.
 - [x] Smoke-test Auth0 OIDC locally using the configured EU tenant and RS256 API.
 - [x] Smoke-test PostgreSQL 16 locally in a disposable container.
-- [ ] Automate opt-in live OIDC and provider checks in an approved secure environment.
+- [ ] Automate opt-in live OIDC and provider checks in an approved secure environment. (The protected preview workflow invokes the checks; the external environment is not provisioned or verified.)
 - [ ] Verify all external integrations in the shared preview or staging environment.
 
 ## 3. Learner-facing vertical slice
@@ -100,7 +102,7 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 - [x] Use API access tokens rather than ID tokens for backend authorization.
 - [x] Approve and document in-memory browser token storage with refresh-token rotation.
 - [ ] Verify login, logout, reload, expiry recovery, and authenticated API calls in the browser.
-- [ ] Add an opt-in live browser authentication test that skips clearly when credentials are unavailable.
+- [ ] Add an opt-in live browser authentication test that skips clearly when credentials are unavailable. (The current live script checks a supplied token against the API; it does not exercise the browser login lifecycle.)
 
 ### Reviewed-content retrieval
 
@@ -131,64 +133,68 @@ This is the living completion checklist for the Cobri learner-facing MVP and its
 
 ## 4. Complete tutoring and learner model
 
-- [ ] Implement the authoritative tutoring state machine and validate every legal transition.
-- [ ] Add persisted learner events for assessment, diagnosis, intervention, retry, transfer, and profile updates.
-- [ ] Define mastery criteria that require successful changed-context transfer.
-- [ ] Prevent a model response alone from declaring mastery or changing learner state.
+- [x] Implement typed tutoring states and guarded progression in `backend/src/cobri/tutoring/contracts.py`; assessment/practice/transfer progression is transactionally applied with evaluation events.
+- [x] Persist assessment, diagnosis, intervention, retry, transfer, mastery, and profile-update event types with state changes in `backend/src/cobri/persistence/repositories.py`.
+- [x] Require changed-context transfer, sandbox-owned test success, sound reasoning, and a valid same-session/package parent chain before mastery.
+- [x] Provider output alone cannot award mastery; absent sandbox success cannot master.
 - [x] Add learner concept history and progress views based on auditable evidence.
-- [ ] Add safe profile recommendations without exposing private reasoning or unsupported claims.
-- [ ] Support multiple lessons while preserving immutable package versions for historical sessions.
-- [ ] Add tests for state transition ordering, replay, concurrency, failure recovery, and audit history.
+- [x] Add authenticated `GET /api/v1/profile` with deterministic reviewed-content recommendation reason codes; it returns no private learner text.
+- [x] Support multiple lessons while preserving immutable package versions for historical sessions.
+- [ ] Extend coverage for every legal/illegal state edge, progression replay, multi-worker concurrency, and failure recovery. (Mastery gating and exported/audited history are tested; full transition-matrix and concurrent profile updates are not.)
 
 ## 5. Content and retrieval maturity
 
-- [ ] Formalize the content lifecycle: draft, review, publish, supersede, and rollback. (Validation and review gates implemented; human publication approval pending.)
-- [ ] Define reviewer roles and acceptance criteria for educational accuracy, sources, rubrics, and bilingual quality.
-- [ ] Add more reviewed concepts and transfer items beyond the initial Python-functions package.
-- [ ] Validate every package for stable IDs, prerequisites, evidence, misconceptions, interventions, tests, and language mappings.
+- [x] Formalize the content lifecycle: draft, review, publish, supersede, and rollback. (The workflow and immutable release ledger are tested; no human publication approval is claimed.)
+- [x] Define independent reviewer role and digest-bound acceptance criteria for accuracy, sources, rubrics, misconceptions, bilingual equivalence, tests, and transfer in docs/governance.md.
+- [x] Obtain the independent content and dataset approval described by those criteria. (Digest-bound approval by moustafa-ash is recorded; no package publish or release occurred.)
+- [x] Complete the Python control-flow package technically and validate prerequisites. (Package bytes remain immutable; its exact-digest review is recorded in the manifest and ledger, and the local catalog now recognizes that ledger approval without editing package bytes. No external deployment or release occurred.)
+- [x] Obtain Moustafa's independent content sign-off for every control-flow item before any release.
+- [x] Validate every package for stable IDs, prerequisites, evidence, misconceptions, interventions, tests, and language mappings.
 - [ ] Add content-version migration and compatibility checks without mutating historical packages.
 - [x] Build semantic retrieval only after deterministic retrieval is accepted.
 - [x] Record embedding/index versions, retrieval filters, conflicts, and source provenance.
-- [ ] Decide whether controlled web retrieval belongs in the product; if approved, add source, safety, and conflict controls.
+- [x] Decide whether controlled web retrieval belongs in the product; if approved, add source, safety, and conflict controls. (Approved sources are restricted to HTTPS `docs.python.org` results and remain quarantined until review.)
 - [ ] Build a content authoring/review workflow or CMS only after the package lifecycle is stable.
 
 ## 6. Evaluation quality and model operations
 
-- [x] Build a representative, versioned evaluation dataset with Arabic and English examples.
-- [ ] Add regression cases for correct answers, incorrect reasoning, known misconceptions, prerequisite gaps, and insufficient evidence.
-- [ ] Measure outcome accuracy, reasoning classification, diagnostic precision, uncertainty calibration, and evidence grounding separately.
-- [ ] Compare pinned Groq, OpenRouter, and optional provider/model profiles without automatic fallback hiding attribution.
-- [ ] Define quality, latency, quota, and cost acceptance thresholds.
-- [ ] Add prompt, model, schema, rubric, and evaluation-dataset version tracking.
-- [ ] Add adversarial tests for prompt injection, malformed outputs, unsafe code, and evidence fabrication.
+- [ ] Build a representative, versioned evaluation dataset with Arabic and English examples. (120 structurally valid cases: 60 per language, 10 per each of six categories/language; each case has digest-bound reviewer approval, but synthetic benchmark quality is not established.)
+- [x] Add dataset cases for correct/sound, reasoning disagreement, supported misconception, prerequisite gap, insufficient evidence, and adversarial behavior; all 120 cases have explicit reviewer approval recorded in the manifest.
+- [ ] Measure and pass outcome accuracy, reasoning classification, diagnostic precision, uncertainty calibration, and evidence grounding separately. (The provider report separates available metrics; confidence calibration is blocked because providers return no confidence signal. No live provider result or quality pass is claimed.)
+- [x] Provide independently selectable Groq-only and OpenRouter-only benchmark modes with no fallback between them. (Runs remain blocked until Moustafa approves the fixture and credentials are explicitly configured.)
+- [x] Define selected quality gates: 100% safety, at least 90% for scored core metrics, and at least 95% supported Recall@3.
+- [ ] Select latency, quota-failure, and cost thresholds before provider operations are considered production-ready.
+- [x] Persist runtime provider/model, prompt/schema/rubric, exact package digest/version, deterministic retrieval index, dataset applicability, latency, and fallback provenance via migration `0007`.
+- [ ] Add adversarial tests for prompt injection, malformed outputs, unsafe code, and evidence fabrication. (Sandbox, provider-failure, and fabricated-evidence coverage exists; explicit prompt-injection and malformed-output cases remain incomplete.)
 - [ ] Require human review before promoting model or prompt changes.
-- [ ] Add provider usage, latency, fallback, quota, and failure monitoring without logging learner secrets.
+- [ ] Integrate provider/model/latency/fallback/quota/failure metrics and thresholds in production operations. (Local worker records provider/model/latency/fallback aggregates without prompts or answers; quota/failure reporting and a deployed metrics backend remain open.)
 
 ## 7. Operations, security, and privacy
 
 - [x] Add structured request and job logs with correlation IDs, duration, status, retry count, and safe error details.
 - [x] Add metrics for accepted, replayed, conflicted, queued, running, succeeded, failed, retried, and stale-recovered work.
 - [x] Add production-safe CORS, trusted hosts/origins, request-size limits, and rate limiting.
-- [ ] Complete a threat model covering authentication, ownership, content, providers, sandboxing, and administrative access.
-- [ ] Define learner-data classification, retention, deletion, export, and audit policies.
-- [ ] Verify that logs, traces, analytics, and provider requests do not expose tokens or unnecessary learner data.
-- [ ] Add dependency, container, and secret scanning with an owned remediation process.
+- [x] Document a threat model covering identity/ownership, content, providers, sandboxing, and operator access in `docs/governance.md` (production residual risks remain).
+- [x] Define learner-data minimization, retention-until-explicit-deletion, operator-mediated export/deletion, and audit policy in `docs/governance.md`; add exact-target export CLI `backend/scripts/export_learner.py`.
+- [ ] Verify by tests that logs, traces, analytics, and all provider requests exclude tokens and unnecessary learner content. (Safe error logging and aggregate metrics exist; complete provider-request/log privacy coverage remains open.)
+- [ ] Add dependency, container, and secret scanning with an owned remediation process. (Dependency and tracked-secret scans run in CI; a full-SHA-pinned container scan and named remediation owner are still required.)
 - [ ] Define credential storage and rotation for every environment.
-- [ ] Add database backup, restore, migration, rollback, and disaster-recovery procedures and tests.
+- [ ] Add database backup, restore, migration, rollback, and disaster-recovery procedures and tests. (`ops/backup.sh`, target-bound destructive `ops/restore.sh`, migration checks, and vendor-neutral procedure exist; disposable PostgreSQL backup/restore and DR drills remain opt-in/unverified.)
 - [x] Add an operational runbook for readiness, stuck jobs, provider outages, stale leases, and credential rotation.
 
 ## 8. Deployment and release
 
-- [ ] Select and document the preview/staging and production hosting architecture.
+- [ ] Select and document the preview/staging and production hosting architecture. (OCI and Render preview paths are documented; production architecture is not selected.)
 - [ ] Provision production PostgreSQL and decide whether the database queue remains sufficient.
-- [ ] Containerize and deploy the API and worker with pinned, reproducible builds.
+- [ ] Add portable digest-pinned API/worker images and deploy with reproducible builds. (No production host was selected; container images and builds are not yet implemented.)
 - [ ] Configure environment isolation, managed secrets, TLS, domains, and least-privilege network access.
-- [ ] Add CI/CD gates for tests, linting, typing, migrations, security checks, and artifact provenance.
+- [x] Add CI/CD gates for tests, linting, typing, migrations, dependency and secret checks, checksummed artifacts, and preview promotion.
 - [ ] Deploy a shared preview environment and pass the full end-to-end flow there.
 - [ ] Add production observability, alerting, uptime checks, and incident ownership.
-- [ ] Run load, concurrency, worker-recovery, sandbox-capacity, and provider-degradation tests.
-- [ ] Complete accessibility, privacy, security, educational-quality, and release reviews.
-- [ ] Verify a clean-checkout installation and document deployment, rollback, and operator procedures.
+- [ ] Run bounded load, competing-worker, stale-lease, sandbox-capacity, and provider-degradation checks. (Existing stale-lease/worker tests pass; bounded load/capacity and degradation profiles remain open.)
+- [ ] Automate accessibility checks for English/Arabic, keyboard use, RTL/LTR, mobile/desktop, focus, semantics, and contrast. (Existing deterministic browser flow runs; automated accessibility coverage is not present.)
+- [ ] Complete accessibility, privacy, security, educational-quality, and release reviews. (Content/evaluation item sign-off is recorded; automated accessibility and complete privacy/security gates, provider evaluation, and release approval remain open.)
+- [ ] Verify a clean-checkout installation and document deployment, rollback, and operator procedures. (Deployment and rollback docs exist; fresh clean-install verification and built images remain open.)
 - [ ] Tag the approved release and publish the final handoff without secrets or unsupported claims.
 
 ## 9. Final definition of done
@@ -210,3 +216,16 @@ These items are not required to complete the current Cobri MVP:
 - Organization-level administration.
 - Arbitrary unreviewed web content.
 - A large curriculum-authoring CMS.
+
+## Current local acceptance evidence (2026-09-19)
+
+- Backend full suite: **164 passed, 4 skipped** using the local Python 3.12 environment. Skips are opt-in live Auth0, Groq/OpenRouter, and PostgreSQL tests; they are not passes.
+- Ruff check and format: passed after formatting the current changes.
+- Alembic migration test including `0007_evaluation_provenance`: **1 passed** on disposable SQLite.
+- Content prerequisite/lifecycle validation and deterministic 120-case dataset validation: passed. Dataset output says quality/safety **not claimed** pending human/provider evaluation.
+- Frontend typecheck, Vitest (**6 passed**), ESLint, and production build passed. Build reports the existing large Monaco-related chunk warning.
+- Deterministic Playwright learner flow passed at desktop (1280x900) and mobile (390x844); this is not an Auth0 journey or automated accessibility audit.
+- `git diff --check`: passed.
+- Wheel/container build: not verified. `uv build` was blocked because the sandbox cannot reach PyPI to resolve Hatchling; no build success is claimed.
+- Human approval: `moustafa-ash` approved all content items and evaluation cases; digest-bound records are in the review manifest and content release ledger. Provider quality evaluation and external release remain separate gates.
+- External state: no GitHub rules, providers, cloud infrastructure, deployment, tag, or release action was performed.

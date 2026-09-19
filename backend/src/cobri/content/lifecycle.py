@@ -13,19 +13,45 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _recorded_review(root: Path, path: Path) -> dict | None:
+    ledger = root / "releases.json"
+    entries = json.loads(ledger.read_text(encoding="utf-8")) if ledger.exists() else []
+    digest = _digest(path)
+    return next(
+        (
+            entry
+            for entry in reversed(entries)
+            if entry.get("action") == "review"
+            and entry.get("digest") == digest
+            and entry.get("reviewer")
+        ),
+        None,
+    )
+
+
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
     seen_items: set[tuple[str, str]] = set()
+    packages: dict[tuple[str, str], ContentPackage] = {}
+    paths: dict[tuple[str, str], Path] = {}
     for path in sorted(root.glob("*/**/package.json")):
         try:
             package = ContentPackage.model_validate_json(path.read_text(encoding="utf-8"))
         except Exception as exc:  # validation boundary: report every bad package
             errors.append(f"{path}: {exc}")
             continue
+        approval = _recorded_review(root, path)
+        if approval and package.review_status == "draft":
+            package = package.model_copy(
+                update={"review_status": "reviewed", "reviewed_by": approval["reviewer"]}
+            )
         if path.parent.name != package.content_version:
             errors.append(f"{path}: folder/version mismatch")
         if path.parent.parent.name != package.content_package_id:
             errors.append(f"{path}: folder/package mismatch")
+        package_key = (package.content_package_id, package.content_version)
+        packages[package_key] = package
+        paths[package_key] = path
         item_ids = [item.item_id for item in package.items]
         if len(item_ids) != len(set(item_ids)):
             errors.append(f"{path}: duplicate item identifier")
@@ -65,6 +91,54 @@ def validate(root: Path) -> list[str]:
                     errors.append(f"{path}: control-flow lesson is incomplete")
         if package.review_status == "reviewed" and not package.reviewed_by:
             errors.append(f"{path}: reviewed package requires reviewer")
+
+    item_keys = {
+        (package.content_package_id, package.content_version, item.item_id)
+        for package in packages.values()
+        for item in package.items
+    }
+    graph: dict[tuple[str, str, str], list[tuple[str, str, str]]] = {}
+    for package in packages.values():
+        for item in package.items:
+            key = (package.content_package_id, package.content_version, item.item_id)
+            graph[key] = []
+            for prerequisite in item.prerequisites:
+                target = (
+                    prerequisite.content_package_id,
+                    prerequisite.content_version,
+                    prerequisite.item_id,
+                )
+                if target not in item_keys:
+                    package_path = paths[(package.content_package_id, package.content_version)]
+                    errors.append(f"{package_path}: unknown prerequisite {target}")
+                    continue
+                target_package = packages[
+                    (prerequisite.content_package_id, prerequisite.content_version)
+                ]
+                if (
+                    package.review_status == "reviewed"
+                    and target_package.review_status != "reviewed"
+                ):
+                    errors.append(f"{package_path}: reviewed package depends on draft {target}")
+                graph[key].append(target)
+
+    visiting: set[tuple[str, str, str]] = set()
+    visited: set[tuple[str, str, str]] = set()
+
+    def visit(key: tuple[str, str, str]) -> None:
+        if key in visiting:
+            errors.append(f"{paths[(key[0], key[1])]}: prerequisite cycle at {key[2]}")
+            return
+        if key in visited:
+            return
+        visiting.add(key)
+        for target in graph.get(key, []):
+            visit(target)
+        visiting.remove(key)
+        visited.add(key)
+
+    for key in graph:
+        visit(key)
     return errors
 
 
@@ -84,7 +158,9 @@ def append_release(
     ):
         raise ValueError("review and publish require a distinct reviewer")
     if action in {"review", "publish", "supersede", "rollback"} and not review_ref:
-        raise ValueError("review and publish require a Git review reference")
+        raise ValueError(
+            "review and publish require a Git review or recorded human-approval reference"
+        )
     if action in {"supersede", "rollback"} and not predecessor:
         raise ValueError(f"{action} requires a predecessor digest")
     ledger = root / "releases.json"
@@ -158,7 +234,7 @@ def main() -> int:
     parser.add_argument("package", nargs="?", type=Path)
     parser.add_argument("--actor", default="")
     parser.add_argument("--reviewer")
-    parser.add_argument("--review-ref")
+    parser.add_argument("--review-ref", help="Git review ID or recorded human-approval reference")
     args = parser.parse_args()
     errors = validate(args.root)
     if errors:

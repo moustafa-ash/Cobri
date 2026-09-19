@@ -19,7 +19,7 @@ from cobri.config import Settings
 from cobri.content.catalog import FileContentCatalog
 from cobri.content.ports import ContentCatalog
 from cobri.content.router import router as content_router
-from cobri.dependencies import get_session_store
+from cobri.dependencies import get_content_catalog, get_session_store
 from cobri.errors import register_error_handlers
 from cobri.identity.auth import Principal, TokenVerifier, get_current_principal
 from cobri.identity.router import router as identity_router
@@ -28,7 +28,13 @@ from cobri.persistence.database import Database
 from cobri.persistence.models import WorkerHeartbeatRecord
 from cobri.persistence.repositories import DatabaseStore
 from cobri.rate_limit import InMemoryRateLimiter, RateLimiter
-from cobri.tutoring.contracts import LearnerProgressView, SessionStore
+from cobri.tutoring.contracts import (
+    LearnerProfileView,
+    LearnerProgressState,
+    LearnerProgressView,
+    ProfileRecommendation,
+    SessionStore,
+)
 from cobri.tutoring.router import router as sessions_router
 
 logger = logging.getLogger(__name__)
@@ -130,6 +136,54 @@ def create_app(
         store: Annotated[SessionStore, Depends(get_session_store)],
     ) -> list[LearnerProgressView]:
         return await store.list_progress(principal)
+
+    @app.get("/api/v1/profile", response_model=LearnerProfileView, tags=["profile"])
+    async def profile(
+        principal: Annotated[Principal, Depends(get_current_principal)],
+        store: Annotated[SessionStore, Depends(get_session_store)],
+        catalog: Annotated[ContentCatalog, Depends(get_content_catalog)],
+    ) -> LearnerProfileView:
+        progress_items = await store.list_progress(principal)
+        progress_by_item = {
+            (row.content_package_id, row.content_version, row.item_id): row.status
+            for row in progress_items
+        }
+        recommendations: list[ProfileRecommendation] = []
+        for package in catalog.list_reviewed():
+            for item in package.items:
+                key = (package.content_package_id, package.content_version, item.item_id)
+                status = progress_by_item.get(key)
+                if status is LearnerProgressState.MASTERED:
+                    continue
+                if status in {LearnerProgressState.NEEDS_RETRY, LearnerProgressState.PRACTICING}:
+                    reason = status.value
+                elif all(
+                    progress_by_item.get(
+                        (
+                            prerequisite.content_package_id,
+                            prerequisite.content_version,
+                            prerequisite.item_id,
+                        )
+                    )
+                    is LearnerProgressState.MASTERED
+                    for prerequisite in item.prerequisites
+                ):
+                    reason = "continue_learning"
+                else:
+                    continue
+                recommendations.append(
+                    ProfileRecommendation(
+                        content_package_id=package.content_package_id,
+                        content_version=package.content_version,
+                        item_id=item.item_id,
+                        reason=reason,
+                    )
+                )
+                if len(recommendations) == 3:
+                    break
+            if len(recommendations) == 3:
+                break
+        return LearnerProfileView(progress=progress_items, recommendations=recommendations)
 
     @app.get(
         "/api/v1/operations/metrics",

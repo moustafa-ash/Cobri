@@ -62,6 +62,13 @@ class MalformedClient(FakeClient):
         raise httpx.ReadTimeout("provider timed out")
 
 
+class QuotaClient(FakeClient):
+    async def post(self, url: str, **_: object):
+        request = httpx.Request("POST", url)
+        response = httpx.Response(429, request=request)
+        response.raise_for_status()
+
+
 def test_provider_fallback_returns_validated_canonical_evaluation(monkeypatch) -> None:
     monkeypatch.setattr(httpx, "AsyncClient", FakeClient)
     FakeClient.calls.clear()
@@ -99,6 +106,23 @@ def test_provider_exhaustion_is_classified_as_unavailable(monkeypatch) -> None:
 
     with pytest.raises(ProviderUnavailable):
         asyncio.run(StructuredModelGateway(settings).evaluate("evidence"))
+
+
+def test_provider_quota_failure_is_classified_without_exposing_response(monkeypatch) -> None:
+    monkeypatch.setattr(httpx, "AsyncClient", QuotaClient)
+    settings = Settings(
+        _env_file=None,
+        groq_api_key="groq-test",
+        auth_issuer=None,
+        auth_audience=None,
+        auth_jwks_url=None,
+    )
+    from cobri.model_gateway.gateway import ProviderUnavailable
+
+    with pytest.raises(ProviderUnavailable) as raised:
+        asyncio.run(StructuredModelGateway(settings).evaluate_provider("groq", "evidence"))
+    assert raised.value.category == "quota"
+    assert str(raised.value) == "provider request failed"
 
 
 def test_content_catalog_rejects_unreviewed_package(tmp_path: Path) -> None:

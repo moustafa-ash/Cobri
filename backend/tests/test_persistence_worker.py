@@ -283,3 +283,103 @@ def test_stale_worker_cannot_finish_after_lease_reclaimed(tmp_path: Path) -> Non
         await database.dispose()
 
     asyncio.run(scenario())
+
+
+def test_operator_export_requires_target_bound_confirmation(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        database = Database(f"sqlite+aiosqlite:///{tmp_path / 'export.db'}")
+        await database.create_schema()
+        store = DatabaseStore(database)
+        principal = Principal(issuer="https://issuer.example", subject="export-me")
+        session = await store.create_session(
+            principal,
+            SessionCreate(
+                content_package_id="python-functions",
+                content_version="1.0.0",
+                ui_locale="en",
+                instructional_language="en",
+            ),
+        )
+        await store.accept_submission(
+            principal,
+            session.session_id,
+            SubmissionCreate(item_id="python-function-return-1", answer="my learner answer"),
+            "export-key",
+        )
+        with pytest.raises(PermissionError):
+            await store.export_learner("", principal.issuer, principal.subject, "wrong")
+        exported = await store.export_learner(
+            "operator-1",
+            principal.issuer,
+            principal.subject,
+            f"EXPORT:{principal.issuer}:{principal.subject}",
+        )
+        assert exported["submissions"][0]["answer"] == "my learner answer"
+        assert exported["events"][0]["event_type"] == "assessment_submitted"
+        await database.dispose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    ("sandbox_passed", "expected"),
+    [(False, "transfer_ready"), (True, "mastered")],
+)
+def test_mastery_requires_sandbox_verified_changed_context_transfer(
+    tmp_path: Path, sandbox_passed: bool, expected: str
+) -> None:
+    async def scenario() -> None:
+        database = Database(f"sqlite+aiosqlite:///{tmp_path / 'mastery.db'}")
+        await database.create_schema()
+        store = DatabaseStore(database)
+        principal = Principal(issuer="https://issuer.example", subject="mastery-learner")
+        session = await store.create_session(
+            principal,
+            SessionCreate(
+                content_package_id="python-functions",
+                content_version="2.0.0",
+                ui_locale="en",
+                instructional_language="en",
+            ),
+        )
+        assessment = await store.accept_submission(
+            principal,
+            session.session_id,
+            SubmissionCreate(item_id="function-return-value", answer="return n * 2"),
+            "assessment",
+        )
+        evaluation = EvaluationView(
+            outcome_verdict=OutcomeVerdict.CORRECT,
+            reasoning_verdict=ReasoningVerdict.SOUND,
+            diagnostic_status=DiagnosticStatus.UNCERTAIN,
+            evidence_references=["python-functions:2.0.0:return-values"],
+        )
+        claim = await store.claim_job("worker", 60)
+        assert claim is not None
+        await store.finish_job(claim[1].job_id, "worker", evaluation)
+        transfer = await store.accept_submission(
+            principal,
+            session.session_id,
+            SubmissionCreate(
+                item_id="transfer-rectangle-area",
+                answer="return width * height",
+                purpose="transfer",
+                parent_submission_id=assessment.submission_id,
+            ),
+            "transfer",
+        )
+        claim = await store.claim_job("worker", 60)
+        assert claim is not None
+        await store.finish_job(claim[1].job_id, "worker", evaluation, sandbox_passed=sandbox_passed)
+        progress = await store.list_progress(principal)
+        progress_item = assessment.item_id if expected == "mastered" else transfer.item_id
+        transfer_progress = next(row for row in progress if row.item_id == progress_item)
+        assert transfer_progress.status.value == expected
+        events = await store.list_events(principal, session.session_id)
+        event_types = {event.event_type.value for event in events}
+        assert "assessment_submitted" in event_types
+        assert "transfer_submitted" in event_types
+        assert ("mastery_awarded" in event_types) is sandbox_passed
+        await database.dispose()
+
+    asyncio.run(scenario())

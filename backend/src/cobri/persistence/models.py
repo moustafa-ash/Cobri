@@ -77,6 +77,7 @@ class EvaluationRecord(Base):
     diagnostic_status: Mapped[str] = mapped_column(String(32), nullable=False)
     evidence_references: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list)
     misconception_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    provenance: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class WorkerHeartbeatRecord(Base):

@@ -44,7 +44,7 @@ def test_api_submission_reaches_worker_and_evaluation(tmp_path: Path) -> None:
                 "reasoning": "It returns the calculated value.",
             },
         )
-        assert submission_response.status_code == 202
+        assert submission_response.status_code == 202, submission_response.text
         submission_id = submission_response.json()["submission_id"]
         worker = EvaluationWorker(
             settings,
@@ -57,10 +57,15 @@ def test_api_submission_reaches_worker_and_evaluation(tmp_path: Path) -> None:
         assert result.json()["job"]["status"] == "succeeded"
         assert result.json()["evaluation"]["outcome_verdict"] == "correct"
         assert client.get("/api/v1/progress").status_code == 200
+        profile = client.get("/api/v1/profile")
+        assert profile.status_code == 200
+        assert profile.json()["progress"]
+        assert all("answer" not in item for item in profile.json()["recommendations"])
         history = client.get(f"/api/v1/sessions/{session_id}/history")
         assert history.status_code == 200
         assert {event["event_type"] for event in history.json()} >= {
-            "submission_accepted",
+            "assessment_submitted",
             "evaluation_succeeded",
+            "diagnosis_recorded",
         }
     app.dependency_overrides.clear()

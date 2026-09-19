@@ -43,6 +43,12 @@ jobs:
       - name: Run Pytest Suite
         run: uv run --project backend --locked pytest backend/tests -p no:cacheprovider
 
+      - name: Validate versioned content and prerequisites
+        run: uv run --project backend --locked python -m cobri.content.lifecycle validate content-packages
+
+      - name: Validate bilingual evaluation dataset
+        run: uv run --project backend --locked python backend/scripts/evaluate_dataset.py --dataset backend/tests/fixtures/evaluations/v1 --mode deterministic
+
       - name: Validate migrations
         run: uv run --project backend --locked pytest backend/tests/test_migrations.py -p no:cacheprovider
 

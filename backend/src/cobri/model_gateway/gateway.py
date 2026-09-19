@@ -2,6 +2,7 @@
 
 import json
 from collections.abc import Awaitable, Callable
+from time import perf_counter
 
 import httpx
 
@@ -12,12 +13,20 @@ from cobri.evaluations.contracts import Evaluation, EvaluationInput
 class ProviderUnavailable(RuntimeError):
     """The provider failed and the job may be retried."""
 
+    def __init__(self, message: str, category: str = "unavailable") -> None:
+        super().__init__(message)
+        self.category = category
+
 
 class StructuredModelGateway:
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
     async def evaluate(self, prompt: str) -> Evaluation:
+        evaluation, _, _, _, _ = await self.evaluate_with_metadata(prompt)
+        return evaluation
+
+    async def evaluate_with_metadata(self, prompt: str) -> tuple[Evaluation, str, str, int, bool]:
         providers: list[Callable[[str], Awaitable[Evaluation]]] = []
         if self.settings.groq_api_key:
             providers.append(self._groq)
@@ -26,9 +35,15 @@ class StructuredModelGateway:
         if not providers:
             raise ProviderUnavailable("no model provider configured")
         last_error: Exception | None = None
-        for provider in providers:
+        for index, provider in enumerate(providers):
             try:
-                return await provider(prompt)
+                started = perf_counter()
+                evaluation = await provider(prompt)
+                name = "groq" if provider == self._groq else "openrouter"
+                model = (
+                    self.settings.groq_model if name == "groq" else self.settings.openrouter_model
+                )
+                return evaluation, name, model, round((perf_counter() - started) * 1000), index > 0
             except (ProviderUnavailable, httpx.HTTPError, ValueError) as exc:
                 last_error = exc
         raise ProviderUnavailable(str(last_error or "all providers failed"))
@@ -103,6 +118,9 @@ class StructuredModelGateway:
                 payload = response.json()
                 content = payload["choices"][0]["message"]["content"]
                 return Evaluation.model_validate(json.loads(content))
+        except httpx.HTTPStatusError as exc:
+            category = "quota" if exc.response.status_code == 429 else "http"
+            raise ProviderUnavailable("provider request failed", category) from exc
         except (httpx.HTTPError, KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
             raise ProviderUnavailable("provider response was unavailable or invalid") from exc
 

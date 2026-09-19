@@ -1,5 +1,7 @@
 # Cobri
 
+Licensed under [Apache-2.0](LICENSE); copyright notice is in [NOTICE](NOTICE).
+
 Cobri is a bilingual Arabic/English tutoring platform. The local Day 2 vertical slice includes the FastAPI API, durable SQLite/PostgreSQL-compatible persistence, a lease-aware evaluation worker, reviewed lesson retrieval, provider and sandbox adapters, and a React/Vite conversational learner app.
 
 ## Repository

@@ -56,6 +56,13 @@
     },
     {
       "item_id": "conditionals-grade-branch-1",
+      "prerequisites": [
+        {
+          "content_package_id": "python-control-flow",
+          "content_version": "1.0.0",
+          "item_id": "conditionals-even-check-1"
+        }
+      ],
       "title": {"en": "Choose a grade label", "ar": "اختيار تقدير الدرجة"},
       "prompt": {
         "en": "Return 'pass' when score is at least 50, otherwise return 'retry'.",
@@ -78,6 +85,13 @@
     },
     {
       "item_id": "loops-sum-range-1",
+      "prerequisites": [
+        {
+          "content_package_id": "python-control-flow",
+          "content_version": "1.0.0",
+          "item_id": "conditionals-grade-branch-1"
+        }
+      ],
       "title": {"en": "Sum a range with a loop", "ar": "جمع نطاق باستخدام حلقة"},
       "prompt": {
         "en": "Return the sum of integers from 1 through n using a for loop.",

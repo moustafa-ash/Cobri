@@ -1,6 +1,8 @@
 """Database-polling evaluation worker."""
 
 import asyncio
+import hashlib
+import json
 import logging
 from dataclasses import dataclass, field
 
@@ -54,10 +56,16 @@ class EvaluationWorker:
                 content_package_id=submission.content_package_id,
                 content_version=submission.content_version,
             )
-            evaluation = await self._evaluate_with_lease(input_data, item, job.job_id, worker_id)
+            evaluation, sandbox_passed, provenance = await self._evaluate_with_lease(
+                input_data, item, job.job_id, worker_id
+            )
             self._validate_evaluation(evaluation, item)
             finished = await self.store.finish_job(
-                job.job_id, worker_id, EvaluationView.from_evaluation(evaluation)
+                job.job_id,
+                worker_id,
+                EvaluationView.from_evaluation(evaluation),
+                sandbox_passed=sandbox_passed,
+                provenance=provenance,
             )
             if finished:
                 self.metrics.increment("jobs_succeeded")
@@ -70,17 +78,25 @@ class EvaluationWorker:
         return True
 
     async def _evaluate(self, input_data: EvaluationInput, item):
+        sandbox_passed = False
         if self.settings.sandbox_enabled:
             sandbox = DockerSandbox(
                 self.settings.sandbox_image, self.settings.sandbox_timeout_seconds
             )
             result = await asyncio.to_thread(sandbox.run, input_data.answer, item.tests)
             input_data = input_data.model_copy(update={"sandbox_passed": result.passed})
+            sandbox_passed = result.passed
         if self.settings.evaluation_mode == "provider":
             if not self.settings.model_configured:
                 raise ProviderUnavailable("provider evaluation mode has no configured provider")
             gateway = StructuredModelGateway(self.settings)
-            evaluation = await gateway.evaluate(
+            (
+                evaluation,
+                provider,
+                model,
+                latency_ms,
+                fallback,
+            ) = await gateway.evaluate_with_metadata(
                 evaluation_prompt(
                     input_data,
                     {
@@ -96,8 +112,36 @@ class EvaluationWorker:
                         "outcome_verdict": ("correct" if input_data.sandbox_passed else "incorrect")
                     }
                 )
-            return evaluation
-        return FixtureEvaluator().evaluate(input_data, item)
+            self.metrics.record_evaluation(provider, model, latency_ms, fallback=fallback)
+            provenance = {
+                "provider": provider,
+                "model": model,
+                "latency_ms": latency_ms,
+                "fallback": fallback,
+            }
+            return evaluation, sandbox_passed, self._provenance(item, provenance, input_data)
+        evaluation = FixtureEvaluator().evaluate(input_data, item)
+        provenance = {"provider": "fixture", "model": "deterministic", "latency_ms": 0}
+        self.metrics.record_evaluation("fixture", "deterministic", 0, fallback=False)
+        return evaluation, sandbox_passed, self._provenance(item, provenance, input_data)
+
+    @staticmethod
+    def _provenance(item, provider_metadata: dict, input_data: EvaluationInput) -> dict:
+        content = json.dumps(item.model_dump(mode="json"), sort_keys=True, ensure_ascii=False)
+        return {
+            **provider_metadata,
+            "prompt_version": "cobri-evaluation-v1",
+            "schema_version": "evaluation-v1",
+            "rubric_version": hashlib.sha256(
+                json.dumps(
+                    [r.model_dump(mode="json") for r in item.rubric], sort_keys=True
+                ).encode()
+            ).hexdigest(),
+            "package_version": f"{input_data.content_package_id}:{input_data.content_version}",
+            "retrieval_index_version": "deterministic-content-v1",
+            "dataset_version": "not-applicable-runtime-evaluation",
+            "package_digest": hashlib.sha256(content.encode()).hexdigest(),
+        }
 
     async def _evaluate_with_lease(self, input_data, item, job_id: str, worker_id: str):
         task = asyncio.create_task(self._evaluate(input_data, item))

@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "content_package_id": "python-control-flow",
+    "content_version": "1.0.0",
+    "digest": "062eea0ec63da7d3f324a215ebdfca9c75ea77a8fd996b2d63fa1d5472d02586",
+    "actor": "codex",
+    "reviewer": "moustafa-ash",
+    "action": "review",
+    "predecessor": null,
+    "review_ref": "codex-chat-approval:2026-09-19T19:56:48Z",
+    "created_at": "2026-09-19T20:01:45.062533+00:00"
+  },
+  {
+    "content_package_id": "python-functions",
+    "content_version": "2.0.0",
+    "digest": "4803885812d046a8c7ff7d0b0d34f080e726b6fc6e1a132027dcb70ad9c4bc21",
+    "actor": "codex",
+    "reviewer": "moustafa-ash",
+    "action": "review",
+    "predecessor": null,
+    "review_ref": "codex-chat-approval:2026-09-19T19:56:48Z",
+    "created_at": "2026-09-19T20:01:45.069570+00:00"
+  }
+]

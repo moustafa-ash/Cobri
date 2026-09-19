@@ -22,4 +22,4 @@ def test_alembic_upgrade_head_and_check(tmp_path: Path) -> None:
         [*command, "current"], cwd=root, env=env, capture_output=True, text=True
     )
     assert current.returncode == 0, current.stderr
-    assert "0006_quarantined_sources" in current.stdout
+    assert "0007_evaluation_provenance" in current.stdout
