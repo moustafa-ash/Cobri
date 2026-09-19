@@ -1,5 +1,7 @@
 # Cobri Day 2 Plan
 
+Status: the local deterministic learner-facing slice described here is implemented. Remaining Auth0 browser verification, live integrations, and production work stay open in the [project checklist](project-checklist.md). See [current status](current-status.md) for fresh evidence.
+
 ## Objective
 
 Turn the verified Day 1 backend vertical slice into a learner-facing tutoring flow. Day 2 should deliver one complete path from Auth0 browser login through session creation, submission, asynchronous evaluation, feedback, and one evidence-grounded remediation or transfer action.

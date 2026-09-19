@@ -1,5 +1,7 @@
 # Cobri Expanded MVP: Teammate Handoff Plan
 
+Status: retained as the expanded implementation plan and evidence handoff. Current local validation is summarized in [current status](current-status.md); unchecked external and deployment gates remain intentionally open.
+
 ## Starting point
 
 - Repository: `D:\CoBri`

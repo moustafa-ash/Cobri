@@ -1,6 +1,6 @@
 # Day 1 handoff
 
-Day 1 is implemented locally across the API, persistence, evaluation, content, worker, provider, sandbox, and OIDC boundaries. Groq, OpenRouter, Docker, PostgreSQL, and Auth0 have been smoke-tested locally.
+Historical snapshot. Day 1 was implemented locally across the API, persistence, evaluation, content, worker, provider, sandbox, and OIDC boundaries. Its external smoke-test claims are not current audit evidence; see [current status](current-status.md).
 
 ## Delivered
 
@@ -50,4 +50,4 @@ available in the current environment. At the Day 2 baseline audit, Docker was un
 
 ## Deferred work
 
-Frontend screens, full RAG, remediation, mastery and profile transitions, transfer execution, and license selection remain outside this Day 1 implementation. The proposed follow-up is tracked in [Day 2 plan](day2-plan.md).
+The Day 2 implementation now adds the learner frontend, deterministic remediation/practice/transfer flow, and browser fixture. Full semantic RAG, mastery and profile transitions, and license selection remain outside the current scope. The original follow-up is tracked in [Day 2 plan](day2-plan.md).

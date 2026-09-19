@@ -1,5 +1,7 @@
 # Stage One Docker Verification
 
+Historical environment record. The commands and versions below document the original Docker check; they are not a claim that Docker was rerun during the 2026-09-19 project audit. See [current status](current-status.md).
+
 Date: 2026-09-14
 
 ## Environment

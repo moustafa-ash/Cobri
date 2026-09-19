@@ -2,6 +2,8 @@
 
 These contracts are implemented by the FastAPI API, SQLAlchemy repositories, database worker, content catalog, evaluation layer, and provider gateway.
 
+The contracts remain the backend baseline for the current learner flow. Current validation evidence is in [current status](current-status.md).
+
 ## Authentication and HTTP behavior
 
 All `/api/v1/` routes require a bearer token verified against configured issuer, audience, JWKS, algorithms, expiry, and time claims. The principal is `{issuer, subject}`. Clients cannot submit an owner ID. Health endpoints are public.
@@ -45,7 +47,7 @@ The repositories use SQLAlchemy async with SQLite for local development and Post
 
 Content packages are JSON documents under `content-packages/` with package ID, immutable version, topic, review status, bilingual prompt/title, expected answer metadata, package-owned tests, evidence references, misconception IDs, and transfer metadata. A package or item is selectable only when its status is `reviewed`.
 
-The initial package is `python-functions` version `1.0.0`, covering parameters, return values, and print-versus-return misconceptions.
+The catalog retains `python-functions` version `1.0.0` and currently selects reviewed version `2.0.0`, covering parameters, return values, composing calls, and print-versus-return misconceptions.
 
 ## Evaluation and provider boundary
 

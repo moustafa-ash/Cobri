@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-Cobri is a Python 3.12 FastAPI monorepo. Runtime code is under `backend/src/cobri/`; current feature modules are `identity`, `content`, `tutoring`, and `assessments`. Keep cross-cutting configuration and composition at the package root. Tests live in `backend/tests/`, with evaluation fixtures reserved under `backend/tests/fixtures/evaluations/`. `content-packages/` will hold reviewed, versioned learning content; `frontend/` is reserved for the later React/TypeScript client; `docs/` contains architecture and handoff contracts.
+Cobri is a Python 3.12 FastAPI monorepo. Runtime code is under `backend/src/cobri/`; current feature modules are `identity`, `content`, `tutoring`, and `assessments`. Keep cross-cutting configuration and composition at the package root. Tests live in `backend/tests/`, with evaluation fixtures reserved under `backend/tests/fixtures/evaluations/`. `content-packages/` holds reviewed, versioned learning content; `frontend/` contains the React/TypeScript learner client; `docs/` contains architecture, contracts, runbooks, status, and handoff records.
 
 ## Build, Test, and Development Commands
 
