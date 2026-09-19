@@ -37,7 +37,9 @@ for (const viewport of [
   await page.getByRole("button", { name: arabic ? "إرسال الموضوع" : "Send topic" }).click();
   await page.getByRole("link", { name: arabic ? /إرجاع قيمة/ : /Return a value/ }).click();
   const chatVisibleWithEditor = await page.getByLabel(arabic ? "المحادثة مع كوبري" : "Conversation with Cobri").isVisible();
-  const editorVisible = await page.getByLabel(arabic ? "مساحة كتابة الكود" : "Coding workspace").isVisible();
+  const attemptDrawer = page.locator(".attempt-drawer");
+  await attemptDrawer.waitFor({ state: "visible" });
+  const editorVisible = await attemptDrawer.isVisible();
   const expectedEditorLabel = arabic ? "كود Python الخاص بك" : "Your Python code";
   const codeEditor = page.locator(".monaco-editor").locator(`[aria-label="${expectedEditorLabel}"]`).first();
   try {
@@ -56,7 +58,7 @@ for (const viewport of [
   await page.getByRole("button", { name: arabic ? "تحقق من إجابتي" : "Check my answer" }).click();
   await page.getByRole("heading", { name: arabic ? "ملاحظاتك" : "Your feedback" }).waitFor({ timeout: 10_000 });
   const feedbackVisible = await page.getByText(arabic ? "فكرة للمراجعة" : "A point to review").isVisible();
-  const editorClosedAfterSubmit = (await page.getByLabel(arabic ? "مساحة كتابة الكود" : "Coding workspace").count()) === 0;
+  const editorClosedAfterSubmit = (await attemptDrawer.count()) === 0;
   await page.screenshot({
     path: `${output}/cobri-${viewport.name}.png`,
     fullPage: !arabic,

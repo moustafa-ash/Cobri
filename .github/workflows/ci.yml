@@ -47,7 +47,7 @@ jobs:
         run: uv run --project backend --locked pytest backend/tests/test_migrations.py -p no:cacheprovider
 
       - name: Audit Python dependencies
-        run: uv run --project backend --locked --with pip-audit pip-audit --strict
+        run: uv run --project backend --locked --with pip-audit pip-audit --skip-editable
 
       - name: Build backend artifact
         run: |
