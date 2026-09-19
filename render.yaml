@@ -1,3 +1,4 @@
+# Demo-only Blueprint: Render free services cannot satisfy Cobri's rootless Docker sandbox gate.
 services:
   - type: web
     name: cobri-api
@@ -15,6 +16,7 @@ services:
           property: connectionString
       - key: COBRI_AUTO_CREATE_SCHEMA
         value: "false"
+      # Keep sandboxing off here; enable it only on the OCI VM after ARM64 validation.
       - key: COBRI_SANDBOX_ENABLED
         value: "false"
       - key: COBRI_EVALUATION_MODE
